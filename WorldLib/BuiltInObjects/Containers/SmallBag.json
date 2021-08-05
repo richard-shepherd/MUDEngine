@@ -1,0 +1,17 @@
+{
+  "ObjectType": "CONTAINER",
+  "Name": "small bag",
+  "Aliases": [
+    "bag"
+  ],
+  "Dimensions": {
+    "Height": "60cm",
+    "Width": "30cm",
+    "Depth": "30cm"
+  },
+  "Weight" :  "1kg",
+  "Capacity": {
+    "Items": 5,
+    "Weight": "10kg"
+  }
+}
