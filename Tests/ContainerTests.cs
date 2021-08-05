@@ -1,7 +1,7 @@
 using NUnit.Framework;
-using System;
 using System.IO;
 using WorldLib;
+using static WorldLib.ObjectBase;
 
 namespace Tests
 {
@@ -13,6 +13,7 @@ namespace Tests
             var builtInObjectsRoot = Path.GetFullPath("../WorldLib/BuiltInObjects");
             var smallBagPath = Path.Combine(builtInObjectsRoot, "Containers/SmallBag.json");
             var smallBag = ObjectUtils.loadObject(smallBagPath);
+            Assert.AreEqual(ObjectTypeEnum.CONTAINER, smallBag.ObjectType);
         }
     }
 }
