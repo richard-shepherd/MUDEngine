@@ -13,13 +13,27 @@ namespace WorldLib
         #region Public methods
 
         /// <summary>
+        /// Loads an object from a JSON file and returns it as the type requested.
+        /// </summary>
+        public static T loadObjectAs<T>(string path) where T : ObjectBase
+        {
+            var objectBase = loadObject(path);
+            return objectBase as T;
+        }
+
+        /// <summary>
         /// Loads an object from a JSON config file.
         /// </summary>
         public static ObjectBase loadObject(string path)
         {
             // We read the file, and parse it...
             var json = File.ReadAllText(path);
-            return parseObject(json);
+            var objectBase = parseObject(json);
+
+            // We parse the string values, eg dimensions into numeric values...
+            objectBase.parseValues();
+
+            return objectBase;
         }
 
         /// <summary>

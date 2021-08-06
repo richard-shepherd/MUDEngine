@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="BuiltInObjects\Containers\SmallBag.json">
+    <None Update="BuiltInObjects\Containers\small-bag.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

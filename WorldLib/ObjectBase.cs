@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Utility;
 
 namespace WorldLib
 {
@@ -19,29 +20,49 @@ namespace WorldLib
         }
 
         /// <summary>
-        /// Holds an object's dimensions.
+        /// Holds an object's dimensions as strings, eg "10cm".
         /// </summary>
         public class DimensionsType
         {
             /// <summary>
-            /// Gets or sets the object's height as a string, eg "30cm".
+            /// Gets or sets the object's height.
             /// </summary>
             public string Height { get; set; } = "";
 
             /// <summary>
-            /// Gets or sets the object's width as a string, eg "30cm".
+            /// Gets or sets the object's width.
             /// </summary>
             public string Width { get; set; } = "";
 
             /// <summary>
-            /// Gets or sets the object's depth as a string, eg "30cm".
+            /// Gets or sets the object's depth.
             /// </summary>
             public string Depth { get; set; } = "";
+
+            /// <summary>
+            /// Gets or sets the object's height in meters.
+            /// </summary>
+            public double HeightM { get; set; } = 0.0;
+
+            /// <summary>
+            /// Gets or sets the object's width in meters.
+            /// </summary>
+            public double WidthM { get; set; } = 0.0;
+
+            /// <summary>
+            /// Gets or sets the object's depth in meters.
+            /// </summary>
+            public double DepthM { get; set; } = 0.0;
         }
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the object's ID.
+        /// </summary>
+        public string ObjectID { get; set; } = "";
 
         /// <summary>
         /// Gets or sets the object type.
@@ -64,18 +85,39 @@ namespace WorldLib
         public List<string> Aliases { get; set; } = new List<string>();
 
         /// <summary>
-        /// Gets or sets the object's dimensions as strings.
-        /// </summary><remarks>
-        /// Use ParsedDimensions to access the dimensions parsed into numeric values.
-        /// </remarks>
+        /// Gets or sets the object's dimensions.
+        /// </summary>
         public DimensionsType Dimensions { get; set; } = new DimensionsType();
 
         /// <summary>
         /// Gets or sets the object's weight as a string.
-        /// </summary><remarks>
-        /// Use Parsed weight to access the weight parsed into a numeric value.
-        /// </remarks>
+        /// </summary>
         public string Weight { get; set; } = "";
+
+        /// <summary>
+        /// Gets or sets the object's weight in kg.
+        /// </summary>
+        public double WeightKG { get; set; } = 0.0;
+
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        /// Parses values such as object dimensions, weight and so on to numeric values.
+        /// NOTE: Derived implementations must call this method as well as parsing their
+        ///       own values.
+        /// </summary>
+        public virtual void parseValues()
+        {
+            // We parse the dimensions...
+            Dimensions.HeightM = UnitsHelper.parse(Dimensions.Height);
+            Dimensions.WidthM = UnitsHelper.parse(Dimensions.Width);
+            Dimensions.DepthM = UnitsHelper.parse(Dimensions.Depth);
+
+            // We parse the weight...
+            WeightKG = UnitsHelper.parse(Weight);
+        }
 
         #endregion
     }

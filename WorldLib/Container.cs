@@ -1,4 +1,6 @@
-﻿namespace WorldLib
+﻿using Utility;
+
+namespace WorldLib
 {
     /// <summary>
     /// Represents containers such as bags, boxes, chests etc.
@@ -16,10 +18,13 @@
 
             /// <summary>
             /// Gets or sets the maximum weight the container can hold as a string, eg "10kg".
-            /// </summary><remarks>
-            /// Use ParsedWeight to get the weight as a numeric value.
-            /// </remarks>
+            /// </summary>
             public string Weight { get; set; } = "";
+
+            /// <summary>
+            /// Gets or sets the maximum weight the container can hold in KG.
+            /// </summary>
+            public double WeightKG { get; set; } = 0.0;
         }
 
         #endregion
@@ -30,6 +35,22 @@
         /// Gets or sets the capacity of the container.
         /// </summary>
         public CapacityType Capacity { get; set; } = new CapacityType();
+
+        #endregion
+
+        #region ObjectBase implementations
+
+        /// <summary>
+        /// Parses object properties to numeric equivalents.
+        /// </summary>
+        public override void parseValues()
+        {
+            // We parse the base object's values...
+            base.parseValues();
+
+            // We parse values for the container...
+            Capacity.WeightKG = UnitsHelper.parse(Capacity.Weight);
+        }
 
         #endregion
     }
