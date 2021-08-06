@@ -104,6 +104,13 @@ namespace WorldLib
         #region Public methods
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ObjectBase()
+        {
+        }
+
+        /// <summary>
         /// Parses values such as object dimensions, weight and so on to numeric values.
         /// NOTE: Derived implementations must call this method as well as parsing their
         ///       own values.

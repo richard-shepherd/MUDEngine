@@ -1,0 +1,16 @@
+﻿{
+  "ObjectID": "apple",
+  "ObjectType": "FOOD",
+
+  "Name": "apple",
+  "Aliases": [
+  ],
+
+  "Dimensions": {
+    "Height": "8cm",
+    "Width": "8cm",
+    "Depth": "8cm"
+  },
+
+  "Weight": "75g"
+}

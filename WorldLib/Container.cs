@@ -1,4 +1,6 @@
-﻿using Utility;
+﻿using System.Collections.Generic;
+using Utility;
+using static WorldLib.ActionResult;
 
 namespace WorldLib
 {
@@ -36,6 +38,32 @@ namespace WorldLib
         /// </summary>
         public CapacityType Capacity { get; set; } = new CapacityType();
 
+        /// <summary>
+        /// Gets the number of items held by the container.
+        /// </summary>
+        public int ItemCount => m_contents.Count;
+
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Container()
+            : base()
+        {
+        }
+
+        /// <summary>
+        /// Adds an object to the container.
+        /// </summary>
+        public ActionResult add(ObjectBase objectToAdd)
+        {
+            m_contents.Add(objectToAdd);
+            return ActionResult.succeeded();
+        }
+
         #endregion
 
         #region ObjectBase implementations
@@ -51,6 +79,19 @@ namespace WorldLib
             // We parse values for the container...
             Capacity.WeightKG = UnitsHelper.parse(Capacity.Weight);
         }
+
+        #endregion
+
+        #region Private functions
+
+
+
+        #endregion
+
+        #region Private data
+
+        // The container's contents...
+        private readonly List<ObjectBase> m_contents = new List<ObjectBase>();
 
         #endregion
     }

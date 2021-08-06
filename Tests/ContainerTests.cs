@@ -25,5 +25,22 @@ namespace Tests
             Assert.AreEqual(5, smallBag.Capacity.Items);
             Assert.AreEqual(10.0, smallBag.Capacity.WeightKG);
         }
+
+        /// <summary>
+        /// Tests adding items to a small-bag.
+        /// </summary>
+        [Test]
+        public void addItems()
+        {
+            // We load the small-bag...
+            var builtInObjectsRoot = Path.GetFullPath("../WorldLib/BuiltInObjects");
+            var smallBagPath = Path.Combine(builtInObjectsRoot, "Containers/small-bag.json");
+            var smallBag = ObjectUtils.loadObjectAs<Container>(smallBagPath);
+
+            // We load two apples...
+
+            // We add two apples
+
+        }
     }
 }
