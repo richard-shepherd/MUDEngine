@@ -1,0 +1,6 @@
+TODO: Create a pot. SMOKE POT -> "It is not that sort of pot"
+
+TODO: Create collections, eg Pile. ("The dragon is lying on a pile of gold coins.")
+
+TODO: Implement EXAMINE
+

@@ -1,0 +1,15 @@
+﻿{
+  "ObjectID": "test-cave-1",
+  "ObjectType": "LOCATION",
+
+  "Name": "test cave 1",
+  "Aliases": [
+    "cave"
+  ],
+
+  "Dimensions": {
+    "Height": "20m",
+    "Width": "30m",
+    "Depth": "30m"
+  }
+}
