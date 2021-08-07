@@ -1,0 +1,22 @@
+﻿{
+  "ObjectID": "wooden-chest",
+  "ObjectType": "CONTAINER",
+
+  "Name": "wooden chest",
+  "Aliases": [
+    "chest"
+  ],
+
+  "Dimensions": {
+    "Height": "1m",
+    "Width": "2m",
+    "Depth": "1m"
+  },
+
+  "Weight": "30kg",
+
+  "Capacity": {
+    "Items": 50,
+    "Weight": "100kg"
+  }
+}

@@ -127,6 +127,20 @@ namespace WorldLib
             WeightKG = UnitsHelper.parse(Weight);
         }
 
+        /// <summary>
+        /// Returns the dimensions of the object in meters, ordered from largest to smallest.
+        /// </summary>
+        public List<double> getOrderedDimensions()
+        {
+            var orderedDimensions = new List<double>();
+            orderedDimensions.Add(Dimensions.HeightM);
+            orderedDimensions.Add(Dimensions.WidthM);
+            orderedDimensions.Add(Dimensions.DepthM);
+            orderedDimensions.Sort();
+            orderedDimensions.Reverse();
+            return orderedDimensions;
+        }
+
         #endregion
     }
 }

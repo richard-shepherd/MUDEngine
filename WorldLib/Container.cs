@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Utility;
 using static WorldLib.ActionResult;
 
@@ -60,13 +61,28 @@ namespace WorldLib
         /// </summary>
         public ActionResult add(ObjectBase objectToAdd)
         {
-            // We check that we have room for the new item...
+            // We check that we have capacity for the new item...
             var result = add_checkCapacity();
-            if(result.Status == StatusEnum.FAILED)
+            if(result.Status != StatusEnum.SUCCEEDED)
             {
                 return result;
             }
 
+            // We check that the container can hold the weight of the new item...
+            result = add_checkWeight(objectToAdd);
+            if (result.Status != StatusEnum.SUCCEEDED)
+            {
+                return result;
+            }
+
+            // We check that the new item fits into the container...
+            result = add_checkSize(objectToAdd);
+            if (result.Status != StatusEnum.SUCCEEDED)
+            {
+                return result;
+            }
+
+            // We can add the item to the container...
             m_contents.Add(objectToAdd);
             return ActionResult.succeeded();
         }
@@ -97,7 +113,7 @@ namespace WorldLib
         /// </summary>
         private ActionResult add_checkCapacity()
         {
-            if(m_contents.Count < Capacity.Items)
+            if (m_contents.Count < Capacity.Items)
             {
                 return ActionResult.succeeded();
             }
@@ -105,6 +121,51 @@ namespace WorldLib
             {
                 return ActionResult.failed($"The {Name} is full");
             }
+        }
+
+        /// <summary>
+        /// Called when an item is being added to check that we can hold the
+        /// weight of the new item.
+        /// </summary>
+        private ActionResult add_checkWeight(ObjectBase objectToAdd)
+        {
+            var totalWeightKG = objectToAdd.WeightKG + getContentsWeight();
+            if (totalWeightKG <= Capacity.WeightKG)
+            {
+                return ActionResult.succeeded();
+            }
+            else
+            {
+                return ActionResult.failed($"The {objectToAdd.Name} is too heavy to add to the {Name}");
+            }
+        }
+
+        /// <summary>
+        /// Called when an item is being added to check that the new item fits into
+        /// this container.
+        /// </summary>
+        private ActionResult add_checkSize(ObjectBase objectToAdd)
+        {
+            // To check that the item fits, we check that each dimension of the
+            // object being added fits into the container...
+            var objectDimensions = objectToAdd.getOrderedDimensions();
+            var containerDimensions = getOrderedDimensions();
+            for(var i=0; i<3; ++i)
+            {
+                if(objectDimensions[i] >= containerDimensions[i])
+                {
+                    return ActionResult.failed($"The {objectToAdd.Name} is too large to add to the {Name}");
+                }
+            }
+            return ActionResult.succeeded();
+        }
+
+        /// <summary>
+        /// Returns the total weight (in kg) of the items in the container. 
+        /// </summary>
+        private double getContentsWeight()
+        {
+            return m_contents.Sum(x => x.WeightKG);
         }
 
         #endregion

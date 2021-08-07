@@ -1,0 +1,21 @@
+﻿{
+  "ObjectID": "backpack",
+  "ObjectType": "CONTAINER",
+
+  "Name": "backpack",
+  "Aliases": [
+  ],
+
+  "Dimensions": {
+    "Height": "150cm",
+    "Width": "80cm",
+    "Depth": "80cm"
+  },
+
+  "Weight": "5kg",
+
+  "Capacity": {
+    "Items": 10,
+    "Weight": "50kg"
+  }
+}

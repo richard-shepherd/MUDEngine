@@ -76,7 +76,7 @@ namespace Tests
             apple = m_objectFactory.createObjectAs<Food>("apple");
             result = smallBag.add(apple);
             Assert.AreEqual(ActionResult.StatusEnum.FAILED, result.Status);
-            Assert.IsTrue(result.Description.Contains("full"));
+            Assert.AreEqual("The small bag is full", result.Description);
             Assert.AreEqual(5, smallBag.ItemCount);
         }
 
@@ -108,8 +108,75 @@ namespace Tests
             apple.WeightKG = 4.0;
             result = smallBag.add(apple);
             Assert.AreEqual(ActionResult.StatusEnum.FAILED, result.Status);
-            Assert.IsTrue(result.Description.Contains("too heavy"));
+            Assert.AreEqual("The apple is too heavy to add to the small bag", result.Description);
             Assert.AreEqual(2, smallBag.ItemCount);
+        }
+
+        /// <summary>
+        /// Tests adding items to a small-bag, checking that the objects fit into the bag.
+        /// </summary>
+        [Test]
+        public void addItems_Size()
+        {
+            // We create a small-bag...
+            var smallBag = m_objectFactory.createObjectAs<Container>("small-bag");
+
+            // We create a too-large apple and add it to the bag...
+            var apple = m_objectFactory.createObjectAs<Food>("apple");
+            apple.Dimensions.WidthM = 2.0;
+            var result = smallBag.add(apple);
+            Assert.AreEqual(ActionResult.StatusEnum.FAILED, result.Status);
+            Assert.AreEqual("The apple is too large to add to the small bag", result.Description);
+            Assert.AreEqual(0, smallBag.ItemCount);
+        }
+
+        /// <summary>
+        /// Tests that we can put a small-bag in a backpack.
+        /// </summary>
+        [Test]
+        public void smallBagInBackpack()
+        {
+            // We create a small-bag and a backpack...
+            var smallBag = m_objectFactory.createObjectAs<Container>("small-bag");
+            var backpack = m_objectFactory.createObjectAs<Container>("backpack");
+
+            // We check that the small-bag can be put into the backpack...
+            var result = backpack.add(smallBag);
+            Assert.AreEqual(ActionResult.StatusEnum.SUCCEEDED, result.Status);
+            Assert.AreEqual(1, backpack.ItemCount);
+        }
+
+        /// <summary>
+        /// Tests that we cannot put a backpack in a small-bag.
+        /// </summary>
+        [Test]
+        public void backpackInSmallBag()
+        {
+            // We create a small-bag and a backpack...
+            var smallBag = m_objectFactory.createObjectAs<Container>("small-bag");
+            var backpack = m_objectFactory.createObjectAs<Container>("backpack");
+
+            // We check that the backpack cannot be put into the small-bag...
+            var result = smallBag.add(backpack);
+            Assert.AreEqual(ActionResult.StatusEnum.FAILED, result.Status);
+            Assert.AreEqual(0, smallBag.ItemCount);
+        }
+
+        /// <summary>
+        /// Tests that we cannot put a small-bag in a small-bag,
+        /// ie, that only items smaller than the container can be added to it.
+        /// </summary>
+        [Test]
+        public void smallBagInSmallBag()
+        {
+            // We create two small-bags...
+            var smallBag1 = m_objectFactory.createObjectAs<Container>("small-bag");
+            var smallBag2 = m_objectFactory.createObjectAs<Container>("small-bag");
+
+            // We check that the small-bag cannot be put into the small-bag...
+            var result = smallBag1.add(smallBag2);
+            Assert.AreEqual(ActionResult.StatusEnum.FAILED, result.Status);
+            Assert.AreEqual(0, smallBag1.ItemCount);
         }
     }
 }
