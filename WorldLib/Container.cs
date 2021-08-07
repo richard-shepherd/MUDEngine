@@ -103,6 +103,14 @@ namespace WorldLib
             Capacity.WeightKG = UnitsHelper.parse(Capacity.Weight);
         }
 
+        /// <summary>
+        /// Returns the total weight of the container and its contents.
+        /// </summary>
+        public override double getTotalWeightKG()
+        {
+            return WeightKG + m_contents.Sum(x => x.TotalWeightKG);
+        }
+
         #endregion
 
         #region Private functions
@@ -129,14 +137,14 @@ namespace WorldLib
         /// </summary>
         private ActionResult add_checkWeight(ObjectBase objectToAdd)
         {
-            var totalWeightKG = objectToAdd.WeightKG + getContentsWeight();
+            var totalWeightKG = objectToAdd.TotalWeightKG + getContentsWeight();
             if (totalWeightKG <= Capacity.WeightKG)
             {
                 return ActionResult.succeeded();
             }
             else
             {
-                return ActionResult.failed($"The {objectToAdd.Name} is too heavy to add to the {Name}");
+                return ActionResult.failed($"The {objectToAdd.Name} is too heavy to be added to the {Name}");
             }
         }
 
@@ -165,7 +173,7 @@ namespace WorldLib
         /// </summary>
         private double getContentsWeight()
         {
-            return m_contents.Sum(x => x.WeightKG);
+            return m_contents.Sum(x => x.TotalWeightKG);
         }
 
         #endregion

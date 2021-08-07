@@ -18,7 +18,6 @@ namespace Tests
         {
             m_objectFactory = new ObjectFactory();
             m_objectFactory.addRootFolder("../WorldLib/BuiltInObjects");
-
         }
         private ObjectFactory m_objectFactory;
 

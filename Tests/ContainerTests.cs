@@ -18,7 +18,6 @@ namespace Tests
         {
             m_objectFactory = new ObjectFactory();
             m_objectFactory.addRootFolder("../WorldLib/BuiltInObjects");
-
         }
         private ObjectFactory m_objectFactory;
 
@@ -108,7 +107,7 @@ namespace Tests
             apple.WeightKG = 4.0;
             result = smallBag.add(apple);
             Assert.AreEqual(ActionResult.StatusEnum.FAILED, result.Status);
-            Assert.AreEqual("The apple is too heavy to add to the small bag", result.Description);
+            Assert.AreEqual("The apple is too heavy to be added to the small bag", result.Description);
             Assert.AreEqual(2, smallBag.ItemCount);
         }
 
@@ -177,6 +176,66 @@ namespace Tests
             var result = smallBag1.add(smallBag2);
             Assert.AreEqual(ActionResult.StatusEnum.FAILED, result.Status);
             Assert.AreEqual(0, smallBag1.ItemCount);
+        }
+
+        /// <summary>
+        /// Tests that the total weight of a container is taken into account when adding
+        /// it to another container.
+        /// </summary>
+        [Test]
+        public void totalWeight_EmptyBags()
+        {
+            // We confirm that five empty small bags can be added to a backpack...
+            var backpack = m_objectFactory.createObjectAs<Container>("backpack");
+            for (var i = 1; i <= 5; ++i)
+            {
+                var smallBag = m_objectFactory.createObjectAs<Container>("small-bag");
+                var result = backpack.add(smallBag);
+                Assert.AreEqual(ActionResult.StatusEnum.SUCCEEDED, result.Status);
+                Assert.AreEqual(i, backpack.ItemCount);
+            }
+        }
+
+        /// <summary>
+        /// Tests that the total weight of a container is taken into account when adding
+        /// it to another container.
+        /// </summary>
+        [Test]
+        public void totalWeight_FullBags()
+        {
+            // We confirm that four full small bags can be added to a backpack...
+            var backpack = m_objectFactory.createObjectAs<Container>("backpack");
+            for (var i = 1; i <= 4; ++i)
+            {
+                var smallBag = m_objectFactory.createObjectAs<Container>("small-bag");
+                var apple = m_objectFactory.createObjectAs<Food>("apple");
+                apple.WeightKG = 10.0;
+                var result = smallBag.add(apple);
+                Assert.AreEqual(ActionResult.StatusEnum.SUCCEEDED, result.Status);
+                Assert.AreEqual(1, smallBag.ItemCount);
+                Assert.AreEqual(11, smallBag.TotalWeightKG);
+
+                result = backpack.add(smallBag);
+                Assert.AreEqual(ActionResult.StatusEnum.SUCCEEDED, result.Status);
+                Assert.AreEqual(i, backpack.ItemCount);
+                Assert.AreEqual(5 + i * 11, backpack.TotalWeightKG);
+            }
+
+            // We add another full bag to the backpack. This should now be too heavy...
+            {
+                var smallBag = m_objectFactory.createObjectAs<Container>("small-bag");
+                var apple = m_objectFactory.createObjectAs<Food>("apple");
+                apple.WeightKG = 10.0;
+                var result = smallBag.add(apple);
+                Assert.AreEqual(ActionResult.StatusEnum.SUCCEEDED, result.Status);
+                Assert.AreEqual(1, smallBag.ItemCount);
+                Assert.AreEqual(11, smallBag.TotalWeightKG);
+
+                result = backpack.add(smallBag);
+                Assert.AreEqual(ActionResult.StatusEnum.FAILED, result.Status);
+                Assert.AreEqual("The small bag is too heavy to be added to the backpack", result.Description);
+                Assert.AreEqual(4, backpack.ItemCount);
+            }
         }
     }
 }

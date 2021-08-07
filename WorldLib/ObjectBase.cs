@@ -100,6 +100,12 @@ namespace WorldLib
         /// </summary>
         public double WeightKG { get; set; } = 0.0;
 
+        /// <summary>
+        /// Gets the total weight of the object. (For example, including the weight of
+        /// objects it holds in the case of a container.)
+        /// </summary>
+        public double TotalWeightKG => getTotalWeightKG();
+
         #endregion
 
         #region Public methods
@@ -110,6 +116,24 @@ namespace WorldLib
         public ObjectBase()
         {
         }
+
+        /// <summary>
+        /// Returns the dimensions of the object in meters, ordered from largest to smallest.
+        /// </summary>
+        public List<double> getOrderedDimensions()
+        {
+            var orderedDimensions = new List<double>();
+            orderedDimensions.Add(Dimensions.HeightM);
+            orderedDimensions.Add(Dimensions.WidthM);
+            orderedDimensions.Add(Dimensions.DepthM);
+            orderedDimensions.Sort();
+            orderedDimensions.Reverse();
+            return orderedDimensions;
+        }
+
+        #endregion
+
+        #region Virtual functions
 
         /// <summary>
         /// Parses values such as object dimensions, weight and so on to numeric values.
@@ -128,17 +152,15 @@ namespace WorldLib
         }
 
         /// <summary>
-        /// Returns the dimensions of the object in meters, ordered from largest to smallest.
-        /// </summary>
-        public List<double> getOrderedDimensions()
+        /// Returns the total weight of the object.
+        /// </summary><remarks>
+        /// Can be optionally overridden in derived classes for cases where the total
+        /// weight may need to be calculated. For example, for containers which hold
+        /// other objects which add to their total weight.
+        /// </remarks>
+        public virtual double getTotalWeightKG()
         {
-            var orderedDimensions = new List<double>();
-            orderedDimensions.Add(Dimensions.HeightM);
-            orderedDimensions.Add(Dimensions.WidthM);
-            orderedDimensions.Add(Dimensions.DepthM);
-            orderedDimensions.Sort();
-            orderedDimensions.Reverse();
-            return orderedDimensions;
+            return WeightKG;
         }
 
         #endregion
