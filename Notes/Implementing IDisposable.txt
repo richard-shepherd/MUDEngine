@@ -1,0 +1,42 @@
+For a base class
+----------------
+
+        #region IDisposable
+
+        /// <summary>
+        /// The "destructor".
+        /// </summary>
+        public virtual void Dispose()
+        {
+            if (IsDisposed) return;
+
+            // Add cleanup code here...
+
+            IsDisposed = true;
+        }
+
+        // True if Dispose has already been called.
+        protected bool IsDisposed { get; private set; }
+
+        #endregion
+
+
+
+For a derived class
+-------------------
+
+        #region IDisposable
+
+        /// <summary>
+        /// The "destructor".
+        /// </summary>
+        public override void Dispose()
+        {
+            if (IsDisposed) return;
+
+            // Add cleanup code here...
+
+            base.Dispose();
+        }
+
+        #endregion

@@ -3,11 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldLib", "WorldLib\WorldLib.csproj", "{F49DB747-7F71-4964-AE4C-FB7D4C46826E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldLib", "WorldLib\WorldLib.csproj", "{F49DB747-7F71-4964-AE4C-FB7D4C46826E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{D4DC7C77-9257-4B5D-85CB-83F73D939B7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "Utility\Utility.csproj", "{D4DC7C77-9257-4B5D-85CB-83F73D939B7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{B635051A-8C23-48EA-9F1E-DECD62E34B77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{B635051A-8C23-48EA-9F1E-DECD62E34B77}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{8283942F-7DDA-46CA-B7D3-58380D8A6ABF}"
+	ProjectSection(SolutionItems) = preProject
+		Notes\Implementing IDisposable.txt = Notes\Implementing IDisposable.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
