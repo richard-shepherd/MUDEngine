@@ -11,15 +11,25 @@ namespace Tests
     public class ContainerTests
     {
         /// <summary>
-        /// Loads a small-bag and checks its properties.
+        /// Sets up the tests.
+        /// </summary>
+        [SetUp]
+        public void setup()
+        {
+            m_objectFactory = new ObjectFactory();
+            m_objectFactory.addRootFolder("../WorldLib/BuiltInObjects");
+
+        }
+        private ObjectFactory m_objectFactory;
+
+        /// <summary>
+        /// Creates a small-bag and checks its properties.
         /// </summary>
         [Test]
         public void loadSmallBag()
         {
-            // We load the small-bag...
-            var builtInObjectsRoot = Path.GetFullPath("../WorldLib/BuiltInObjects");
-            var smallBagPath = Path.Combine(builtInObjectsRoot, "Containers/small-bag.json");
-            var smallBag = ObjectUtils.loadObjectAs<Container>(smallBagPath);
+            // We create a small-bag...
+            var smallBag = m_objectFactory.createObjectAs<Container>("small-bag");
 
             // We check container properties...
             Assert.AreEqual(5, smallBag.Capacity.Items);
@@ -32,10 +42,8 @@ namespace Tests
         [Test]
         public void addItems()
         {
-            // We load the small-bag...
-            var builtInObjectsRoot = Path.GetFullPath("../WorldLib/BuiltInObjects");
-            var smallBagPath = Path.Combine(builtInObjectsRoot, "Containers/small-bag.json");
-            var smallBag = ObjectUtils.loadObjectAs<Container>(smallBagPath);
+            // We create a small-bag...
+            var smallBag = m_objectFactory.createObjectAs<Container>("small-bag");
 
             // We load two apples...
 

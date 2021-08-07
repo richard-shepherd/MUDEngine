@@ -10,22 +10,26 @@ namespace Tests
     /// </summary>
     public class ObjectBaseTests
     {
+        /// <summary>
+        /// Sets up the tests.
+        /// </summary>
         [SetUp]
         public void setup()
         {
+            m_objectFactory = new ObjectFactory();
+            m_objectFactory.addRootFolder("../WorldLib/BuiltInObjects");
 
         }
+        private ObjectFactory m_objectFactory;
 
         /// <summary>
-        /// Loads a small-bag and checks its properties.
+        /// Creates a small-bag and checks its properties.
         /// </summary>
         [Test]
         public void loadSmallBag()
         {
-            // We load the small-bag...
-            var builtInObjectsRoot = Path.GetFullPath("../WorldLib/BuiltInObjects");
-            var smallBagPath = Path.Combine(builtInObjectsRoot, "Containers/small-bag.json");
-            var smallBag = ObjectUtils.loadObject(smallBagPath);
+            // We create a small-bag...
+            var smallBag = m_objectFactory.createObjectAs<Container>("small-bag");
 
             // We check base-object properties...
             Assert.AreEqual("small-bag", smallBag.ObjectID);
