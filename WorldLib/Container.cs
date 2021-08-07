@@ -60,6 +60,13 @@ namespace WorldLib
         /// </summary>
         public ActionResult add(ObjectBase objectToAdd)
         {
+            // We check that we have room for the new item...
+            var result = add_checkCapacity();
+            if(result.Status == StatusEnum.FAILED)
+            {
+                return result;
+            }
+
             m_contents.Add(objectToAdd);
             return ActionResult.succeeded();
         }
@@ -84,7 +91,21 @@ namespace WorldLib
 
         #region Private functions
 
-
+        /// <summary>
+        /// Called when an item is being added to check that we have capacity to
+        /// hold the extra item.
+        /// </summary>
+        private ActionResult add_checkCapacity()
+        {
+            if(m_contents.Count < Capacity.Items)
+            {
+                return ActionResult.succeeded();
+            }
+            else
+            {
+                return ActionResult.failed($"The {Name} is full");
+            }
+        }
 
         #endregion
 

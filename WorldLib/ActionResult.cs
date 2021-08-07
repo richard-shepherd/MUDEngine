@@ -12,7 +12,7 @@
         /// </summary>
         public enum StatusEnum
         {
-            SUCCEDED,
+            SUCCEEDED,
             FAILED
         }
 
@@ -55,7 +55,7 @@
         /// </summary>
         public static ActionResult succeeded()
         {
-            return new ActionResult(StatusEnum.SUCCEDED);
+            return new ActionResult(StatusEnum.SUCCEEDED);
         }
 
         /// <summary>

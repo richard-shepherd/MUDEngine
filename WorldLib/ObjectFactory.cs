@@ -57,7 +57,7 @@ namespace WorldLib
         public T createObjectAs<T>(string objectID) where T : ObjectBase
         {
             var objectBase = createObject(objectID);
-            return objectBase as T;
+            return (T)objectBase;
         }
 
         #endregion
