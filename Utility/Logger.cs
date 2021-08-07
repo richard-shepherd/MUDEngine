@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DroneWar
+namespace Utility
 {
     /// <summary>
     /// Not so much a logger as a log-broker.

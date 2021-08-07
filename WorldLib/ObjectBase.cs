@@ -16,7 +16,8 @@ namespace WorldLib
         public enum ObjectTypeEnum
         {
             NOT_SPECIFIED,
-            CONTAINER
+            CONTAINER,
+            FOOD
         }
 
         /// <summary>

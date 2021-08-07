@@ -38,8 +38,7 @@ namespace Utility
             var parsedValue = getParsedValue(s);
 
             // We look up the multiplier...
-            double multiplier;
-            if(!m_unitMultipliers.TryGetValue(parsedValue.Units, out multiplier))
+            if(!m_unitMultipliers.TryGetValue(parsedValue.Units, out double multiplier))
             {
                 throw new Exception($"Could not find units from string '{s}'");
             }

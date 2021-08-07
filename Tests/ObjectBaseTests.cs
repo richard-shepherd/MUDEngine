@@ -10,6 +10,12 @@ namespace Tests
     /// </summary>
     public class ObjectBaseTests
     {
+        [SetUp]
+        public void setup()
+        {
+
+        }
+
         /// <summary>
         /// Loads a small-bag and checks its properties.
         /// </summary>
