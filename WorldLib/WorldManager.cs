@@ -1,4 +1,6 @@
-﻿namespace WorldLib
+﻿using System.Collections.Generic;
+
+namespace WorldLib
 {
     /// <summary>
     /// Manages the world, including all locations and the objects they contain.
@@ -29,6 +31,21 @@
             m_worldState.Locations = m_objectFactory.createAllLocations();
         }
 
+        /// <summary>
+        /// Creates a new player.
+        /// </summary>
+        public Player createPlayer(string name)
+        {
+            // We set up a new player...
+            var player = m_playerFactory.createPlayer(this, name);
+            m_players.Add(player);
+
+            // We put the player in the starting location...
+            player.setLocation(m_playerStartingLocationID);
+
+            return player;
+        }
+
         #endregion
 
         #region Private data
@@ -38,7 +55,13 @@
         private readonly string m_playerStartingLocationID;
 
         // The world state...
-        private WorldState m_worldState = null;
+        private WorldState m_worldState = new WorldState();
+
+        // Creates players or loads saved players...
+        private readonly PlayerFactory m_playerFactory = new PlayerFactory();
+
+        // The collection of active players...
+        private readonly List<Player> m_players = new List<Player>();
 
         #endregion
     }
