@@ -17,7 +17,8 @@ namespace WorldLib
         {
             NOT_SPECIFIED,
             CONTAINER,
-            FOOD
+            FOOD,
+            LOCATION
         }
 
         /// <summary>
@@ -84,6 +85,14 @@ namespace WorldLib
         /// For example "bag" can be used as an alias for "small bag".
         /// </remarks>
         public List<string> Aliases { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets or sets the object's description.
+        /// </summary><remarks>
+        /// This is stored as a list of strings to allow for multi-line descriptions
+        /// to be neatly specified in JSON config.
+        /// </remarks>
+        public List<string> Description { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the object's dimensions.

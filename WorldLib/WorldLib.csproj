@@ -35,7 +35,7 @@
     <None Update="BuiltInObjects\Food\apple.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="BuiltInObjects\Locations\test-cave-1.json">
+    <None Update="BuiltInObjects\Locations\test-cave-1K.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

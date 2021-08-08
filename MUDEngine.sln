@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{8283942F-7DDA-46CA-B7D3-58380D8A6ABF}"
 	ProjectSection(SolutionItems) = preProject
 		Notes\Implementing IDisposable.txt = Notes\Implementing IDisposable.txt
+		Notes\Notes.txt = Notes\Notes.txt
 		Notes\TODO.txt = Notes\TODO.txt
 	EndProjectSection
 EndProject

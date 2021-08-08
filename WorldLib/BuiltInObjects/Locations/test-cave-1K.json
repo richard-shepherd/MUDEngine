@@ -1,0 +1,40 @@
+﻿{
+  "ObjectID": "test-cave-1K",
+  "ObjectType": "LOCATION",
+
+  "Name": "test cave 1K",
+  "Aliases": [
+    "cave"
+  ],
+
+  "Dimensions": {
+    "Height": "20m",
+    "Width": "30m",
+    "Depth": "30m"
+  },
+
+  "Description": [
+    "You are in a cave.",
+    "Phosphorescent stalactites cast an eerie glow."
+  ],
+
+  "Exits": [
+    {
+      "Direction": "N",
+      "To": "test-cave-1K"
+    },
+    {
+      "Direction": "S",
+      "To": "test-cave-1K"
+    },
+    {
+      "Direction": "E",
+      "To": "test-cave-1K"
+    },
+    {
+      "Direction": "W",
+      "To": "test-cave-1K"
+    }
+  ]
+
+}

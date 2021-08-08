@@ -1,0 +1,12 @@
+
+Single-player vs multi-player
+-----------------------------
+- I guess that in some ways these can really be the same thing.
+  - ie, that single player is really just multi player with only one player
+
+- QUESTION: Is the main thing to separate storage of the world state from storage of the player state? 
+  - ie, not to store the world state with the player
+  - Because other players might change the world state when any individual player is not playing.
+
+
+

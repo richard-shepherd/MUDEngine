@@ -4,3 +4,6 @@ TODO: Create collections, eg Pile. ("The dragon is lying on a pile of gold coins
 
 TODO: Implement EXAMINE
 
+TODO: Location and object persistence.
+      eg, you do not want locations to be recreated and objects in them respawned whenever you
+      enter a location. 
