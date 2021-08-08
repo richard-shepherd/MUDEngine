@@ -8,5 +8,5 @@ Single-player vs multi-player
   - ie, not to store the world state with the player
   - Because other players might change the world state when any individual player is not playing.
 
-
+- So we have a WorldState class and a PlayerState class 
 

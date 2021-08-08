@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Utility;
 using static WorldLib.ObjectBase;
 
@@ -58,6 +59,27 @@ namespace WorldLib
         {
             var objectBase = createObject(objectID);
             return (T)objectBase;
+        }
+
+        /// <summary>
+        /// Returns a collection of all locations in the game, each newly created.
+        /// The returned dictionary is keyed by object-ID.
+        /// </summary>
+        public Dictionary<string, Location> createAllLocations()
+        {
+            var locations = new Dictionary<string, Location>();
+
+            // We find the object-IDs for all locations, and create them...
+            var locationIDs = m_objectDefinitions
+                .Where(x => x.Value.ObjectType == ObjectTypeEnum.LOCATION)
+                .Select(x => x.Key);
+            foreach(var locationID in locationIDs)
+            {
+                var location = createObjectAs<Location>(locationID);
+                locations[locationID] = location;
+            }
+
+            return locations;
         }
 
         #endregion

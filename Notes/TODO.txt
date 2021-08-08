@@ -7,3 +7,6 @@ TODO: Implement EXAMINE
 TODO: Location and object persistence.
       eg, you do not want locations to be recreated and objects in them respawned whenever you
       enter a location. 
+
+TODO: Have a reset button
+      IF a player presses this, they shoud be transported to the starting location.
