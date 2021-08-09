@@ -12,12 +12,12 @@ namespace WorldLib
         #region Public types
 
         /// <summary>
-        /// Informatiopn about a 'simple' exit from the location.
+        /// Information about a 'simple' exit from the location.
         /// </summary><remarks>
         /// A simple exit is one which you can take without any conditions, 
         /// eg, without having to open or unlock a door.
         /// </remarks>
-        public class ExitType
+        public class ExitInfo
         {
             /// <summary>
             /// Gets or sets the direction of the exit, eg "N", "W", "UP".
@@ -30,6 +30,22 @@ namespace WorldLib
             public string To { get; set; } = "";
         }
 
+        /// <summary>
+        /// Information about an object in the location.
+        /// </summary>
+        public class ObjectInfo
+        {
+            /// <summary>
+            /// Gets or sets the ID of the object.
+            /// </summary>
+            public string ObjectID { get; set; } = "";
+
+            /// <summary>
+            /// Gets or sets the collection of objects held by the object (if it is a container).
+            /// </summary>
+            public List<ObjectInfo> Contains { get; set; } = new List<ObjectInfo>();
+        }
+
         #endregion
 
         #region Properties
@@ -37,7 +53,12 @@ namespace WorldLib
         /// <summary>
         /// Gets or sets the collection of exits from the location.
         /// </summary>
-        public List<ExitType> Exits { get; set; } = new List<ExitType>();
+        public List<ExitInfo> Exits { get; set; } = new List<ExitInfo>();
+
+        /// <summary>
+        /// Gets or sets the collection of objects in the location.
+        /// </summary>
+        public List<ObjectInfo> Objects { get; set; } = new List<ObjectInfo>();
 
         #endregion
 
@@ -67,6 +88,15 @@ namespace WorldLib
             results.Add(exits);
 
             return results;
+        }
+
+        #endregion
+
+        #region ObjectBase implementation
+
+        public override void parseValues()
+        {
+            base.parseValues();
         }
 
         #endregion

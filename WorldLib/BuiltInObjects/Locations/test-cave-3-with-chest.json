@@ -1,0 +1,39 @@
+﻿{
+  "ObjectID": "test-cave-3-with-chest",
+  "ObjectType": "LOCATION",
+
+  "Name": "test cave 3",
+  "Aliases": [
+    "cave"
+  ],
+
+  "Dimensions": {
+    "Height": "20m",
+    "Width": "30m",
+    "Depth": "30m"
+  },
+
+  "Description": [
+    "You are in a cave.",
+    "Phosphorescent stalactites cast an eerie glow."
+  ],
+
+  "Exits": [
+  ],
+
+  "Objects": [
+    {
+      "ObjectID": "wooden-chest",
+      "Contains": [
+        {
+          "ObjectID": "small-bag",
+          "Contains": [
+            { "ObjectID": "apple" },
+            { "ObjectID": "apple" },
+            { "ObjectID": "apple" }
+          ]
+        }
+      ]
+    }
+  ]
+}

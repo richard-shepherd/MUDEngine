@@ -42,7 +42,7 @@ namespace UI_WinForms
                 // We create the world...
                 m_objectFactory = new ObjectFactory();
                 m_objectFactory.addRootFolder("../WorldLib/BuiltInObjects");
-                m_worldManager = new WorldManager(m_objectFactory, "test-cave-2-main");
+                m_worldManager = new WorldManager(m_objectFactory, "test-cave-3-with-chest");
 
                 // We create the player and observe updates for them...
                 m_player = m_worldManager.createPlayer("Dugong");
