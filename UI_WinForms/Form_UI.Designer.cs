@@ -45,7 +45,7 @@ namespace UI_WinForms
             this.ctrlGroupBox_Output.Controls.Add(this.ctrlOutput);
             this.ctrlGroupBox_Output.Location = new System.Drawing.Point(12, 12);
             this.ctrlGroupBox_Output.Name = "ctrlGroupBox_Output";
-            this.ctrlGroupBox_Output.Size = new System.Drawing.Size(1737, 985);
+            this.ctrlGroupBox_Output.Size = new System.Drawing.Size(2432, 985);
             this.ctrlGroupBox_Output.TabIndex = 1;
             this.ctrlGroupBox_Output.TabStop = false;
             this.ctrlGroupBox_Output.Text = "Output";
@@ -62,7 +62,7 @@ namespace UI_WinForms
             this.ctrlOutput.Multiline = true;
             this.ctrlOutput.Name = "ctrlOutput";
             this.ctrlOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.ctrlOutput.Size = new System.Drawing.Size(1725, 933);
+            this.ctrlOutput.Size = new System.Drawing.Size(2420, 933);
             this.ctrlOutput.TabIndex = 1;
             // 
             // ctrlGroupBox_Input
@@ -72,7 +72,7 @@ namespace UI_WinForms
             this.ctrlGroupBox_Input.Controls.Add(this.ctrlInput);
             this.ctrlGroupBox_Input.Location = new System.Drawing.Point(12, 1003);
             this.ctrlGroupBox_Input.Name = "ctrlGroupBox_Input";
-            this.ctrlGroupBox_Input.Size = new System.Drawing.Size(1737, 118);
+            this.ctrlGroupBox_Input.Size = new System.Drawing.Size(2432, 118);
             this.ctrlGroupBox_Input.TabIndex = 1;
             this.ctrlGroupBox_Input.TabStop = false;
             this.ctrlGroupBox_Input.Text = "Input";
@@ -86,7 +86,7 @@ namespace UI_WinForms
             this.ctrlInput.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.ctrlInput.Location = new System.Drawing.Point(6, 46);
             this.ctrlInput.Name = "ctrlInput";
-            this.ctrlInput.Size = new System.Drawing.Size(1725, 53);
+            this.ctrlInput.Size = new System.Drawing.Size(2420, 53);
             this.ctrlInput.TabIndex = 0;
             this.ctrlInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ctrlInput_KeyPress);
             // 
@@ -94,7 +94,7 @@ namespace UI_WinForms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(17F, 41F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1761, 1133);
+            this.ClientSize = new System.Drawing.Size(2456, 1133);
             this.Controls.Add(this.ctrlGroupBox_Input);
             this.Controls.Add(this.ctrlGroupBox_Output);
             this.Name = "Form_UI";
