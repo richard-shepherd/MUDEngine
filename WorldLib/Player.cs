@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Utility;
 
 namespace WorldLib
@@ -81,11 +82,38 @@ namespace WorldLib
                 return;
             }
 
+            // We perform the action...
+            switch(parsedInput.Action)
+            {
+                case InputParser.ActionEnum.GO_TO_DIRECTION:
+                    goToDirection(parsedInput.Direction);
+                    break;
+
+                default:
+                    throw new Exception($"Action {parsedInput.Action} not handled.");
+            }
         }
 
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Goes to the direction specified.
+        /// </summary>
+        private void goToDirection(string direction)
+        {
+            // We find the location in the direction specified...
+            var exit = m_location.Exits.FirstOrDefault(x => x.Direction == direction);
+            if(exit == null)
+            {
+                Logger.log($"There is no exit to the {direction}.");
+                return;
+            }
+
+            // We set this as our new location...
+            setLocation(exit.To);
+        }
 
         /// <summary>
         /// Raises an event sending updated info about the player or about what the 

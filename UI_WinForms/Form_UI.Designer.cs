@@ -61,6 +61,7 @@ namespace UI_WinForms
             this.ctrlOutput.Location = new System.Drawing.Point(6, 46);
             this.ctrlOutput.Multiline = true;
             this.ctrlOutput.Name = "ctrlOutput";
+            this.ctrlOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.ctrlOutput.Size = new System.Drawing.Size(1725, 933);
             this.ctrlOutput.TabIndex = 1;
             // 

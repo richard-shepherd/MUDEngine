@@ -38,6 +38,15 @@
     <None Update="BuiltInObjects\Locations\test-cave-1K.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="BuiltInObjects\Locations\test-cave-2-east.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="BuiltInObjects\Locations\test-cave-2-main.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="BuiltInObjects\Locations\test-cave-2-north.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

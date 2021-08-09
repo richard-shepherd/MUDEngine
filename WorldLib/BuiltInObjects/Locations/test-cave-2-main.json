@@ -1,0 +1,32 @@
+﻿{
+  "ObjectID": "test-cave-2-main",
+  "ObjectType": "LOCATION",
+
+  "Name": "test cave 2 main",
+  "Aliases": [
+    "cave"
+  ],
+
+  "Dimensions": {
+    "Height": "20m",
+    "Width": "30m",
+    "Depth": "30m"
+  },
+
+  "Description": [
+    "You are in a cave.",
+    "Phosphorescent stalactites cast an eerie glow."
+  ],
+
+  "Exits": [
+    {
+      "Direction": "N",
+      "To": "test-cave-2-north"
+    },
+    {
+      "Direction": "E",
+      "To": "test-cave-2-east"
+    }
+  ]
+
+}
