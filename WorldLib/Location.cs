@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Utility;
 
 namespace WorldLib
 {
@@ -83,17 +85,20 @@ namespace WorldLib
             var results = new List<string>(Description);
 
             // Exits...
-            var exits = "";
-            if(Exits.Count == 1)
+            var exits = look_Exits();
+            if(exits != null)
             {
-                exits = $"There is an exit to the {Exits[0].Direction}.";
+                results.Add("");
+                results.Add(exits);
             }
-            if(Exits.Count > 1)
+
+            // Objects...
+            var objects = look_Objects();
+            if (objects != null)
             {
-                var directions = Exits.Select(x => x.Direction);
-                exits = $"There are exits to the {string.Join(", ", directions)}.";
+                results.Add("");
+                results.Add(objects);
             }
-            results.Add(exits);
 
             return results;
         }
@@ -121,6 +126,39 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Returns a string description of the location's exits.
+        /// </summary>
+        private string look_Exits()
+        {
+            if (Exits.Count == 1)
+            {
+                return $"There is an exit to the {Exits[0].Direction}.";
+            }
+
+            if (Exits.Count > 1)
+            {
+                var directions = Exits.Select(x => x.Direction);
+                return $"There are exits to the {string.Join(", ", directions)}.";
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Returns a string description of the objects in the location.
+        /// </summary>
+        private string look_Objects()
+        {
+            if(ParsedObjects.Count == 0)
+            {
+                return null;
+            }
+
+            var objectNames = ParsedObjects.Select(x => Utils.prefixAOrAn(x.Name));
+            return $"You can see: {string.Join(", ", objectNames)}.";
+        }
 
         /// <summary>
         /// Parses one ObjectInfo into a concrete ObjectBase-derived object.

@@ -23,6 +23,9 @@
 
   "Objects": [
     {
+      "ObjectID": "apple"
+    },
+    {
       "ObjectID": "wooden-chest",
       "Contains": [
         {

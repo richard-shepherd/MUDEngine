@@ -27,6 +27,12 @@
       "Direction": "E",
       "To": "test-cave-2-east"
     }
+  ],
+
+  "Objects": [
+    {
+      "ObjectID": "apple"
+    }
   ]
 
 }
