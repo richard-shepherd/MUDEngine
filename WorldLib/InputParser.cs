@@ -58,8 +58,15 @@ namespace WorldLib
             input = input.ToUpper();
 
             // We check if the input is a simple compass direction...
-            var parsedInput = parseCompassDirection(input);
-            if(parsedInput != null)
+            var parsedInput = parse_CompassDirection(input);
+            if (parsedInput != null)
+            {
+                return parsedInput;
+            }
+
+            // We check if the input is LOOK...
+            parsedInput = parse_Look(input);
+            if (parsedInput != null)
             {
                 return parsedInput;
             }
@@ -75,15 +82,30 @@ namespace WorldLib
         /// Checks if the input is a simple compass direction.
         /// Returns a ParsedInput if so, null if not.
         /// </summary>
-        private ParsedInput parseCompassDirection(string input)
+        private ParsedInput parse_CompassDirection(string input)
         {
-            if(!m_directions.Contains(input))
+            if (!m_directions.Contains(input))
             {
                 return null;
             }
             var parsedInput = new ParsedInput();
             parsedInput.Action = ActionEnum.GO_TO_DIRECTION;
             parsedInput.Direction = input;
+            return parsedInput;
+        }
+
+        /// <summary>
+        /// Checks if the input is a look command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Look(string input)
+        {
+            if (input != "LOOK")
+            {
+                return null;
+            }
+            var parsedInput = new ParsedInput();
+            parsedInput.Action = ActionEnum.LOOK;
             return parsedInput;
         }
 

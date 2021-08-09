@@ -89,6 +89,10 @@ namespace WorldLib
                     goToDirection(parsedInput.Direction);
                     break;
 
+                case InputParser.ActionEnum.LOOK:
+                    look();
+                    break;
+
                 default:
                     throw new Exception($"Action {parsedInput.Action} not handled.");
             }

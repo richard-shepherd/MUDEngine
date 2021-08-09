@@ -149,7 +149,7 @@ namespace WorldLib
         /// NOTE: Derived implementations must call this method as well as parsing their
         ///       own values.
         /// </summary>
-        public virtual void parseValues()
+        public virtual void parseConfig(ObjectFactory objectFactory)
         {
             // We parse the dimensions...
             Dimensions.HeightM = UnitsHelper.parse(Dimensions.Height);

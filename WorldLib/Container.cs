@@ -94,10 +94,10 @@ namespace WorldLib
         /// <summary>
         /// Parses object properties to numeric equivalents.
         /// </summary>
-        public override void parseValues()
+        public override void parseConfig(ObjectFactory objectFactory)
         {
             // We parse the base object's values...
-            base.parseValues();
+            base.parseConfig(objectFactory);
 
             // We parse values for the container...
             Capacity.WeightKG = UnitsHelper.parse(Capacity.Weight);

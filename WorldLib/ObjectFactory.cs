@@ -138,7 +138,7 @@ namespace WorldLib
             }
 
             // We parse the string values, eg dimensions into numeric values...
-            objectBase.parseValues();
+            objectBase.parseConfig(this);
 
             return objectBase;
         }
