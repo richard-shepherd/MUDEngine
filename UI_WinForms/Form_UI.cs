@@ -76,13 +76,34 @@ namespace UI_WinForms
             }
         }
 
+        /// <summary>
+        /// Called when a key is pressed in the input box.
+        /// When Enter has been pressed we parse the input and perform the action.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ctrlInput_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Enter)
+            try
             {
-                ctrlOutput.AppendText($"> {ctrlInput.Text}{Environment.NewLine}");
+                if (e.KeyChar != (char)Keys.Enter)
+                {
+                    return;
+                }
+
+                // Enter was pressed.
+                // We echo the input to the output window...
+                var input = ctrlInput.Text;
+                ctrlOutput.AppendText($"> {input}{Environment.NewLine}");
                 ctrlInput.Text = "";
-                e.Handled = true;
+                e.Handled = true;  // This stops the 'ding'
+
+                // We pass the input to the player...
+                m_player.parseInput(input);
+            }
+            catch (Exception ex)
+            {
+                Logger.log(ex);
             }
         }
 
@@ -97,11 +118,11 @@ namespace UI_WinForms
         {
             try
             {
-                ctrlOutput.AppendText($"LOG: {args.Message}{Environment.NewLine}");
+                ctrlOutput.AppendText($"{args.Message}{Environment.NewLine}{Environment.NewLine}");
             }
             catch (Exception ex)
             {
-                ctrlOutput.AppendText($"LOG: {ex.Message}{Environment.NewLine}");
+                ctrlOutput.AppendText($"{ex.Message}{Environment.NewLine}{Environment.NewLine}");
             }
         }
 
@@ -116,8 +137,9 @@ namespace UI_WinForms
                 {
                     ctrlOutput.AppendText($"{line}{Environment.NewLine}");
                 }
+                ctrlOutput.AppendText($"{Environment.NewLine}");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.log(ex);
             }

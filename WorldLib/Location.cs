@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace WorldLib
 {
@@ -37,6 +38,36 @@ namespace WorldLib
         /// Gets or sets the collection of exits from the location.
         /// </summary>
         public List<ExitType> Exits { get; set; } = new List<ExitType>();
+
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        /// Returns what you see when you look at a location - including when you
+        /// first enter a location. This includes the location's description, as 
+        /// well its exits and an overview of objects in it.
+        /// </summary>
+        public List<string> look()
+        {
+            // Description...
+            var results = new List<string>(Description);
+
+            // Exits...
+            var exits = "";
+            if(Exits.Count == 1)
+            {
+                exits = $"There is an exit to the {Exits[0].Direction}.";
+            }
+            if(Exits.Count > 1)
+            {
+                var directions = Exits.Select(x => x.Direction);
+                exits = $"There are exits to the {string.Join(", ", directions)}.";
+            }
+            results.Add(exits);
+
+            return results;
+        }
 
         #endregion
     }

@@ -54,7 +54,7 @@ namespace WorldLib
 
             // We get the Location and show its description...
             m_location = m_worldManager.getLocation(locationID);
-            sendUpdate(m_location.Description);
+            sendUpdate(m_location.look());
         }
 
         /// <summary>
@@ -64,8 +64,23 @@ namespace WorldLib
         {
             if(m_location != null)
             {
-                sendUpdate(m_location.Description);
+                sendUpdate(m_location.look());
             }
+        }
+
+        /// <summary>
+        /// Parses user input and takes the action specified.
+        /// </summary>
+        public void parseInput(string input)
+        {
+            // We parse the input...
+            var parsedInput = m_inputParser.parseInput(input);
+            if(parsedInput == null)
+            {
+                Logger.log($"You try to {input} but are not entirely clear on how to do that.");
+                return;
+            }
+
         }
 
         #endregion
@@ -94,6 +109,9 @@ namespace WorldLib
 
         // THe player's current location...
         private Location m_location = null;
+
+        // Parses user input...
+        private readonly InputParser m_inputParser = new InputParser();
 
         #endregion
     }
