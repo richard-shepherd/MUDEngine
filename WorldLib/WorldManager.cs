@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WorldLib
 {
@@ -19,6 +20,7 @@ namespace WorldLib
         {
             m_objectFactory = objectFactory;
             m_playerStartingLocationID = playerStartingLocationID;
+            resetWorld();
         }
 
         /// <summary>
@@ -44,6 +46,18 @@ namespace WorldLib
             player.setLocation(m_playerStartingLocationID);
 
             return player;
+        }
+
+        /// <summary>
+        /// Returns the location for the ID specified.
+        /// </summary>
+        public Location getLocation(string locationID)
+        {
+            if(!m_worldState.Locations.TryGetValue(locationID, out var location))
+            {
+                throw new Exception($"Location not found for ID={locationID}");
+            }
+            return location;
         }
 
         #endregion

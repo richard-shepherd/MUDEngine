@@ -34,11 +34,16 @@ namespace Utility
         /// </summary>
         public static double parse(string s)
         {
+            if(String.IsNullOrEmpty(s))
+            {
+                return 0.0;
+            }
+
             // We get the value and units...
             var parsedValue = getParsedValue(s);
 
             // We look up the multiplier...
-            if(!m_unitMultipliers.TryGetValue(parsedValue.Units, out double multiplier))
+            if(!m_unitMultipliers.TryGetValue(parsedValue.Units, out var multiplier))
             {
                 throw new Exception($"Could not find units from string '{s}'");
             }

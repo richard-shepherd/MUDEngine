@@ -98,6 +98,8 @@ namespace UI_WinForms
             this.Controls.Add(this.ctrlGroupBox_Output);
             this.Name = "Form_UI";
             this.Text = "MUDEngine UI";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_UI_FormClosing);
+            this.Load += new System.EventHandler(this.Form_UI_Load);
             this.ctrlGroupBox_Output.ResumeLayout(false);
             this.ctrlGroupBox_Output.PerformLayout();
             this.ctrlGroupBox_Input.ResumeLayout(false);

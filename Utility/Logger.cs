@@ -43,8 +43,7 @@ namespace Utility
         public static void log(string message)
         {
             var args = new Args { Message = message };
-            var handler = onMessageLogged;
-            handler?.Invoke(null, args);
+            Utils.raiseEvent(null, onMessageLogged, args);
         }
 
         #endregion

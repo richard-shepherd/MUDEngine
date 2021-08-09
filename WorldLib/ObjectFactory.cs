@@ -44,7 +44,7 @@ namespace WorldLib
         public ObjectBase createObject(string objectID)
         {
             // We find the definition for the object ID and parse it...
-            if(!m_objectDefinitions.TryGetValue(objectID, out ObjectDefinition objectDefinition))
+            if(!m_objectDefinitions.TryGetValue(objectID, out var objectDefinition))
             {
                 throw new Exception($"Could not find JSON definition for object ID={objectID}");
             }

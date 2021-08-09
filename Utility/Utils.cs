@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace Utility
 {
@@ -31,6 +32,14 @@ namespace Utility
         public static string right(string s, int length)
         {
             return s.Substring(s.Length-length, length);
+        }
+
+        /// <summary>
+        /// Raises an event.
+        /// </summary>
+        public static void raiseEvent<T>(object sender, EventHandler<T> eventHandler, T args)
+        {
+            eventHandler?.Invoke(sender, args);
         }
 
         #endregion
