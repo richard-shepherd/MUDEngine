@@ -18,9 +18,11 @@ namespace WorldLib
         public enum ActionEnum
         {
             NO_ACTION,
+            SMOKE_POT,
             LOOK,
             GO_TO_DIRECTION,
-            TAKE
+            TAKE,
+            EXAMINE
         }
 
         /// <summary>
@@ -44,6 +46,7 @@ namespace WorldLib
             /// Gets or sets the primary target object.
             /// </summary><remarks>
             /// Used with the TAKE action, eg TAKE [target-1].
+            /// Used with the EXAMINE action, eg EXAMINE [target-1].
             /// </remarks>
             public string Target1 { get; set; } = "";
         }
@@ -65,14 +68,16 @@ namespace WorldLib
         public ParsedInput parseInput(string input)
         {
             // We convert the input to uppercase before parsing...
-            var uppercaseInput = input.ToUpper();
+            var uppercaseInput = input.ToUpper().Trim();
 
             // We check the parsing functions...
             var parsingFunctions = new List<Func<string, string, ParsedInput>>
             {
+                parse_SmokePot,
                 parse_CompassDirection,
                 parse_Look,
-                parse_Take
+                parse_Take,
+                parse_Examine
             };
             foreach(var parsingFunction in parsingFunctions)
             {
@@ -91,10 +96,25 @@ namespace WorldLib
         #region Private functions
 
         /// <summary>
+        /// Checks if the input is SMOKE POT.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_SmokePot(string uppercaseInput, string originalInput)
+        {
+            if (uppercaseInput != "SMOKE POT")
+            {
+                return null;
+            }
+            var parsedInput = new ParsedInput();
+            parsedInput.Action = ActionEnum.SMOKE_POT;
+            return parsedInput;
+        }
+
+        /// <summary>
         /// Checks if the input is a simple compass direction.
         /// Returns a ParsedInput if so, null if not.
         /// </summary>
-        private ParsedInput parse_CompassDirection(string uppercaseInput, string input)
+        private ParsedInput parse_CompassDirection(string uppercaseInput, string originalInput)
         {
             if (!m_directions.Contains(uppercaseInput))
             {
@@ -110,7 +130,7 @@ namespace WorldLib
         /// Checks if the input is a look command.
         /// Returns a ParsedInput if so, null if not.
         /// </summary>
-        private ParsedInput parse_Look(string uppercaseInput, string input)
+        private ParsedInput parse_Look(string uppercaseInput, string originalInput)
         {
             if (uppercaseInput != "LOOK")
             {
@@ -125,30 +145,51 @@ namespace WorldLib
         /// Checks if the input is a take command.
         /// Returns a ParsedInput if so, null if not.
         /// </summary>
-        private ParsedInput parse_Take(string uppercaseInput, string input)
+        private ParsedInput parse_Take(string uppercaseInput, string originalInput)
         {
             // We check if the input starts with a TAKE synonym...
-            var synonyms = new List<string> { "TAKE", "PICK UP" };
+            var synonyms = new List<string> { "TAKE", "PICK UP", "GET" };
             var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput.StartsWith(x));
             if(matchingSynonym == null)
             {
                 return null;
             }
+            var parsedInput = new ParsedInput();
+            parsedInput.Action = ActionEnum.TAKE;
+            parsedInput.Target1 = getTarget(matchingSynonym, originalInput);
+            return parsedInput;
+        }
 
-            // We have a take command, so we find the target...
-            var target = input.Substring(matchingSynonym.Length).Trim();
+
+        private ParsedInput parse_Examine(string uppercaseInput, string originalInput)
+        {
+            // We check if the input starts with an TAKE synonym...
+            var synonyms = new List<string> { "EXAMINE", "LOOK AT" };
+            var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput.StartsWith(x));
+            if (matchingSynonym == null)
+            {
+                return null;
+            }
+            var parsedInput = new ParsedInput();
+            parsedInput.Action = ActionEnum.EXAMINE;
+            parsedInput.Target1 = getTarget(matchingSynonym, originalInput);
+            return parsedInput;
+        }
+
+        /// <summary>
+        /// Returns the target from inputs like "TAKE [target]", "EXAMINE [target]" etc.
+        /// </summary>
+        private string getTarget(string command, string originalInput)
+        {
+            var target = originalInput.Substring(command.Length).Trim();
 
             // If the target starts with "the " we remove this...
-            if(target.ToUpper().StartsWith("THE "))
+            if (target.ToUpper().StartsWith("THE "))
             {
                 target = target.Substring(4);
             }
 
-            // We return the parsed input...
-            var parsedInput = new ParsedInput();
-            parsedInput.Action = ActionEnum.TAKE;
-            parsedInput.Target1 = target;
-            return parsedInput;
+            return target;
         }
 
         #endregion

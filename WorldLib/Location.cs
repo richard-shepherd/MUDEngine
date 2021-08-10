@@ -104,12 +104,39 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Returns an object from this location for the object-name specified.
+        /// If there is more than one object of the requested type, the first one is returned.
+        /// Return null if there are no objects of the requested type.
+        /// </summary>
+        public ObjectBase findObject(string objectName)
+        {
+            // We check each object in the location...
+            objectName = objectName.ToUpper();
+            foreach (var objectInLocation in ParsedObjects)
+            {
+                // We check its name...
+                if (objectInLocation.Name.ToUpper() == objectName)
+                {
+                    return objectInLocation;
+                }
+
+                // We check its aliases...
+                if (objectInLocation.Aliases.Any(x => x.ToUpper() == objectName))
+                {
+                    return objectInLocation;
+                }
+            }
+
+            // We did not find a matching object...
+            return null;
+        }
+
+        /// <summary>
         /// Takes / picks up the named object from the location.
         /// </summary>
-        public ObjectBase take(string objectName)
+        public void takeObject(ObjectBase objectBase)
         {
-            // We check if the object is in the location...
-            return getObject(objectName);
+            ParsedObjects.Remove(objectBase);
         }
 
         #endregion
@@ -135,34 +162,6 @@ namespace WorldLib
         #endregion
 
         #region Private functions
-
-        /// <summary>
-        /// Returns an object from this location for the object-name specified.
-        /// If there is more than one object of the requested type, the first one is returned.
-        /// Return null if there are no objects of the requested type.
-        /// </summary>
-        private ObjectBase getObject(string objectName)
-        {
-            // We check each object in the location...
-            objectName = objectName.ToUpper();
-            foreach(var objectInLocation in ParsedObjects)
-            {
-                // We check its name...
-                if(objectInLocation.Name.ToUpper() == objectName)
-                {
-                    return objectInLocation;
-                }
-
-                // We check its aliases...
-                if(objectInLocation.Aliases.Any(x => x.ToUpper() == objectName))
-                {
-                    return objectInLocation;
-                }
-            }
-
-            // We did not find a matching object...
-            return null;
-        }
 
         /// <summary>
         /// Returns a string description of the location's exits.

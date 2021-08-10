@@ -1,5 +1,3 @@
-TODO: Create a pot. SMOKE POT -> "It is not that sort of pot"
-
 TODO: Create collections, eg Pile. ("The dragon is lying on a pile of gold coins.")
 
 TODO: Implement EXAMINE
@@ -10,3 +8,14 @@ TODO: Location and object persistence.
 
 TODO: Have a reset button
       IF a player presses this, they shoud be transported to the starting location.
+
+TODO: "You can see three apples"
+
+TODO: Allow items to respawn afer a period of time
+
+TODO: DROP object
+
+
+
+
+

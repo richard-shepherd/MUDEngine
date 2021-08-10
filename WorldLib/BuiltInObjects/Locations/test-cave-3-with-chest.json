@@ -26,6 +26,9 @@
       "ObjectID": "apple"
     },
     {
+      "ObjectID": "lobster-pot"
+    },
+    {
       "ObjectID": "wooden-chest",
       "Contains": [
         {

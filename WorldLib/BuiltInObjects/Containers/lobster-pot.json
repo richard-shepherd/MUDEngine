@@ -1,0 +1,22 @@
+{
+  "ObjectID":  "lobster-pot",
+  "ObjectType": "CONTAINER",
+
+  "Name": "lobster pot",
+  "Aliases": [
+    "pot"
+  ],
+
+  "Dimensions": {
+    "Height": "60cm",
+    "Width": "50cm",
+    "Depth": "50cm"
+  },
+
+  "Weight": "2kg",
+
+  "Capacity": {
+    "Items": 2,
+    "Weight": "10kg"
+  }
+}

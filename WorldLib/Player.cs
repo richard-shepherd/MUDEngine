@@ -78,13 +78,17 @@ namespace WorldLib
             var parsedInput = m_inputParser.parseInput(input);
             if(parsedInput == null)
             {
-                Logger.log($"You try to {input} but are not entirely clear on how to do that.");
+                sendUpdate($"You try to {input} but are not entirely clear on how to do that.");
                 return;
             }
 
             // We perform the action...
             switch(parsedInput.Action)
             {
+                case InputParser.ActionEnum.SMOKE_POT:
+                    sendUpdate("It is not that sort of pot.");
+                    break;
+
                 case InputParser.ActionEnum.GO_TO_DIRECTION:
                     goToDirection(parsedInput.Direction);
                     break;
@@ -111,24 +115,26 @@ namespace WorldLib
         /// </summary>
         private void take(string target)
         {
-            // We take the object from the current location...
-            var objectFromLocation = m_location.take(target);
+            // We find the object from the current location...
+            var objectFromLocation = m_location.findObject(target);
             if(objectFromLocation == null)
             {
-                Logger.log($"There is no {target} in this location.");
+                sendUpdate($"You cannot take the {target}.");
                 return;
             }
 
             // We add the object to our inventory...
             var actionResult = m_inventory.add(objectFromLocation);
-            if(actionResult.Status == ActionResult.StatusEnum.SUCCEEDED)
+            if(actionResult.Status != ActionResult.StatusEnum.SUCCEEDED)
             {
-                Logger.log($"You add the {target} to your inventory.");
+                sendUpdate(actionResult.Message);
+                return;
             }
-            else
-            {
-                Logger.log(actionResult.Message);
-            }
+
+            // The object was successfully added to the inventory, so we remove it 
+            // from the location...
+            m_location.takeObject(objectFromLocation);
+            sendUpdate($"You add the {target} to your inventory.");
         }
 
         /// <summary>
@@ -140,7 +146,7 @@ namespace WorldLib
             var exit = m_location.Exits.FirstOrDefault(x => x.Direction == direction);
             if(exit == null)
             {
-                Logger.log($"There is no exit to the {direction}.");
+                sendUpdate($"There is no exit to the {direction}.");
                 return;
             }
 
@@ -152,6 +158,10 @@ namespace WorldLib
         /// Raises an event sending updated info about the player or about what the 
         /// player can see.
         /// </summary>
+        private void sendUpdate(string text)
+        {
+            sendUpdate(new List<string> { text });
+        }
         private void sendUpdate(List<string> text)
         {
             var args = new Args { Text = text };
