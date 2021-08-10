@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+using System.IO;
 using System.Windows.Forms;
 using Utility;
 using WorldLib;
@@ -39,10 +35,17 @@ namespace UI_WinForms
                 // We hook up to the logger...
                 Logger.onMessageLogged += onMessageLogged;
 
+                // We load the config...
+                var jsonConfig = File.ReadAllText("config.json");
+                var config = Utils.fromJSON<ParsedConfig>(jsonConfig);
+
                 // We create the world...
                 m_objectFactory = new ObjectFactory();
-                m_objectFactory.addRootFolder("../WorldLib/BuiltInObjects");
-                m_worldManager = new WorldManager(m_objectFactory, "test-cave-2-main");
+                foreach(var folder in config.ObjectFolders)
+                {
+                    m_objectFactory.addRootFolder(folder);
+                }
+                m_worldManager = new WorldManager(m_objectFactory, config.StartingLocationID);
 
                 // We create the player and observe updates for them...
                 m_player = m_worldManager.createPlayer("Dugong");

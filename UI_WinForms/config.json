@@ -1,0 +1,7 @@
+﻿{
+  "ObjectFolders": [
+    "../WorldLib/BuiltInObjects"
+  ],
+
+  "StartingLocationID": "test-cave-3-with-chest"
+}
