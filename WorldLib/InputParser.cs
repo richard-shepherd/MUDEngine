@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Utility;
 
 namespace WorldLib
@@ -18,7 +19,8 @@ namespace WorldLib
         {
             NO_ACTION,
             LOOK,
-            GO_TO_DIRECTION
+            GO_TO_DIRECTION,
+            TAKE
         }
 
         /// <summary>
@@ -33,9 +35,17 @@ namespace WorldLib
 
             /// <summary>
             /// Gets or sets the direction.
+            /// </summary><remarks>
             /// Used with the GO_TO_DIRECTION action.
-            /// </summary>
+            /// </remarks>
             public string Direction { get; set; } = "";
+
+            /// <summary>
+            /// Gets or sets the primary target object.
+            /// </summary><remarks>
+            /// Used with the TAKE action, eg TAKE [target-1].
+            /// </remarks>
+            public string Target1 { get; set; } = "";
         }
 
         #endregion
@@ -57,18 +67,20 @@ namespace WorldLib
             // We convert the input to uppercase before parsing...
             input = input.ToUpper();
 
-            // We check if the input is a simple compass direction...
-            var parsedInput = parse_CompassDirection(input);
-            if (parsedInput != null)
+            // We check the parsing functions...
+            var parsingFunctions = new List<Func<string, ParsedInput>>
             {
-                return parsedInput;
-            }
-
-            // We check if the input is LOOK...
-            parsedInput = parse_Look(input);
-            if (parsedInput != null)
+                parse_CompassDirection,
+                parse_Look,
+                parse_Take
+            };
+            foreach(var parsingFunction in parsingFunctions)
             {
-                return parsedInput;
+                var parsedInput = parsingFunction(input);
+                if (parsedInput != null)
+                {
+                    return parsedInput;
+                }
             }
 
             return null;
@@ -106,6 +118,28 @@ namespace WorldLib
             }
             var parsedInput = new ParsedInput();
             parsedInput.Action = ActionEnum.LOOK;
+            return parsedInput;
+        }
+
+        /// <summary>
+        /// Checks if the input is a take command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Take(string input)
+        {
+            // We check if the input starts with a TAKE synonym...
+            var synonyms = new List<string> { "TAKE", "PICK UP" };
+            var matchingSynonym = synonyms.FirstOrDefault(x => input.StartsWith(x));
+            if(matchingSynonym == null)
+            {
+                return null;
+            }
+
+            // We have a take command, so we find the target...
+            var target = input.Substring(matchingSynonym.Length).Trim();
+            var parsedInput = new ParsedInput();
+            parsedInput.Action = ActionEnum.TAKE;
+            parsedInput.Target1 = target;
             return parsedInput;
         }
 
