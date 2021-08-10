@@ -101,6 +101,10 @@ namespace WorldLib
                     take(parsedInput.Target1);
                     break;
 
+                case InputParser.ActionEnum.EXAMINE:
+                    examine(parsedInput.Target1);
+                    break;
+
                 default:
                     throw new Exception($"Action {parsedInput.Action} not handled.");
             }
@@ -117,7 +121,7 @@ namespace WorldLib
         {
             // We find the object from the current location...
             var objectFromLocation = m_location.findObject(target);
-            if(objectFromLocation == null)
+            if (objectFromLocation == null)
             {
                 sendUpdate($"You cannot take the {target}.");
                 return;
@@ -125,7 +129,7 @@ namespace WorldLib
 
             // We add the object to our inventory...
             var actionResult = m_inventory.add(objectFromLocation);
-            if(actionResult.Status != ActionResult.StatusEnum.SUCCEEDED)
+            if (actionResult.Status != ActionResult.StatusEnum.SUCCEEDED)
             {
                 sendUpdate(actionResult.Message);
                 return;
@@ -135,6 +139,23 @@ namespace WorldLib
             // from the location...
             m_location.takeObject(objectFromLocation);
             sendUpdate($"You add the {target} to your inventory.");
+        }
+
+        /// <summary>
+        /// Examines the object specified.
+        /// </summary>
+        private void examine(string target)
+        {
+            // We find the object from the current location...
+            var objectFromLocation = m_location.findObject(target);
+            if (objectFromLocation == null)
+            {
+                sendUpdate($"You cannot examine the {target}.");
+                return;
+            }
+
+            // We examine the object...
+            sendUpdate(objectFromLocation.examine());
         }
 
         /// <summary>

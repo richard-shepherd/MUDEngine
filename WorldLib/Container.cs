@@ -111,9 +111,44 @@ namespace WorldLib
             return WeightKG + m_contents.Sum(x => x.TotalWeightKG);
         }
 
+        /// <summary>
+        /// Returns the list of items in the container.
+        /// </summary>
+        public override List<string> examine()
+        {
+            return listContents();
+        }
+
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Returns the list of items in the container.
+        /// </summary>
+        private List<string> listContents()
+        {
+            if(m_contents.Count == 0)
+            {
+                return new List<string> { $"The {Name} is empty." };
+            }
+
+            var results = new List<string>();
+
+            // We list the contents of the container...
+            results.Add($"The {Name} contains: {ObjectUtils.objectNamesAndCounts(m_contents)}.");
+
+            // If any of the contained objects is itself a container, we list what is in it...
+            foreach(var containedObject in m_contents)
+            {
+                var container = containedObject as Container;
+                if(container != null)
+                {
+                    results.AddRange(container.listContents());
+                }
+            }
+            return results;
+        }
 
         /// <summary>
         /// Called when an item is being added to check that we have capacity to

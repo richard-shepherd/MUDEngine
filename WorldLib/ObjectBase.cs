@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Utility;
 
 namespace WorldLib
@@ -170,6 +171,22 @@ namespace WorldLib
         public virtual double getTotalWeightKG()
         {
             return WeightKG;
+        }
+
+        /// <summary>
+        /// Returns the description of the object.
+        /// Can be overridden in derived classes to provide a more detailed description.
+        /// </summary>
+        public virtual List<string> examine()
+        {
+            if(Description.Count != 0)
+            {
+                return Description;
+            }
+            else
+            {
+                return new List<string> { $"You take a close look at the {Name}. It is {Utils.prefixAOrAn(Name)}." };
+            }
         }
 
         #endregion

@@ -11,6 +11,61 @@ namespace Utility
         #region Public methods
 
         /// <summary>
+        /// Returns a string for n items, eg "an apple", "two dragons" etc.
+        /// </summary>
+        public static string numberOfItems(int n, string item)
+        {
+            switch(n)
+            {
+                case 1:
+                    return prefixAOrAn(item);
+
+                case 2:
+                    return $"two {getPlural(item)}";
+
+                case 3:
+                    return $"three {getPlural(item)}";
+
+                case 4:
+                    return $"four {getPlural(item)}";
+
+                case 5:
+                    return $"five {getPlural(item)}";
+
+                case 6:
+                    return $"six {getPlural(item)}";
+
+                case 7:
+                    return $"seven {getPlural(item)}";
+
+                case 8:
+                    return $"eight {getPlural(item)}";
+
+                case 9:
+                    return $"nine {getPlural(item)}";
+
+                case 10:
+                    return $"ten {getPlural(item)}";
+
+                default:
+                    return $"{n} {getPlural(item)}";
+            }
+        }
+
+        /// <summary>
+        /// Returns a plural for the item passed in.
+        /// </summary>
+        public static string getPlural(string item)
+        {
+            if(item.EndsWith("x"))
+            {
+                return $"{item}es";
+
+            }
+            return $"{item}s";
+        }
+
+        /// <summary>
         /// Returns a string with the prefix "a" or "an" to the string specified, depending
         /// on whether it starts with a vowel or not.
         /// </summary>

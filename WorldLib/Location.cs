@@ -191,9 +191,7 @@ namespace WorldLib
             {
                 return null;
             }
-
-            var objectNames = ParsedObjects.Select(x => Utils.prefixAOrAn(x.Name));
-            return $"You can see: {string.Join(", ", objectNames)}.";
+            return $"You can see: {ObjectUtils.objectNamesAndCounts(ParsedObjects)}.";
         }
 
         /// <summary>

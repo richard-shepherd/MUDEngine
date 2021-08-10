@@ -73,11 +73,11 @@ namespace WorldLib
             // We check the parsing functions...
             var parsingFunctions = new List<Func<string, string, ParsedInput>>
             {
-                parse_SmokePot,
                 parse_CompassDirection,
                 parse_Look,
                 parse_Take,
-                parse_Examine
+                parse_Examine,
+                parse_SmokePot
             };
             foreach(var parsingFunction in parsingFunctions)
             {
@@ -161,6 +161,10 @@ namespace WorldLib
         }
 
 
+        /// <summary>
+        /// Checks if the input is a examine command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
         private ParsedInput parse_Examine(string uppercaseInput, string originalInput)
         {
             // We check if the input starts with an TAKE synonym...
