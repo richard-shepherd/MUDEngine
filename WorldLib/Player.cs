@@ -93,6 +93,10 @@ namespace WorldLib
                     look();
                     break;
 
+                case InputParser.ActionEnum.TAKE:
+                    take(parsedInput.Target1);
+                    break;
+
                 default:
                     throw new Exception($"Action {parsedInput.Action} not handled.");
             }
@@ -101,6 +105,31 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Takes the object specified from the current location.
+        /// </summary>
+        private void take(string target)
+        {
+            // We take the object from the current location...
+            var objectFromLocation = m_location.take(target);
+            if(objectFromLocation == null)
+            {
+                Logger.log($"There is no {target} in this location.");
+                return;
+            }
+
+            // We add the object to our inventory...
+            var actionResult = m_inventory.add(objectFromLocation);
+            if(actionResult.Status == ActionResult.StatusEnum.SUCCEEDED)
+            {
+                Logger.log($"You add the {target} to your inventory.");
+            }
+            else
+            {
+                Logger.log(actionResult.Message);
+            }
+        }
 
         /// <summary>
         /// Goes to the direction specified.
@@ -144,6 +173,9 @@ namespace WorldLib
 
         // Parses user input...
         private readonly InputParser m_inputParser = new InputParser();
+
+        // The player's inventory...
+        private readonly Inventory m_inventory = new Inventory();
 
         #endregion
     }

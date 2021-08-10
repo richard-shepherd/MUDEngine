@@ -65,10 +65,10 @@ namespace WorldLib
         public ParsedInput parseInput(string input)
         {
             // We convert the input to uppercase before parsing...
-            input = input.ToUpper();
+            var uppercaseInput = input.ToUpper();
 
             // We check the parsing functions...
-            var parsingFunctions = new List<Func<string, ParsedInput>>
+            var parsingFunctions = new List<Func<string, string, ParsedInput>>
             {
                 parse_CompassDirection,
                 parse_Look,
@@ -76,7 +76,7 @@ namespace WorldLib
             };
             foreach(var parsingFunction in parsingFunctions)
             {
-                var parsedInput = parsingFunction(input);
+                var parsedInput = parsingFunction(uppercaseInput, input);
                 if (parsedInput != null)
                 {
                     return parsedInput;
@@ -94,15 +94,15 @@ namespace WorldLib
         /// Checks if the input is a simple compass direction.
         /// Returns a ParsedInput if so, null if not.
         /// </summary>
-        private ParsedInput parse_CompassDirection(string input)
+        private ParsedInput parse_CompassDirection(string uppercaseInput, string input)
         {
-            if (!m_directions.Contains(input))
+            if (!m_directions.Contains(uppercaseInput))
             {
                 return null;
             }
             var parsedInput = new ParsedInput();
             parsedInput.Action = ActionEnum.GO_TO_DIRECTION;
-            parsedInput.Direction = input;
+            parsedInput.Direction = uppercaseInput;
             return parsedInput;
         }
 
@@ -110,9 +110,9 @@ namespace WorldLib
         /// Checks if the input is a look command.
         /// Returns a ParsedInput if so, null if not.
         /// </summary>
-        private ParsedInput parse_Look(string input)
+        private ParsedInput parse_Look(string uppercaseInput, string input)
         {
-            if (input != "LOOK")
+            if (uppercaseInput != "LOOK")
             {
                 return null;
             }
@@ -125,11 +125,11 @@ namespace WorldLib
         /// Checks if the input is a take command.
         /// Returns a ParsedInput if so, null if not.
         /// </summary>
-        private ParsedInput parse_Take(string input)
+        private ParsedInput parse_Take(string uppercaseInput, string input)
         {
             // We check if the input starts with a TAKE synonym...
             var synonyms = new List<string> { "TAKE", "PICK UP" };
-            var matchingSynonym = synonyms.FirstOrDefault(x => input.StartsWith(x));
+            var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput.StartsWith(x));
             if(matchingSynonym == null)
             {
                 return null;
@@ -137,6 +137,14 @@ namespace WorldLib
 
             // We have a take command, so we find the target...
             var target = input.Substring(matchingSynonym.Length).Trim();
+
+            // If the target starts with "the " we remove this...
+            if(target.ToUpper().StartsWith("THE "))
+            {
+                target = target.Substring(4);
+            }
+
+            // We return the parsed input...
             var parsedInput = new ParsedInput();
             parsedInput.Action = ActionEnum.TAKE;
             parsedInput.Target1 = target;

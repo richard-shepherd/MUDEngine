@@ -162,7 +162,7 @@ namespace WorldLib
             {
                 if(objectDimensions[i] >= containerDimensions[i])
                 {
-                    return ActionResult.failed($"The {objectToAdd.Name} is too large to add to the {Name}");
+                    return ActionResult.failed($"The {objectToAdd.Name} is too large to add to the {Name}.");
                 }
             }
             return ActionResult.succeeded();

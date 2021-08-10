@@ -26,9 +26,9 @@
         public StatusEnum Status { get; set; } = StatusEnum.FAILED;
 
         /// <summary>
-        /// Gets or sets an optional description associated with the result.
+        /// Gets or sets an optional message associated with the result.
         /// </summary>
-        public string Description { get; set; } = "";
+        public string Message { get; set; } = "";
 
         #endregion
 
@@ -44,10 +44,10 @@
         /// <summary>
         /// Constructor.
         /// </summary>
-        public ActionResult(StatusEnum status, string description="")
+        public ActionResult(StatusEnum status, string message="")
         {
             Status = status;
-            Description = description;
+            Message = message;
         }
 
         /// <summary>
@@ -61,9 +61,9 @@
         /// <summary>
         /// Static helper to create a FAILED result.
         /// </summary>
-        public static ActionResult failed(string description)
+        public static ActionResult failed(string message)
         {
-            return new ActionResult(StatusEnum.FAILED, description);
+            return new ActionResult(StatusEnum.FAILED, message);
         }
 
         #endregion

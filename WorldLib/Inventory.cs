@@ -12,6 +12,9 @@
         /// </summary>
         public Inventory()
         {
+            // We set up properties of the inventory...
+            Name = "inventory";
+
             // We set up the default dimensions and capacity of the inventory...
             Dimensions.HeightM = 2.0;
             Dimensions.WidthM = 2.0;

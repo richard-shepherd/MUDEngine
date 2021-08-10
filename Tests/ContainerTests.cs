@@ -75,7 +75,7 @@ namespace Tests
             apple = m_objectFactory.createObjectAs<Food>("apple");
             result = smallBag.add(apple);
             Assert.AreEqual(ActionResult.StatusEnum.FAILED, result.Status);
-            Assert.AreEqual("The small bag is full", result.Description);
+            Assert.AreEqual("The small bag is full", result.Message);
             Assert.AreEqual(5, smallBag.ItemCount);
         }
 
@@ -107,7 +107,7 @@ namespace Tests
             apple.WeightKG = 4.0;
             result = smallBag.add(apple);
             Assert.AreEqual(ActionResult.StatusEnum.FAILED, result.Status);
-            Assert.AreEqual("The apple is too heavy to be added to the small bag", result.Description);
+            Assert.AreEqual("The apple is too heavy to be added to the small bag", result.Message);
             Assert.AreEqual(2, smallBag.ItemCount);
         }
 
@@ -125,7 +125,7 @@ namespace Tests
             apple.Dimensions.WidthM = 2.0;
             var result = smallBag.add(apple);
             Assert.AreEqual(ActionResult.StatusEnum.FAILED, result.Status);
-            Assert.AreEqual("The apple is too large to add to the small bag", result.Description);
+            Assert.AreEqual("The apple is too large to add to the small bag", result.Message);
             Assert.AreEqual(0, smallBag.ItemCount);
         }
 
@@ -233,7 +233,7 @@ namespace Tests
 
                 result = backpack.add(smallBag);
                 Assert.AreEqual(ActionResult.StatusEnum.FAILED, result.Status);
-                Assert.AreEqual("The small bag is too heavy to be added to the backpack", result.Description);
+                Assert.AreEqual("The small bag is too heavy to be added to the backpack", result.Message);
                 Assert.AreEqual(4, backpack.ItemCount);
             }
         }
