@@ -1,0 +1,32 @@
+﻿{
+  "ObjectID": "small-green-dragon",
+  "ObjectType": "MONSTER",
+
+  "Name": "small green dragon",
+  "Aliases": [
+    "dragon"
+  ],
+
+  "Dimensions": {
+    "Height": "200cm",
+    "Width": "200cm",
+    "Depth": "80cm"
+  },
+
+  "Weight": "100kg",
+
+  "HP": 1000,
+
+  "Dexterity":  10,
+
+  "Attacks": [
+    {
+      "Name": "slash",
+      "Damage": "0-100"
+    },
+    {
+      "Name": "fire breath",
+      "Damage": "0-200"
+    }
+  ]
+}

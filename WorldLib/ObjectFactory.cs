@@ -38,6 +38,17 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Confirms that all objects can be created.
+        /// </summary>
+        public void validateObjects()
+        {
+            foreach(var objectID in m_objectDefinitions.Keys)
+            {
+                createObject(objectID);
+            }
+        }
+
+        /// <summary>
         /// Returns a new instance of the object for the ID specified.
         /// The object is returned as ObjectBase.
         /// </summary>

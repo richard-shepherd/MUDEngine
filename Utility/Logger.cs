@@ -46,6 +46,15 @@ namespace Utility
             Utils.raiseEvent(null, onMessageLogged, args);
         }
 
+        /// <summary>
+        /// Logs an error message.
+        /// </summary>
+        public static void error(string message)
+        {
+            var args = new Args { Message = $"ERROR: {message}" };
+            Utils.raiseEvent(null, onMessageLogged, args);
+        }
+
         #endregion
     }
 }

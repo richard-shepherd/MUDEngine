@@ -56,6 +56,9 @@
     <None Update="BuiltInObjects\Monsters\platypus.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="BuiltInObjects\Monsters\small-green-dragon.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="BuiltInObjects\NPCs\Slartibartfast.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -12,8 +12,6 @@ TODO: DROP object
 
 TODO: Only allow TAKE from a container if it is unlocked
 
-TODO: "TAKE apples" - ie, allow plurals
-
 
 
 

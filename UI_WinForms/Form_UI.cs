@@ -39,12 +39,15 @@ namespace UI_WinForms
                 var jsonConfig = File.ReadAllText("config.json");
                 var config = Utils.fromJSON<ParsedConfig>(jsonConfig);
 
-                // We create the world...
+                // We create the object factor and load object defintions...
                 m_objectFactory = new ObjectFactory();
                 foreach(var folder in config.ObjectFolders)
                 {
                     m_objectFactory.addRootFolder(folder);
                 }
+                m_objectFactory.validateObjects();
+
+                // We create the world...
                 m_worldManager = new WorldManager(m_objectFactory, config.StartingLocationID);
 
                 // We create the player and observe updates for them...
