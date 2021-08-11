@@ -179,7 +179,7 @@ namespace WorldLib
             }
             else
             {
-                return ActionResult.failed($"The {objectToAdd.Name} is too heavy to be added to the {Name}");
+                return ActionResult.failed($"{Utils.prefix_The(objectToAdd.Name)} is too heavy to be added to the {Name}.");
             }
         }
 
@@ -197,7 +197,7 @@ namespace WorldLib
             {
                 if(objectDimensions[i] >= containerDimensions[i])
                 {
-                    return ActionResult.failed($"The {objectToAdd.Name} is too large to add to the {Name}.");
+                    return ActionResult.failed($"{Utils.prefix_The(objectToAdd.Name)} is too large to add to the {Name}.");
                 }
             }
             return ActionResult.succeeded();

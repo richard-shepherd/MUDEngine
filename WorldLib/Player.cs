@@ -123,7 +123,7 @@ namespace WorldLib
             var objectFromLocation = m_location.findObject(target);
             if (objectFromLocation == null)
             {
-                sendUpdate($"You cannot take the {target}.");
+                sendUpdate($"You cannot take {Utils.prefix_the(target)}.");
                 return;
             }
 
@@ -138,7 +138,7 @@ namespace WorldLib
             // The object was successfully added to the inventory, so we remove it 
             // from the location...
             m_location.takeObject(objectFromLocation);
-            sendUpdate($"You add the {target} to your inventory.");
+            sendUpdate($"You add {Utils.prefix_the(target)} to your inventory.");
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace WorldLib
             var objectFromLocation = m_location.findObject(target);
             if (objectFromLocation == null)
             {
-                sendUpdate($"You cannot examine the {target}.");
+                sendUpdate($"You cannot examine {Utils.prefix_the(target)}.");
                 return;
             }
 

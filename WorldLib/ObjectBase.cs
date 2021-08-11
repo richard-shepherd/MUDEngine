@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Utility;
 
 namespace WorldLib
@@ -19,7 +18,8 @@ namespace WorldLib
             NOT_SPECIFIED,
             CONTAINER,
             FOOD,
-            LOCATION
+            LOCATION,
+            NPC
         }
 
         /// <summary>
@@ -94,6 +94,14 @@ namespace WorldLib
         /// to be neatly specified in JSON config.
         /// </remarks>
         public List<string> Description { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets or sets optional text returned when the object is examined.
+        /// </summary><remarks>
+        /// This is stored as a list of strings to allow for multi-line descriptions
+        /// to be neatly specified in JSON config.
+        /// </remarks>
+        public List<string> Examine { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the object's dimensions.
@@ -179,14 +187,14 @@ namespace WorldLib
         /// </summary>
         public virtual List<string> examine()
         {
-            if(Description.Count != 0)
+            var result = new List<string>();
+            result.AddRange(Description);
+            result.AddRange(Examine);
+            if(result.Count == 0)
             {
-                return Description;
+                result.Add($"You take a close look at {Utils.prefix_the(Name)}. It is {Utils.prefix_a_an(Name)}.");
             }
-            else
-            {
-                return new List<string> { $"You take a close look at the {Name}. It is {Utils.prefixAOrAn(Name)}." };
-            }
+            return result;
         }
 
         #endregion

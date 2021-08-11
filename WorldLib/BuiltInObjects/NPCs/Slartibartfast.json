@@ -1,0 +1,22 @@
+﻿{
+  "ObjectID": "Slartibartfast",
+  "ObjectType": "NPC",
+
+  "Name": "Slartibartfast",
+  "Aliases": [
+    "Slarti",
+    "SBF"
+  ],
+
+  "Examine": [
+    "Slartibartfast is looking concerned about something and muttering under his breath, but you cannot hear what he is saying." 
+  ],
+
+  "Dimensions": {
+    "Height": "180cm",
+    "Width": "80cm",
+    "Depth": "80cm"
+  },
+
+  "Weight": "80kg"
+}

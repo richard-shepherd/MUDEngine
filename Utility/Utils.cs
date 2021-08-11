@@ -18,7 +18,7 @@ namespace Utility
             switch(n)
             {
                 case 1:
-                    return prefixAOrAn(item);
+                    return prefix_a_an(item);
 
                 case 2:
                     return $"two {getPlural(item)}";
@@ -66,14 +66,58 @@ namespace Utility
         }
 
         /// <summary>
+        /// Returns the string prefixed with 'The'.
+        /// </summary>
+        public static string prefix_The(string s)
+        {
+            // We check if the first letter is upper case. If so, it looks like the string
+            // could be a proper name so we do not add 'the'...
+            var firstLetter = left(s, 1);
+            var uppercaseFirstLetter = firstLetter.ToUpper();
+            if (firstLetter == uppercaseFirstLetter)
+            {
+                return s;
+            }
+
+            // The first letter is not a capital, so we prefix with 'The'...
+            return $"The {s}";
+        }
+
+        /// <summary>
+        /// Returns the string prefixed with 'the'.
+        /// </summary>
+        public static string prefix_the(string s)
+        {
+            // We check if the first letter is upper case. If so, it looks like the string
+            // could be a proper name so we do not add 'the'...
+            var firstLetter = left(s, 1);
+            var uppercaseFirstLetter = firstLetter.ToUpper();
+            if (firstLetter == uppercaseFirstLetter)
+            {
+                return s;
+            }
+
+            // The first letter is not a capital, so we prefix with 'the'...
+            return $"the {s}";
+        }
+
+        /// <summary>
         /// Returns a string with the prefix "a" or "an" to the string specified, depending
         /// on whether it starts with a vowel or not.
         /// </summary>
-        public static string prefixAOrAn(string s)
+        public static string prefix_a_an(string s)
         {
+            // We check if the first letter is upper case. If so, it looks like the string
+            // could be a proper name so we do not add 'a' or 'an'...
             var firstLetter = left(s, 1);
-            firstLetter = firstLetter.ToUpper();
-            switch(firstLetter)
+            var uppercaseFirstLetter = firstLetter.ToUpper();
+            if(firstLetter == uppercaseFirstLetter)
+            {
+                return s;
+            }
+
+            // The first letter is not uppercase, so we check if it is a vowel...
+            switch(uppercaseFirstLetter)
             {
                 case "A":
                 case "E":
