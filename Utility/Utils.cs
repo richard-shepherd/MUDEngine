@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Utility
 {
@@ -67,6 +68,28 @@ namespace Utility
                 return $"{item}es";
             }
             return $"{item}s";
+        }
+
+        /// <summary>
+        /// Returns a list of possible singular forms of the item passed in.
+        /// </summary>
+        public static List<string> getSingularForms(string item)
+        {
+            var results = new List<string>();
+
+            // We try removing "s"...
+            if (right(item, 1) == "s")
+            {
+                results.Add(left(item, item.Length - 1));
+            }
+
+            // We try removing "es"...
+            if (right(item, 2) == "es")
+            {
+                results.Add(left(item, item.Length - 2));
+            }
+
+            return results;
         }
 
         /// <summary>

@@ -82,6 +82,34 @@ namespace WorldLib
             return locations;
         }
 
+        /// <summary>
+        /// Gets the object-name for the object-name provided.
+        /// 
+        /// The name provided can be singular or plural. The singular form is returned, along
+        /// with a bool indicating whether the original name was a plural.
+        /// </summary>
+        public (string Name, bool IsPlural) getObjectName(string name)
+        {
+            // We check if we have an object with the name as provided...
+            if(m_objectNames.Contains(name))
+            {
+                return (name, false);
+            }
+
+            // We do not have the name, so it could be a plural...
+            var singularsForms = Utils.getSingularForms(name);
+            foreach(var singularForm in singularsForms)
+            {
+                if (m_objectNames.Contains(singularForm))
+                {
+                    return (singularForm, true);
+                }
+            }
+
+            // We do not have this object, either as a plural or singular...
+            return (null, false);
+        }
+
         #endregion
 
         #region Private functions
@@ -101,9 +129,13 @@ namespace WorldLib
                 var objectDefinition = new ObjectDefinition
                 {
                     JSON = json,
-                    ObjectType = objectBase.ObjectType
+                    ObjectType = objectBase.ObjectType,
+                    ObjectName = objectBase.Name
                 };
                 m_objectDefinitions[objectBase.ObjectID] = objectDefinition;
+
+                // We store the name...
+                m_objectNames.Add(objectBase.Name);
             }
             catch (Exception ex)
             {
@@ -160,10 +192,14 @@ namespace WorldLib
         {
             public string JSON { get; set; } = "";
             public ObjectTypeEnum ObjectType { get; set; } = ObjectTypeEnum.NOT_SPECIFIED;
+            public string ObjectName { get; set; } = "";
         }
 
         // Object JSON definitions, keyed by object ID...
         private readonly Dictionary<string, ObjectDefinition> m_objectDefinitions = new Dictionary<string, ObjectDefinition>();
+
+        // Names of all known objects...
+        private readonly HashSet<string> m_objectNames = new HashSet<string>();
 
         #endregion
     }

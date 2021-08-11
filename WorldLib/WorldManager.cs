@@ -11,6 +11,15 @@ namespace WorldLib
     /// </remarks>
     public class WorldManager
     {
+        #region Properties
+
+        /// <summary>
+        /// Gets the object-factory.
+        /// </summary>
+        public ObjectFactory ObjectFactory => m_objectFactory;
+
+        #endregion
+
         #region Public methods
 
         /// <summary>

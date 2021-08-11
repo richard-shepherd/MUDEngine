@@ -119,11 +119,16 @@ namespace WorldLib
         /// </summary>
         private void take(string target)
         {
+            // The target could be expressed as a singular or plural form.
+            // We find the singular version of the object name and whether it is a plural...
+            var targetInfo = m_worldManager.ObjectFactory.getObjectName(target);
+            var targetName = targetInfo.Name;
+
             // We find the object from the current location...
-            var objectFromLocation = m_location.findObject(target);
+            var objectFromLocation = m_location.findObject(targetName);
             if (objectFromLocation == null)
             {
-                sendUpdate($"There is no {target} which can be taken.");
+                sendUpdate($"There is no {targetName} which can be taken.");
                 return;
             }
 
@@ -138,7 +143,7 @@ namespace WorldLib
             // The object was successfully added to the inventory, so we remove it 
             // from the location...
             m_location.takeObject(objectFromLocation);
-            sendUpdate($"You add {Utils.prefix_the(target)} to your inventory.");
+            sendUpdate($"You add {Utils.prefix_the(targetName)} to your inventory.");
         }
 
         /// <summary>
