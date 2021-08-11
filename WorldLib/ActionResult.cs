@@ -53,9 +53,9 @@
         /// <summary>
         /// Static helper to create a SUCCEEDED result.
         /// </summary>
-        public static ActionResult succeeded()
+        public static ActionResult succeeded(string message = "")
         {
-            return new ActionResult(StatusEnum.SUCCEEDED);
+            return new ActionResult(StatusEnum.SUCCEEDED, message);
         }
 
         /// <summary>

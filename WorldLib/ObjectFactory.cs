@@ -106,8 +106,9 @@ namespace WorldLib
                 }
             }
 
-            // We do not have this object, either as a plural or singular...
-            return (null, false);
+            // We do not have this object, either as a plural or singular.
+            // It could be an alias for another object, so we return the original name...
+            return (name, false);
         }
 
         #endregion

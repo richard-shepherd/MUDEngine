@@ -162,7 +162,7 @@ namespace WorldLib
             }
             else
             {
-                return ActionResult.failed($"The {Name} is full");
+                return ActionResult.failed($"The {Name} is full.");
             }
         }
 
