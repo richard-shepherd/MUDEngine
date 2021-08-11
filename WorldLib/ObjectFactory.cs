@@ -137,6 +137,10 @@ namespace WorldLib
                     objectBase = Utils.fromJSON<NPC>(objectDefinition.JSON);
                     break;
 
+                case ObjectTypeEnum.MONSTER:
+                    objectBase = Utils.fromJSON<Monster>(objectDefinition.JSON);
+                    break;
+
                 default:
                     throw new Exception($"Failed to parse object type {objectDefinition.ObjectType}. You may need to add a case statement to ObjectFactory.parseObject().");
             }

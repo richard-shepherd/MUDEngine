@@ -123,7 +123,7 @@ namespace WorldLib
             var objectFromLocation = m_location.findObject(target);
             if (objectFromLocation == null)
             {
-                sendUpdate($"You cannot take {Utils.prefix_the(target)}.");
+                sendUpdate($"There is no {target} which can be taken.");
                 return;
             }
 

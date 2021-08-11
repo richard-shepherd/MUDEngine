@@ -57,10 +57,14 @@ namespace Utility
         /// </summary>
         public static string getPlural(string item)
         {
-            if(item.EndsWith("x"))
+            var uppercaseLastLetter = right(item, 1).ToUpper();
+            if (uppercaseLastLetter == "X")
             {
                 return $"{item}es";
-
+            }
+            if (uppercaseLastLetter == "S")
+            {
+                return $"{item}es";
             }
             return $"{item}s";
         }

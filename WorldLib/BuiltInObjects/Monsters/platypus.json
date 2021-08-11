@@ -1,0 +1,20 @@
+﻿{
+  "ObjectID": "platipus",
+  "ObjectType": "MONSTER",
+
+  "Name": "platipus",
+  "Aliases": [
+  ],
+
+  "Examine": [
+    "What a peculiar creature!"
+  ],
+
+  "Dimensions": {
+    "Height": "20cm",
+    "Width": "40cm",
+    "Depth": "20cm"
+  },
+
+  "Weight": "8kg"
+}

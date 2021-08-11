@@ -19,7 +19,8 @@ namespace WorldLib
             CONTAINER,
             FOOD,
             LOCATION,
-            NPC
+            NPC,
+            MONSTER
         }
 
         /// <summary>

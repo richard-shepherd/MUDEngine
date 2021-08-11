@@ -53,6 +53,9 @@
     <None Update="BuiltInObjects\Locations\test-cave-3-with-chest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="BuiltInObjects\Monsters\platypus.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="BuiltInObjects\NPCs\Slartibartfast.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
