@@ -1,5 +1,5 @@
 ﻿{
-  "ObjectID": "test-cave-3-with-chest",
+  "ObjectID": "test-cave-3",
   "ObjectType": "LOCATION",
 
   "Name": "test cave 3",
@@ -22,6 +22,15 @@
   ],
 
   "Objects": [
+    {
+      "ObjectID": "small-green-dragon"
+    },
+    {
+      "ObjectID": "apple"
+    },
+    {
+      "ObjectID": "apple"
+    },
     {
       "ObjectID": "lobster-pot"
     },

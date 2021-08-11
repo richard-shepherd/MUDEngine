@@ -6,7 +6,7 @@
     /// The state is held separately from the management of the player (done by
     /// the Player class) so that it can be serialized cleanly to JSON.
     /// </remarks>
-    public class PlayerState : ObjectBase
+    public class PlayerState : NPC
     {
         #region Properties
 

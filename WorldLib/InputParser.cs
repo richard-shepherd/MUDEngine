@@ -22,7 +22,8 @@ namespace WorldLib
             LOOK,
             GO_TO_DIRECTION,
             TAKE,
-            EXAMINE
+            EXAMINE,
+            INVENTORY
         }
 
         /// <summary>
@@ -77,6 +78,7 @@ namespace WorldLib
                 parse_Look,
                 parse_Take,
                 parse_Examine,
+                parse_Inventory,
                 parse_SmokePot
             };
             foreach(var parsingFunction in parsingFunctions)
@@ -94,6 +96,24 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Checks if the input is requesting the inventory.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Inventory(string uppercaseInput, string originalInput)
+        {
+            // We check if the input is one of the synonyms for the inventory...
+            var synonyms = new List<string> { "I", "INVENTORY" };
+            var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput == x);
+            if (matchingSynonym == null)
+            {
+                return null;
+            }
+            var parsedInput = new ParsedInput();
+            parsedInput.Action = ActionEnum.INVENTORY;
+            return parsedInput;
+        }
 
         /// <summary>
         /// Checks if the input is SMOKE POT.

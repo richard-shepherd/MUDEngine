@@ -43,6 +43,11 @@ namespace WorldLib
             m_worldManager = worldManager;
             m_playerState.ObjectID = id;
             m_playerState.Name = name;
+
+            // We set up default player properties...
+            m_playerState.HP = 100;
+            m_playerState.Dexterity = 20;
+            m_playerState.Attacks.Add(new NPC.AttackType { Name = "punch", MinDamage = 0, MaxDamage = 5 });
         }
 
         /// <summary>
@@ -105,6 +110,10 @@ namespace WorldLib
                     examine(parsedInput.Target1);
                     break;
 
+                case InputParser.ActionEnum.INVENTORY:
+                    showInventory();
+                    break;
+
                 default:
                     throw new Exception($"Action {parsedInput.Action} not handled.");
             }
@@ -113,6 +122,14 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Shows the contents of the inventory.
+        /// </summary>
+        private void showInventory()
+        {
+            sendUpdate(m_inventory.examine());
+        }
 
         /// <summary>
         /// Takes the target specified from the current location and adds it/them to the inventory.
