@@ -62,11 +62,6 @@ namespace WorldLib
         #region Properties
 
         /// <summary>
-        /// Gets or sets the ID of the character's location.
-        /// </summary>
-        public string LocationID { get; set; } = "";
-
-        /// <summary>
         /// Gets or sets the character's hit-points.
         /// </summary>
         public int HP { get; set; } = 50;
@@ -132,6 +127,9 @@ namespace WorldLib
         /// </summary>
         public void fight(DateTime updateTimeUTC)
         {
+            // We remove any opponents who are dead, or no longer in the same location...
+            cleanupFightOppenents();
+
             // We check if we have any opponents we are currently fighting...
             if(m_fightOpponents.Count == 0)
             {
@@ -165,6 +163,36 @@ namespace WorldLib
                 sendUpdate($"{Utils.prefix_The(Name)} launches a {attack.Name} attack at {Utils.prefix_the(opponent.Name)} but misses.");
                 return;
             }
+
+            // We work out how much damage we have done to the opponent...
+            var damage = Utils.Rnd.Next(attack.MinDamage, attack.MaxDamage);
+            opponent.HP -= damage;
+
+            // We create the update...
+            var update = new List<string>();
+
+            // Attack description...
+            update.Add($"{Utils.prefix_The(Name)} launches a {attack.Name} attack at {Utils.prefix_the(opponent.Name)} doing {damage} damage.");
+            
+            // Current HP of each fighter (in alphabetical order)...
+            if(opponent.Name.CompareTo(Name) < 0)
+            {
+                update.Add($"{opponent.Name} HP={opponent.HP}");
+                update.Add($"{Name} HP={HP}");
+            }
+            else
+            {
+                update.Add($"{Name} HP={HP}");
+                update.Add($"{opponent.Name} HP={opponent.HP}");
+            }
+
+            // We note if this character killed the opponent...
+            if (opponent.HP <= 0)
+            {
+                update.Add($"{Utils.prefix_The(Name)} has killed {Utils.prefix_the(opponent.Name)}.");
+            }
+
+            sendUpdate(update);
         }
 
         #endregion
@@ -235,6 +263,31 @@ namespace WorldLib
             // We set the next available attack time...
             m_nextAttackTime = updateTimeUTC + TimeSpan.FromSeconds(AttackIntervalSeconds);
             return true;
+        }
+
+        /// <summary>
+        /// Removes any fight opponents which are dead or no longer in the same 
+        /// location as the character.
+        /// </summary>
+        private void cleanupFightOppenents()
+        {
+            // If this character is dead, we remove all opponents...
+            if(HP <= 0)
+            {
+                m_fightOpponents.Clear();
+            }
+
+            // We check if any opponents are dead or no longer in the same location...
+            var opponents = new List<Character>(m_fightOpponents);
+            foreach (var opponent in opponents)
+            {
+                if( opponent.HP <= 0
+                    ||
+                    opponent.LocationID != LocationID)
+                {
+                    m_fightOpponents.Remove(opponent);
+                }
+            }
         }
 
         #endregion

@@ -264,6 +264,9 @@ namespace WorldLib
             // We get the object from its ID...
             var objectBase = objectFactory.createObject(objectInfo.ObjectID);
 
+            // We set its location to this location...
+            objectBase.LocationID = ObjectID;
+
             // We parse any contents (if it is a container)...
             parseContents(objectBase, objectInfo, objectFactory);
 

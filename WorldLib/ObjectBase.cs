@@ -78,6 +78,11 @@ namespace WorldLib
         public ObjectTypeEnum ObjectType { get; set; } = ObjectTypeEnum.NOT_SPECIFIED;
 
         /// <summary>
+        /// <summary>
+        /// Gets or sets the ID of the object's location.
+        /// </summary>
+        public string LocationID { get; set; } = "";
+
         /// Gets or sets the object's name.
         /// </summary>
         public string Name { get; set; } = "";
