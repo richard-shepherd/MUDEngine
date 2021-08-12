@@ -23,7 +23,8 @@ namespace WorldLib
             GO_TO_DIRECTION,
             TAKE,
             EXAMINE,
-            INVENTORY
+            INVENTORY,
+            KILL
         }
 
         /// <summary>
@@ -46,8 +47,9 @@ namespace WorldLib
             /// <summary>
             /// Gets or sets the primary target object.
             /// </summary><remarks>
-            /// Used with the TAKE action, eg TAKE [target-1].
+            /// Used with the TAKE action,    eg TAKE [target-1].
             /// Used with the EXAMINE action, eg EXAMINE [target-1].
+            /// Used with the KILL action,    eg KILL [target-1].
             /// </remarks>
             public string Target1 { get; set; } = "";
         }
@@ -79,6 +81,7 @@ namespace WorldLib
                 parse_Take,
                 parse_Examine,
                 parse_Inventory,
+                parse_Kill,
                 parse_SmokePot
             };
             foreach(var parsingFunction in parsingFunctions)
@@ -96,6 +99,17 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Checks if the input is a KILL command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Kill(string uppercaseInput, string originalInput)
+        {
+            // We check if the input starts with a KILL synonym...
+            var synonyms = new List<string> { "KILL", "FIGHT" };
+            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.KILL, synonyms);
+        }
 
         /// <summary>
         /// Checks if the input is requesting the inventory.
@@ -169,15 +183,7 @@ namespace WorldLib
         {
             // We check if the input starts with a TAKE synonym...
             var synonyms = new List<string> { "TAKE", "PICK UP", "GET" };
-            var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput.StartsWith(x));
-            if(matchingSynonym == null)
-            {
-                return null;
-            }
-            var parsedInput = new ParsedInput();
-            parsedInput.Action = ActionEnum.TAKE;
-            parsedInput.Target1 = getTarget(matchingSynonym, originalInput);
-            return parsedInput;
+            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.TAKE, synonyms);
         }
 
 
@@ -187,17 +193,9 @@ namespace WorldLib
         /// </summary>
         private ParsedInput parse_Examine(string uppercaseInput, string originalInput)
         {
-            // We check if the input starts with an TAKE synonym...
+            // We check if the input starts with an EXAMINE synonym...
             var synonyms = new List<string> { "EXAMINE", "LOOK AT" };
-            var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput.StartsWith(x));
-            if (matchingSynonym == null)
-            {
-                return null;
-            }
-            var parsedInput = new ParsedInput();
-            parsedInput.Action = ActionEnum.EXAMINE;
-            parsedInput.Target1 = getTarget(matchingSynonym, originalInput);
-            return parsedInput;
+            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.EXAMINE, synonyms);
         }
 
         /// <summary>
@@ -214,6 +212,24 @@ namespace WorldLib
             }
 
             return target;
+        }
+
+        /// <summary>
+        /// Returns ParsedInput for a command with a target: "[command] [target]", eg, "TAKE apple".
+        /// Returns null if the input does not match the command.
+        /// </summary>
+        private ParsedInput parse_WithTarget(string uppercaseInput, string originalInput, ActionEnum action, List<string> synonyms)
+        {
+            // We check if the input starts with a command synonym...
+            var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput.StartsWith(x));
+            if (matchingSynonym == null)
+            {
+                return null;
+            }
+            var parsedInput = new ParsedInput();
+            parsedInput.Action = action;
+            parsedInput.Target1 = getTarget(matchingSynonym, originalInput);
+            return parsedInput;
         }
 
         #endregion
