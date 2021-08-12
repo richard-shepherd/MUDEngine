@@ -14,6 +14,9 @@ TODO: Only allow TAKE from a container if it is unlocked
 
 TODO: PUT [target1] in/into [target2]
 
+TODO: Implement XP
+      Updates other stats at certain levels.
+
 
 
 

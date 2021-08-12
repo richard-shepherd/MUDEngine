@@ -165,7 +165,7 @@ namespace WorldLib
             }
 
             // We work out how much damage we have done to the opponent...
-            var damage = Utils.Rnd.Next(attack.MinDamage, attack.MaxDamage);
+            var damage = Utils.Rnd.Next(attack.MinDamage, attack.MaxDamage + 1);
             opponent.HP -= damage;
 
             // We create the update...

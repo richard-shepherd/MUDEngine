@@ -17,18 +17,18 @@
 
   "HP": 1000,
 
-  "Dexterity": 20,
+  "Dexterity": 30,
 
   "AttackIntervalSeconds":  5.0,
 
   "Attacks": [
     {
       "Name": "slash",
-      "Damage": "0-100"
+      "Damage": "1-100"
     },
     {
       "Name": "fire breath",
-      "Damage": "0-200"
+      "Damage": "1-200"
     }
   ]
 }

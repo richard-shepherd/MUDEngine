@@ -33,7 +33,7 @@ namespace WorldLib
             HP = 100;
             Dexterity = 50;
             AttackIntervalSeconds = 1.0;
-            Attacks.Add(new Character.AttackType { Name = "punch", MinDamage = 0, MaxDamage = 5 });
+            Attacks.Add(new Character.AttackType { Name = "punch", MinDamage = 1, MaxDamage = 5 });
         }
 
         /// <summary>
