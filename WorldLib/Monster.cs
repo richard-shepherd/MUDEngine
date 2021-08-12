@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents monsters.
     /// </summary>
-    public class Monster : NPC
+    public class Monster : Character
     {
         #region Public methods
 

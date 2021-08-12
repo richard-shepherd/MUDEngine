@@ -239,8 +239,8 @@ namespace WorldLib
             {
                 return null;
             }
-            var nonPlayerObjects = ParsedObjects.Where(x => x.ObjectType as Player != null);
-            return $"You can see: {ObjectUtils.objectNamesAndCounts(ParsedObjects)}.";
+            var nonPlayerObjects = ParsedObjects.Where(x => x.ObjectType != ObjectTypeEnum.PLAYER);
+            return $"You can see: {ObjectUtils.objectNamesAndCounts(nonPlayerObjects)}.";
         }
 
         /// <summary>
@@ -252,7 +252,8 @@ namespace WorldLib
             {
                 return null;
             }
-            return $"You can see: {ObjectUtils.objectNamesAndCounts(ParsedObjects)}.";
+            var players = ParsedObjects.Where(x => x.ObjectType == ObjectTypeEnum.PLAYER);
+            return $"Players here: {ObjectUtils.objectNamesAndCounts(players)}.";
         }
 
         /// <summary>

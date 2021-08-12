@@ -8,31 +8,13 @@ namespace WorldLib
     /// <summary>
     /// Manages the actions of a player.
     /// </summary><remarks>
-    /// The player's state is held separately (in the PlayerState class) to make it
-    /// easier to serialize.
+    /// NOTE about properties
+    /// ---------------------
+    /// This class will be serialized when saving the game state, so make sure that public properties
+    /// are only ones which make sense to serialize in this way.
     /// </remarks>
-    public class Player
+    public class Player : Character
     {
-        #region Events
-
-        /// <summary>
-        /// Data passed with the onUpdate event.
-        /// </summary>
-        public class Args : EventArgs
-        {
-            /// <summary>
-            /// Gets or sets text sent with the update.
-            /// </summary>
-            public List<string> Text { get; set; }
-        }
-
-        /// <summary>
-        /// Raised when there is an update to the player or to the world as seen by the player.
-        /// </summary>
-        public event EventHandler<Args> onUpdate;
-
-        #endregion
-
         #region Public methods
 
         /// <summary>
@@ -41,13 +23,17 @@ namespace WorldLib
         public Player(WorldManager worldManager, string id, string name)
         {
             m_worldManager = worldManager;
-            m_playerState.ObjectID = id;
-            m_playerState.Name = name;
+
+            // We set up the player's identity...
+            ObjectType = ObjectTypeEnum.PLAYER;
+            ObjectID = id;
+            Name = name;
 
             // We set up default player properties...
-            m_playerState.HP = 100;
-            m_playerState.Dexterity = 20;
-            m_playerState.Attacks.Add(new NPC.AttackType { Name = "punch", MinDamage = 0, MaxDamage = 5 });
+            HP = 100;
+            Dexterity = 50;
+            AttackIntervalSeconds = 1.0;
+            Attacks.Add(new Character.AttackType { Name = "punch", MinDamage = 0, MaxDamage = 5 });
         }
 
         /// <summary>
@@ -56,19 +42,16 @@ namespace WorldLib
         public void setLocation(string locationID)
         {
             // We note that the player is in the location...
-            m_playerState.LocationID = locationID;
+            LocationID = locationID;
 
-            // We unsubscribe from events from our previous location...
-            if(m_location != null)
-            {
-                m_location.onUpdate -= onLocationUpdated;
-            }
-
-            // We get the Location and subscribe to its events...
+            // We get the Location...
             m_location = m_worldManager.getLocation(locationID);
-            m_location.onUpdate += onLocationUpdated;
 
-            m_location.ParsedObjects.Add(m_playerState);
+            // We add ourself to it...
+            m_location.ParsedObjects.Add(this);
+
+            // We observe events from the location and characters in it...
+            updateObservedObjects();
 
             // We show the description of the location...
             sendUpdate(m_location.look());
@@ -148,7 +131,23 @@ namespace WorldLib
                 // We show the update to the player...
                 sendUpdate(args.Text);
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                Logger.log(ex);
+            }
+        }
+
+        /// <summary>
+        /// Called when we receive updated information from a character we are observing.
+        /// </summary>
+        private void onCharacterUpdated(object sender, Character.Args args)
+        {
+            try
+            {
+                // We show the update to the player...
+                sendUpdate(args.Text);
+            }
+            catch (Exception ex)
             {
                 Logger.log(ex);
             }
@@ -167,16 +166,34 @@ namespace WorldLib
                 return;
             }
 
-            // We check that the target is an NPC...
-            var npc = objectFromLocation as NPC;
-            if(npc == null)
+            // We check that the target is an character...
+            var opponent = objectFromLocation as Character;
+            if(opponent == null)
             {
                 sendUpdate($"You cannot fight {Utils.prefix_the(target)}.");
                 return;
             }
 
-            // We check if the player is already fighting the target...
+            // We check if the opponent is the player themself...
+            if (opponent == this)
+            {
+                sendUpdate($"It is probably best not to fight yourself.");
+                return;
+            }
 
+            // We check if the player is already fighting the opponent...
+            if (isFightingOpponent(opponent))
+            {
+                sendUpdate($"You are already fighting {Utils.prefix_the(target)}.");
+                return;
+            }
+
+            // We note that the player is fighting the opponent (and that it is fighting the player)...
+            addFightOpponent(opponent);
+            opponent.addFightOpponent(this);
+
+            // The player takes the first swing at the opponent...
+            fight(DateTime.UtcNow);
         }
 
         /// <summary>
@@ -287,17 +304,40 @@ namespace WorldLib
         }
 
         /// <summary>
-        /// Raises an event sending updated info about the player or about what the 
-        /// player can see.
+        /// We update the objects we observe, including the current location and the characters in it.
         /// </summary>
-        private void sendUpdate(string text)
+        private void updateObservedObjects()
         {
-            sendUpdate(new List<string> { text });
-        }
-        private void sendUpdate(List<string> text)
-        {
-            var args = new Args { Text = text };
-            Utils.raiseEvent(this, onUpdate, args);
+            // We stop observing the previous collection of objects...
+            if(m_observedObjects.Location != null)
+            {
+                m_observedObjects.Location.onUpdate -= onLocationUpdated;
+                m_observedObjects.Location = null;
+            }
+            foreach(var character in m_observedObjects.Characters)
+            {
+                character.onUpdate -= onCharacterUpdated;
+            }
+            m_observedObjects.Characters.Clear();
+
+            // We observe the current location...
+            if (m_location == null)
+            {
+                return;
+            }
+            m_observedObjects.Location = m_location;
+            m_location.onUpdate += onLocationUpdated;
+
+            // We observe characters in the location (apart from ourself)...
+            foreach(var objectBase in m_location.ParsedObjects)
+            {
+                var character = objectBase as Character;
+                if(character != null && character != this)
+                {
+                    m_observedObjects.Characters.Add(character);
+                    character.onUpdate += onCharacterUpdated;
+                }
+            }
         }
 
         #endregion
@@ -307,9 +347,6 @@ namespace WorldLib
         // Construction parameters...
         private readonly WorldManager m_worldManager;
 
-        // The player state...
-        private PlayerState m_playerState = new PlayerState();
-
         // THe player's current location...
         private Location m_location = null;
 
@@ -318,6 +355,14 @@ namespace WorldLib
 
         // The player's inventory...
         private readonly Inventory m_inventory = new Inventory();
+
+        // The collection of objects being observed for updates...
+        private class ObservedObjects
+        {
+            public Location Location { get; set; } = null;
+            public List<Character> Characters { get; set; } = new List<Character>();
+        }
+        private readonly ObservedObjects m_observedObjects = new ObservedObjects();
 
         #endregion
     }

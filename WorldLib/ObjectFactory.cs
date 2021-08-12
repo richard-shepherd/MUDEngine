@@ -177,8 +177,8 @@ namespace WorldLib
                     objectBase = Utils.fromJSON<Location>(objectDefinition.JSON);
                     break;
 
-                case ObjectTypeEnum.NPC:
-                    objectBase = Utils.fromJSON<NPC>(objectDefinition.JSON);
+                case ObjectTypeEnum.CHARACTER:
+                    objectBase = Utils.fromJSON<Character>(objectDefinition.JSON);
                     break;
 
                 case ObjectTypeEnum.MONSTER:

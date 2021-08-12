@@ -5,7 +5,7 @@ using Utility;
 namespace WorldLib
 {
     /// <summary>
-    /// Base class for all objects - including players, NPCs, monsters etc.
+    /// Base class for all objects - including player and non-player characters, monsters etc.
     /// </summary>
     public class ObjectBase
     {
@@ -17,10 +17,11 @@ namespace WorldLib
         public enum ObjectTypeEnum
         {
             NOT_SPECIFIED,
+            PLAYER,
             CONTAINER,
             FOOD,
             LOCATION,
-            NPC,
+            CHARACTER,
             MONSTER
         }
 
