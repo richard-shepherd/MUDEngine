@@ -58,8 +58,19 @@ namespace WorldLib
             // We note that the player is in the location...
             m_playerState.LocationID = locationID;
 
-            // We get the Location and show its description...
+            // We unsubscribe from events from our previous location...
+            if(m_location != null)
+            {
+                m_location.onUpdate -= onLocationUpdated;
+            }
+
+            // We get the Location and subscribe to its events...
             m_location = m_worldManager.getLocation(locationID);
+            m_location.onUpdate += onLocationUpdated;
+
+            m_location.ParsedObjects.Add(m_playerState);
+
+            // We show the description of the location...
             sendUpdate(m_location.look());
         }
 
@@ -114,6 +125,10 @@ namespace WorldLib
                     showInventory();
                     break;
 
+                case InputParser.ActionEnum.KILL:
+                    kill(parsedInput.Target1);
+                    break;
+
                 default:
                     throw new Exception($"Action {parsedInput.Action} not handled.");
             }
@@ -122,6 +137,47 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Called when we receive updated information from the current location.
+        /// </summary>
+        private void onLocationUpdated(object sender, Location.Args args)
+        {
+            try
+            {
+                // We show the update to the player...
+                sendUpdate(args.Text);
+            }
+            catch(Exception ex)
+            {
+                Logger.log(ex);
+            }
+        }
+
+        /// <summary>
+        /// Starts a fight with the target.
+        /// </summary>
+        private void kill(string target)
+        {
+            // We find the item from the current location...
+            var objectFromLocation = m_location.findObject(target);
+            if (objectFromLocation == null)
+            {
+                sendUpdate($"There is no {target} to fight.");
+                return;
+            }
+
+            // We check that the target is an NPC...
+            var npc = objectFromLocation as NPC;
+            if(npc == null)
+            {
+                sendUpdate($"You cannot fight {Utils.prefix_the(target)}.");
+                return;
+            }
+
+            // We check if the player is already fighting the target...
+
+        }
 
         /// <summary>
         /// Shows the contents of the inventory.
@@ -236,10 +292,7 @@ namespace WorldLib
         /// </summary>
         private void sendUpdate(string text)
         {
-            if(!String.IsNullOrEmpty(text))
-            {
-                sendUpdate(new List<string> { text });
-            }
+            sendUpdate(new List<string> { text });
         }
         private void sendUpdate(List<string> text)
         {

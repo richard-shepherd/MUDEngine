@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Utility;
 
 namespace WorldLib
@@ -150,6 +151,26 @@ namespace WorldLib
             return orderedDimensions;
         }
 
+        /// <summary>
+        /// Sets the object-factory used to create the object.
+        /// </summary><remarks>
+        /// Note: This is not a propertiy, as we do not want to serialize it.
+        /// </remarks>
+        public void setObjectFactory(ObjectFactory objectFactory)
+        {
+            m_objectFactory = objectFactory;
+        }
+
+        /// <summary>
+        /// Gets the object-factory used to create the object.
+        /// </summary><remarks>
+        /// Note: This is not a propertiy, as we do not want to serialize it.
+        /// </remarks>
+        public ObjectFactory getObjectFactory()
+        {
+            return m_objectFactory;
+        }
+
         #endregion
 
         #region Virtual functions
@@ -197,6 +218,22 @@ namespace WorldLib
             }
             return result;
         }
+
+        /// <summary>
+        /// Called at regular intervals to update the object, if it has dynamic 
+        /// properties or behaviour.
+        /// </summary>
+        public virtual void update(DateTime updateTimeUTC)
+        {
+        }
+
+        #endregion
+
+        #region Private data
+
+        // The object facgtory which created this object. 
+        // This can be used if the object itself needs to create other objects.
+        private ObjectFactory m_objectFactory = null;
 
         #endregion
     }

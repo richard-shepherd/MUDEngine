@@ -57,6 +57,11 @@ namespace WorldLib
         /// </summary>
         public List<AttackType> Attacks { get; set; } = new List<AttackType>();
 
+        /// <summary>
+        /// Gets or sets the inteval at which the NPC performs attacks.
+        /// </summary>
+        public double AttackIntervalSeconds { get; set; } = 0.0;
+
         #endregion
 
         #region Public methods

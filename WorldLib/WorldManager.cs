@@ -33,6 +33,20 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Updates the world state, based on the time passed since the previous update.
+        /// </summary>
+        public void update()
+        {
+            var utcNow = DateTime.UtcNow;
+
+            // We update the locations - which also updates all the items in them...
+            foreach(var location in m_worldState.Locations.Values)
+            {
+                location.update(utcNow);
+            }
+        }
+
+        /// <summary>
         /// Resets the world to the state at the start of a new game, or when the
         /// reset button is pressed.
         /// </summary>

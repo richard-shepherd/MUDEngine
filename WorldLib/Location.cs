@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Utility;
@@ -11,6 +12,26 @@ namespace WorldLib
     /// </summary>
     public class Location : ObjectBase
     {
+        #region Events
+
+        /// <summary>
+        /// Data passed with the onUpdate event.
+        /// </summary>
+        public class Args : EventArgs
+        {
+            /// <summary>
+            /// Gets or sets text sent with the update.
+            /// </summary>
+            public List<string> Text { get; set; }
+        }
+
+        /// <summary>
+        /// Raised when there is an update to the location.
+        /// </summary>
+        public event EventHandler<Args> onUpdate;
+
+        #endregion
+
         #region Public types
 
         /// <summary>
@@ -75,6 +96,13 @@ namespace WorldLib
         #region Public methods
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Location()
+        {
+        }
+
+        /// <summary>
         /// Returns what you see when you look at a location - including when you
         /// first enter a location. This includes the location's description, as 
         /// well its exits and an overview of objects in it.
@@ -98,6 +126,14 @@ namespace WorldLib
             {
                 results.Add("");
                 results.Add(objects);
+            }
+
+            // Players...
+            var players = look_Players();
+            if (players != null)
+            {
+                results.Add("");
+                results.Add(players);
             }
 
             return results;
@@ -144,6 +180,18 @@ namespace WorldLib
         #region ObjectBase implementation
 
         /// <summary>
+        /// Called at regular intervals to update the location and the objects in it.
+        /// </summary>
+        public override void update(DateTime updateTimeUTC)
+        {
+            // We update all the objects in the location...
+            foreach(var objectBase in ParsedObjects)
+            {
+                objectBase.update(updateTimeUTC);
+            }
+        }
+
+        /// <summary>
         /// Parses the location config, in particular the objects in the location.
         /// </summary>
         public override void parseConfig(ObjectFactory objectFactory)
@@ -187,7 +235,20 @@ namespace WorldLib
         /// </summary>
         private string look_Objects()
         {
-            if(ParsedObjects.Count == 0)
+            if (ParsedObjects.Count == 0)
+            {
+                return null;
+            }
+            var nonPlayerObjects = ParsedObjects.Where(x => x.ObjectType as Player != null);
+            return $"You can see: {ObjectUtils.objectNamesAndCounts(ParsedObjects)}.";
+        }
+
+        /// <summary>
+        /// Returns a string description of the players in the location.
+        /// </summary>
+        private string look_Players()
+        {
+            if (ParsedObjects.Count == 0)
             {
                 return null;
             }
@@ -226,6 +287,20 @@ namespace WorldLib
                 var containedObject = parseObject(containedObjectInfo, objectFactory);
                 container.add(containedObject);
             }
+        }
+
+        /// <summary>
+        /// Raises an event sending updated info about the player or about what the 
+        /// player can see.
+        /// </summary>
+        private void sendUpdate(string text)
+        {
+            sendUpdate(new List<string> { text });
+        }
+        private void sendUpdate(List<string> text)
+        {
+            var args = new Args { Text = text };
+            Utils.raiseEvent(this, onUpdate, args);
         }
 
         #endregion

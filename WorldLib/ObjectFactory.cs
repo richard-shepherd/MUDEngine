@@ -189,6 +189,9 @@ namespace WorldLib
                     throw new Exception($"Failed to parse object type {objectDefinition.ObjectType}. You may need to add a case statement to ObjectFactory.parseObject().");
             }
 
+            // We set the object-factory...
+            objectBase.setObjectFactory(this);
+
             // We parse the string values, eg dimensions into numeric values...
             objectBase.parseConfig(this);
 

@@ -86,8 +86,6 @@ namespace UI_WinForms
         /// Called when a key is pressed in the input box.
         /// When Enter has been pressed we parse the input and perform the action.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ctrlInput_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -108,6 +106,21 @@ namespace UI_WinForms
                 m_player.parseInput(input);
             }
             catch (Exception ex)
+            {
+                Logger.log(ex);
+            }
+        }
+
+        /// <summary>
+        /// Called when the world update timer ticks.
+        /// </summary>
+        private void m_worldUpdateTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                m_worldManager.update();
+            }
+            catch(Exception ex)
             {
                 Logger.log(ex);
             }

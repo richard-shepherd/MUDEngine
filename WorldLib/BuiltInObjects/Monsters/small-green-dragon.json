@@ -17,7 +17,9 @@
 
   "HP": 1000,
 
-  "Dexterity":  10,
+  "Dexterity": 10,
+
+  "AttackIntervalSeconds":  5.0,
 
   "Attacks": [
     {

@@ -9,6 +9,15 @@ namespace Utility
     /// </summary>
     public class Utils
     {
+        #region Properties
+
+        /// <summary>
+        /// Gets the random number generator.
+        /// </summary>
+        public static Random Rnd => m_rnd;
+
+        #endregion
+
         #region Public methods
 
         /// <summary>
@@ -189,6 +198,13 @@ namespace Utility
         {
             eventHandler?.Invoke(sender, args);
         }
+
+        #endregion
+
+        #region Private data
+
+        // Random number generator...
+        private static Random m_rnd = new Random();
 
         #endregion
     }
