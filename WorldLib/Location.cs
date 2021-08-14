@@ -176,25 +176,7 @@ namespace WorldLib
         /// </summary>
         public ObjectBase findObject(string objectName)
         {
-            // We check each object in the location...
-            objectName = objectName.ToUpper();
-            foreach (var objectInLocation in ParsedObjects)
-            {
-                // We check its name...
-                if (objectInLocation.Name.ToUpper() == objectName)
-                {
-                    return objectInLocation;
-                }
-
-                // We check its aliases...
-                if (objectInLocation.Aliases.Any(x => x.ToUpper() == objectName))
-                {
-                    return objectInLocation;
-                }
-            }
-
-            // We did not find a matching object...
-            return null;
+            return ObjectUtils.findObject(ParsedObjects, objectName);
         }
 
         #endregion

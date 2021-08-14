@@ -114,24 +114,20 @@ namespace WorldLib
             // We perform the action...
             switch(parsedInput.Action)
             {
-                case InputParser.ActionEnum.SMOKE_POT:
-                    sendUIUpdate("It is not that sort of pot.");
-                    break;
-
-                case InputParser.ActionEnum.GO_TO_DIRECTION:
-                    goToDirection(parsedInput.Direction);
-                    break;
-
-                case InputParser.ActionEnum.LOOK:
-                    look();
-                    break;
-
-                case InputParser.ActionEnum.TAKE:
-                    takeTargetFromLocation(parsedInput.Target1);
+                case InputParser.ActionEnum.DROP:
+                    drop(parsedInput.Target1);
                     break;
 
                 case InputParser.ActionEnum.EXAMINE:
                     examine(parsedInput.Target1);
+                    break;
+
+                case InputParser.ActionEnum.GIVE:
+                    give(parsedInput.Target1, parsedInput.Target1);
+                    break;
+
+                case InputParser.ActionEnum.GO_TO_DIRECTION:
+                    goToDirection(parsedInput.Direction);
                     break;
 
                 case InputParser.ActionEnum.INVENTORY:
@@ -140,6 +136,18 @@ namespace WorldLib
 
                 case InputParser.ActionEnum.KILL:
                     kill(parsedInput.Target1);
+                    break;
+
+                case InputParser.ActionEnum.LOOK:
+                    look();
+                    break;
+
+                case InputParser.ActionEnum.SMOKE_POT:
+                    sendUIUpdate("It is not that sort of pot.");
+                    break;
+
+                case InputParser.ActionEnum.TAKE:
+                    takeTargetFromLocation(parsedInput.Target1);
                     break;
 
                 case InputParser.ActionEnum.TALK:
@@ -154,6 +162,20 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Drops the target object.
+        /// </summary>
+        private void drop(string target)
+        {
+        }
+
+        /// <summary>
+        /// Gives target1 to target2.
+        /// </summary>
+        private void give(string target11, string target12)
+        {
+        }
 
         /// <summary>
         /// Called when we receive updated information from the current location.

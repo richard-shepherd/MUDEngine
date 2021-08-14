@@ -18,6 +18,7 @@ namespace WorldLib
         public enum ActionEnum
         {
             NO_ACTION,
+            DROP,
             EXAMINE,
             GIVE,
             GO_TO_DIRECTION,
@@ -84,14 +85,15 @@ namespace WorldLib
             var parsingFunctions = new List<Func<string, string, ParsedInput>>
             {
                 parse_CompassDirection,
-                parse_Look,
-                parse_Take,
+                parse_Drop,
                 parse_Examine,
+                parse_Give,
                 parse_Inventory,
                 parse_Kill,
-                parse_Talk,
-                parse_Give,
-                parse_SmokePot
+                parse_Look,
+                parse_SmokePot,
+                parse_Take,
+                parse_Talk
             };
             foreach(var parsingFunction in parsingFunctions)
             {
@@ -108,6 +110,17 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Checks if the input is a DROP command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Drop(string uppercaseInput, string originalInput)
+        {
+            // We check if the input starts with a DROP synonym...
+            var synonyms = new List<string> { "DROP" };
+            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.DROP, synonyms);
+        }
 
         /// <summary>
         /// Checks if the input is a GIVE command.

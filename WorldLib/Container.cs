@@ -57,6 +57,15 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Returns the first object matching the name specified from the container.
+        /// Returns null if the object is not in the container.
+        /// </summary>
+        public ObjectBase findObject(string objectName)
+        {
+            
+        }
+
+        /// <summary>
         /// Adds an object to the container.
         /// </summary>
         public ActionResult add(ObjectBase objectToAdd)
