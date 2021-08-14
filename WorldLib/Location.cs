@@ -140,6 +140,22 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Adds an object to the location.
+        /// </summary>
+        public void addObject(ObjectBase objectBase)
+        {
+            ParsedObjects.Add(objectBase);
+        }
+
+        /// <summary>
+        /// Removes the object from the location.
+        /// </summary>
+        public void removeObject(ObjectBase objectBase)
+        {
+            ParsedObjects.Remove(objectBase);
+        }
+
+        /// <summary>
         /// Returns an object from this location for the object-name specified.
         /// If there is more than one object of the requested type, the first one is returned.
         /// Return null if there are no objects of the requested type.
@@ -167,14 +183,6 @@ namespace WorldLib
             return null;
         }
 
-        /// <summary>
-        /// Takes / picks up the named object from the location.
-        /// </summary>
-        public void takeObject(ObjectBase objectBase)
-        {
-            ParsedObjects.Remove(objectBase);
-        }
-
         #endregion
 
         #region ObjectBase implementation
@@ -189,6 +197,9 @@ namespace WorldLib
             {
                 objectBase.update(updateTimeUTC);
             }
+
+            // We clean up any dead characters...
+            cleanupDeadCharacters();
         }
 
         /// <summary>
@@ -210,6 +221,25 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Cleans up dead characters.
+        /// </summary>
+        private void cleanupDeadCharacters()
+        {
+            var characters = ParsedObjects
+                .Where(x => x is Character)
+                .Select(x => x as Character)
+                .ToList();
+            foreach(var character in characters)
+            {
+                if(character.HP <= 0)
+                {
+                    sendUpdate($"A swarm of rats eats the carcass of {Utils.prefix_the(character.Name)}.");
+                    ParsedObjects.Remove(character);
+                }
+            }
+        }
 
         /// <summary>
         /// Returns a string description of the location's exits.

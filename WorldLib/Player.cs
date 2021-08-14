@@ -15,6 +15,26 @@ namespace WorldLib
     /// </remarks>
     public class Player : Character
     {
+        #region Events
+
+        /// <summary>
+        /// Data passed with the onUIUpdate event.
+        /// </summary>
+        public class UIUpdateArgs : EventArgs
+        {
+            /// <summary>
+            /// Gets or sets text sent with the update.
+            /// </summary>
+            public List<string> Text { get; set; }
+        }
+
+        /// <summary>
+        /// Raised when we have new data to show in the UI for this player.
+        /// </summary>
+        public event EventHandler<UIUpdateArgs> onUIUpdate;
+
+        #endregion
+
         #region Public methods
 
         /// <summary>
@@ -30,6 +50,12 @@ namespace WorldLib
             Name = name;
 
             // We set up default player properties...
+            Dimensions.HeightM = 1.8;
+            Dimensions.WidthM = 0.6;
+            Dimensions.DepthM = 0.6;
+            WeightKG = 90.0;
+
+            // We set up player fighting properties...
             HP = 100;
             Dexterity = 50;
             AttackIntervalSeconds = 1.0;
@@ -41,20 +67,24 @@ namespace WorldLib
         /// </summary>
         public void setLocation(string locationID)
         {
+            // We remove the player from the previous location...
+            if(m_location != null)
+            {
+                m_location.removeObject(this);
+            }
+
             // We note that the player is in the location...
             LocationID = locationID;
 
-            // We get the Location...
+            // We get the Location and add the player to it...
             m_location = m_worldManager.getLocation(locationID);
-
-            // We add ourself to it...
-            m_location.ParsedObjects.Add(this);
+            m_location.addObject(this);
 
             // We observe events from the location and characters in it...
             updateObservedObjects();
 
             // We show the description of the location...
-            sendUpdate(m_location.look());
+            sendUIUpdate(m_location.look());
         }
 
         /// <summary>
@@ -64,7 +94,7 @@ namespace WorldLib
         {
             if(m_location != null)
             {
-                sendUpdate(m_location.look());
+                sendUIUpdate(m_location.look());
             }
         }
 
@@ -77,7 +107,7 @@ namespace WorldLib
             var parsedInput = m_inputParser.parseInput(input);
             if(parsedInput == null)
             {
-                sendUpdate($"You try to {input} but are not entirely clear on how to do that.");
+                sendUIUpdate($"You try to {input} but are not entirely clear on how to do that.");
                 return;
             }
 
@@ -85,7 +115,7 @@ namespace WorldLib
             switch(parsedInput.Action)
             {
                 case InputParser.ActionEnum.SMOKE_POT:
-                    sendUpdate("It is not that sort of pot.");
+                    sendUIUpdate("It is not that sort of pot.");
                     break;
 
                 case InputParser.ActionEnum.GO_TO_DIRECTION:
@@ -129,7 +159,7 @@ namespace WorldLib
             try
             {
                 // We show the update to the player...
-                sendUpdate(args.Text);
+                sendUIUpdate(args.Text);
             }
             catch (Exception ex)
             {
@@ -140,12 +170,12 @@ namespace WorldLib
         /// <summary>
         /// Called when we receive updated information from a character we are observing.
         /// </summary>
-        private void onCharacterUpdated(object sender, Character.Args args)
+        private void onCharacterUpdated(object sender, Character.GameUpdateArgs args)
         {
             try
             {
                 // We show the update to the player...
-                sendUpdate(args.Text);
+                sendUIUpdate(args.Text);
             }
             catch (Exception ex)
             {
@@ -162,7 +192,7 @@ namespace WorldLib
             var objectFromLocation = m_location.findObject(target);
             if (objectFromLocation == null)
             {
-                sendUpdate($"There is no {target} to fight.");
+                sendUIUpdate($"There is no {target} to fight.");
                 return;
             }
 
@@ -170,21 +200,21 @@ namespace WorldLib
             var opponent = objectFromLocation as Character;
             if(opponent == null)
             {
-                sendUpdate($"You cannot fight {Utils.prefix_the(target)}.");
+                sendUIUpdate($"You cannot fight {Utils.prefix_the(target)}.");
                 return;
             }
 
             // We check if the opponent is the player themself...
             if (opponent == this)
             {
-                sendUpdate($"It is probably best not to fight yourself.");
+                sendUIUpdate($"It is probably best not to fight yourself.");
                 return;
             }
 
             // We check if the player is already fighting the opponent...
             if (isFightingOpponent(opponent))
             {
-                sendUpdate($"You are already fighting {Utils.prefix_the(target)}.");
+                sendUIUpdate($"You are already fighting {Utils.prefix_the(target)}.");
                 return;
             }
 
@@ -201,7 +231,7 @@ namespace WorldLib
         /// </summary>
         private void showInventory()
         {
-            sendUpdate(m_inventory.examine());
+            sendUIUpdate(m_inventory.examine());
         }
 
         /// <summary>
@@ -226,21 +256,21 @@ namespace WorldLib
                     actionResult = takeOneItemFromLocation(item);
                     if(actionResult.Status == ActionResult.StatusEnum.SUCCEEDED)
                     {
-                        sendUpdate(actionResult.Message);
+                        sendUIUpdate(actionResult.Message);
                         itemCount++;
                     }
                 }
                 if(itemCount == 0)
                 {
                     // No items were successfully taken...
-                    sendUpdate(actionResult.Message);
+                    sendUIUpdate(actionResult.Message);
                 }
             }
             else
             {
                 // We are taking a single item...
                 var actionResult = takeOneItemFromLocation(item);
-                sendUpdate(actionResult.Message);
+                sendUIUpdate(actionResult.Message);
             }
         }
 
@@ -265,7 +295,7 @@ namespace WorldLib
 
             // The object was successfully added to the inventory, so we remove it 
             // from the location...
-            m_location.takeObject(objectFromLocation);
+            m_location.removeObject(objectFromLocation);
             return ActionResult.succeeded($"You add {Utils.prefix_the(item)} to your inventory.");
         }
 
@@ -278,12 +308,12 @@ namespace WorldLib
             var objectFromLocation = m_location.findObject(target);
             if (objectFromLocation == null)
             {
-                sendUpdate($"You cannot examine {Utils.prefix_the(target)}.");
+                sendUIUpdate($"You cannot examine {Utils.prefix_the(target)}.");
                 return;
             }
 
             // We examine the object...
-            sendUpdate(objectFromLocation.examine());
+            sendUIUpdate(objectFromLocation.examine());
         }
 
         /// <summary>
@@ -295,7 +325,7 @@ namespace WorldLib
             var exit = m_location.Exits.FirstOrDefault(x => x.Direction == direction);
             if(exit == null)
             {
-                sendUpdate($"There is no exit to the {direction}.");
+                sendUIUpdate($"There is no exit to the {direction}.");
                 return;
             }
 
@@ -316,7 +346,7 @@ namespace WorldLib
             }
             foreach(var character in m_observedObjects.Characters)
             {
-                character.onUpdate -= onCharacterUpdated;
+                character.onGameUpdate -= onCharacterUpdated;
             }
             m_observedObjects.Characters.Clear();
 
@@ -335,9 +365,22 @@ namespace WorldLib
                 if(character != null && character != this)
                 {
                     m_observedObjects.Characters.Add(character);
-                    character.onUpdate += onCharacterUpdated;
+                    character.onGameUpdate += onCharacterUpdated;
                 }
             }
+        }
+
+        /// <summary>
+        /// Raises an event sending updated info about the player to the UI.
+        /// </summary>
+        public void sendUIUpdate(string text)
+        {
+            sendUIUpdate(new List<string> { text });
+        }
+        public void sendUIUpdate(List<string> text)
+        {
+            var args = new UIUpdateArgs { Text = text };
+            Utils.raiseEvent(this, onUIUpdate, args);
         }
 
         #endregion

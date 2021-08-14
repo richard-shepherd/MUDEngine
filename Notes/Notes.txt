@@ -10,3 +10,31 @@ Single-player vs multi-player
 
 - So we have a WorldState class and a PlayerState class 
 
+
+
+Observation loop
+----------------
+- We see updates sent by other players and characters
+  - This is a bit wrong anyway, as player updates say "You do X"
+  - We don't want other players to see these anyway
+
+- What do we want to see from other players?
+
+- At the moment we see everything
+  - This will inlcude (for example) anything typed by the players
+  - Them looking at their own stats / inventory etc
+
+- So definitely wrong that we see this
+
+- Maybe we need two types of update / event??
+  - UI updates
+  - Game updates
+
+- UI updates are sent to the player's UI (and nowhere else)
+
+- Game updates are seen by any other players in the same location
+
+- We would then observe game updates from other Characters, but not UI updates
+
+- Does this avoid a loop?
+  - Yes: Because we observe a GameUpdate and relay it as a UIUpdate (which is not observed except by the UI).

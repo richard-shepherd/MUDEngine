@@ -12,9 +12,9 @@ namespace WorldLib
         #region Events
 
         /// <summary>
-        /// Data passed with the onUpdate event.
+        /// Data passed with onGameUpdate events.
         /// </summary>
-        public class Args : EventArgs
+        public class GameUpdateArgs : EventArgs
         {
             /// <summary>
             /// Gets or sets text sent with the update.
@@ -23,9 +23,11 @@ namespace WorldLib
         }
 
         /// <summary>
-        /// Raised when there is an update to the player or to the world as seen by the player.
-        /// </summary>
-        public event EventHandler<Args> onUpdate;
+        /// Raised when there is an update to the character or to the world as seen by the character.
+        /// </summary><remarks>
+        /// This is called a "game update" to distinguish it from UI updates sent by players to the UI.
+        /// </remarks>
+        public event EventHandler<GameUpdateArgs> onGameUpdate;
 
         #endregion
 
@@ -96,14 +98,14 @@ namespace WorldLib
         /// <summary>
         /// Raises an event sending updated info about the character.
         /// </summary>
-        public void sendUpdate(string text)
+        public void sendGameUpdate(string text)
         {
-            sendUpdate(new List<string> { text });
+            sendGameUpdate(new List<string> { text });
         }
-        public void sendUpdate(List<string> text)
+        public void sendGameUpdate(List<string> text)
         {
-            var args = new Args { Text = text };
-            Utils.raiseEvent(this, onUpdate, args);
+            var args = new GameUpdateArgs { Text = text };
+            Utils.raiseEvent(this, onGameUpdate, args);
         }
 
         /// <summary>
@@ -160,7 +162,7 @@ namespace WorldLib
             var dexterity = Utils.Rnd.Next(0, 100);
             if(dexterity >= Dexterity)
             {
-                sendUpdate($"{Utils.prefix_The(Name)} launches a {attack.Name} attack at {Utils.prefix_the(opponent.Name)} but misses.");
+                sendGameUpdate($"{Utils.prefix_The(Name)} launches a {attack.Name} attack at {Utils.prefix_the(opponent.Name)} but misses.");
                 return;
             }
 
@@ -192,7 +194,7 @@ namespace WorldLib
                 update.Add($"{Utils.prefix_The(Name)} has killed {Utils.prefix_the(opponent.Name)}.");
             }
 
-            sendUpdate(update);
+            sendGameUpdate(update);
         }
 
         #endregion

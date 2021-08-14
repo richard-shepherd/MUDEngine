@@ -17,6 +17,10 @@ TODO: PUT [target1] in/into [target2]
 TODO: Implement XP
       Updates other stats at certain levels.
 
+TODO: EAT - Looks in the location first for the object, then in the inventory
+
+
+
 
 
 

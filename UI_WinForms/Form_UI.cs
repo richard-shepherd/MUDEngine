@@ -52,7 +52,10 @@ namespace UI_WinForms
 
                 // We create the player and observe updates for them...
                 m_player = m_worldManager.createPlayer("Dugong");
-                m_player.onUpdate += onPlayerUpdate;
+                m_player.onUIUpdate += onPlayerUIUpdate;
+
+                var batman = m_worldManager.createPlayer("Batman");
+                //batman.parseInput("kill dragon");
 
                 // We look at the player's initial location...
                 m_player.look();
@@ -71,7 +74,7 @@ namespace UI_WinForms
             try
             {
                 // We stop observing the player...
-                m_player.onUpdate -= onPlayerUpdate;
+                m_player.onUIUpdate -= onPlayerUIUpdate;
 
                 // We unhook the logger...
                 Logger.onMessageLogged -= onMessageLogged;
@@ -148,7 +151,7 @@ namespace UI_WinForms
         /// <summary>
         /// Called when we see an update to a player or to what the player can see.
         /// </summary>
-        private void onPlayerUpdate(object sender, Player.Args args)
+        private void onPlayerUIUpdate(object sender, Player.UIUpdateArgs args)
         {
             try
             {
