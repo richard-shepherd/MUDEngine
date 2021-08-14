@@ -4,7 +4,7 @@ TODO: Implement EXAMINE
       You cannot see what is in containers if they are locked
 
 TODO: Have a reset button
-      IF a player presses this, they shoud be transported to the starting location.
+      If a player presses this, they should be transported to the starting location.
 
 TODO: Allow items to respawn afer a period of time
 
@@ -18,6 +18,22 @@ TODO: Implement XP
       Updates other stats at certain levels.
 
 TODO: EAT - Looks in the location first for the object, then in the inventory
+
+TODO: You cannot do anything if you are dead
+      Make the player respawn after a few seconds.
+
+TODO: Implement locked doors
+
+TODO: Allow exits to be blocked by monsters
+
+TODO; Gets objects from NPCs
+
+TODO: Get objects from NPCs only if you give them something
+      ie, a quest
+      Implement GIVE [target1] to [target2]
+
+
+
 
 
 
