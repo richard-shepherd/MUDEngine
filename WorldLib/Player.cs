@@ -358,15 +358,15 @@ namespace WorldLib
             m_observedObjects.Location = m_location;
             m_location.onUpdate += onLocationUpdated;
 
-            // We observe characters in the location (apart from ourself)...
-            foreach(var objectBase in m_location.ParsedObjects)
+            // We observe characters in the location...
+            var characters = m_location.ParsedObjects
+                .Where(x => x is Character)
+                .Select(x => x as Character)
+                .ToList();
+            foreach (var character in characters)
             {
-                var character = objectBase as Character;
-                if(character != null && character != this)
-                {
-                    m_observedObjects.Characters.Add(character);
-                    character.onGameUpdate += onCharacterUpdated;
-                }
+                m_observedObjects.Characters.Add(character);
+                character.onGameUpdate += onCharacterUpdated;
             }
         }
 
