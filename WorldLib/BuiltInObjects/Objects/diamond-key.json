@@ -1,0 +1,17 @@
+﻿{
+	"ObjectID": "diamond-key",
+	"ObjectType": "OBJECT",
+
+	"Name": "diamond key",
+	"Aliases": [
+		"key"
+	],
+
+	"Dimensions": {
+		"Height": "8cm",
+		"Width": "2cm",
+		"Depth": "1cm"
+	},
+
+	"Weight": "10g"
+}

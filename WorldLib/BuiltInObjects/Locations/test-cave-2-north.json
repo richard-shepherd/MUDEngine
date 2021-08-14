@@ -22,6 +22,11 @@
       "Direction": "S",
       "To": "test-cave-2-main"
     }
-  ]
+  ],
 
+  "Objects": [
+    {
+      "ObjectID": "oak-leaf"
+    }
+  ]
 }

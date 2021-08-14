@@ -165,6 +165,10 @@ namespace WorldLib
             ObjectBase objectBase = null;
             switch (objectDefinition.ObjectType)
             {
+                case ObjectTypeEnum.CHARACTER:
+                    objectBase = Utils.fromJSON<Character>(objectDefinition.JSON);
+                    break;
+
                 case ObjectTypeEnum.CONTAINER:
                     objectBase = Utils.fromJSON<Container>(objectDefinition.JSON);
                     break;
@@ -177,12 +181,12 @@ namespace WorldLib
                     objectBase = Utils.fromJSON<Location>(objectDefinition.JSON);
                     break;
 
-                case ObjectTypeEnum.CHARACTER:
-                    objectBase = Utils.fromJSON<Character>(objectDefinition.JSON);
-                    break;
-
                 case ObjectTypeEnum.MONSTER:
                     objectBase = Utils.fromJSON<Monster>(objectDefinition.JSON);
+                    break;
+
+                case ObjectTypeEnum.OBJECT:
+                    objectBase = Utils.fromJSON<ObjectBase>(objectDefinition.JSON);
                     break;
 
                 default:

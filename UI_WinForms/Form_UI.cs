@@ -56,6 +56,9 @@ namespace UI_WinForms
 
                 // We look at the player's initial location...
                 m_player.look();
+
+                // We start the timer which updates world state at regular intervals...
+                m_worldUpdateTimer.Enabled = true;
             }
             catch(Exception ex)
             {

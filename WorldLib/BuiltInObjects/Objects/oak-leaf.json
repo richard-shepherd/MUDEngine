@@ -1,0 +1,17 @@
+﻿{
+  "ObjectID": "oak-leaf",
+  "ObjectType": "OBJECT",
+
+  "Name": "oak leaf",
+  "Aliases": [
+    "leaf"
+  ],
+
+  "Dimensions": {
+    "Height": "8cm",
+    "Width": "2cm",
+    "Depth": "1cm"
+  },
+
+  "Weight": "2g"
+}

@@ -17,12 +17,13 @@ namespace WorldLib
         public enum ObjectTypeEnum
         {
             NOT_SPECIFIED,
-            PLAYER,
+            CHARACTER,
             CONTAINER,
             FOOD,
             LOCATION,
-            CHARACTER,
-            MONSTER
+            MONSTER,
+            OBJECT,
+            PLAYER
         }
 
         /// <summary>

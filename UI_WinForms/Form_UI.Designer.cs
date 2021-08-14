@@ -97,7 +97,7 @@ namespace UI_WinForms
             // 
             // m_worldUpdateTimer
             // 
-            this.m_worldUpdateTimer.Enabled = true;
+            this.m_worldUpdateTimer.Enabled = false;
             this.m_worldUpdateTimer.Interval = 500;
             this.m_worldUpdateTimer.Tick += new System.EventHandler(this.m_worldUpdateTimer_Tick);
             // 

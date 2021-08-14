@@ -43,7 +43,7 @@ namespace Utility
         public static void log(string message)
         {
             var args = new Args { Message = message };
-            Utils.raiseEvent(null, onMessageLogged, args);
+            Utils.raiseEvent(onMessageLogged, null, args);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Utility
         public static void error(string message)
         {
             var args = new Args { Message = $"ERROR: {message}" };
-            Utils.raiseEvent(null, onMessageLogged, args);
+            Utils.raiseEvent(onMessageLogged, null, args);
         }
 
         #endregion

@@ -32,6 +32,9 @@ TODO: Get objects from NPCs only if you give them something
       ie, a quest
       Implement GIVE [target1] to [target2]
 
+TODO: Implement TALK TO [target]
+
+
 
 
 
