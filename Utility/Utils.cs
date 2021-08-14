@@ -21,6 +21,44 @@ namespace Utility
         #region Public methods
 
         /// <summary>
+        /// Returns the text passed in, adding quotes at the start and end.
+        /// </summary>
+        public static List<string> addQuotes(List<string> text)
+        {
+            // We check if we have any text...
+            if(text == null)
+            {
+                return text;
+            }
+            var numLines = text.Count;
+            if (numLines == 0)
+            {
+                return text;
+            }
+
+            // If we have only one line, we quote it...
+            if(numLines == 1)
+            {
+                var line = text[0];
+                return new List<string> { $"\"{line}\"" };
+            }
+
+            // We have multiple lines, so we add quotes at the start and end, and copy in
+            // the middle lines...
+            var firstLine = $"\"{text[0]}";
+            var lastLine = $" {text[numLines - 1]}\"";
+            var quotedText = new List<string>();
+            quotedText.Add(firstLine);
+            for(var i=1; i<numLines-1; ++i)
+            {
+                quotedText.Add($" {text[i]}");
+            }
+            quotedText.Add(lastLine);
+
+            return quotedText;
+        }
+
+        /// <summary>
         /// Returns a string for n items, eg "an apple", "two dragons" etc.
         /// </summary>
         public static string numberOfItems(int n, string item)

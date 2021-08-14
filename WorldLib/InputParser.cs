@@ -22,6 +22,7 @@ namespace WorldLib
             LOOK,
             GO_TO_DIRECTION,
             TAKE,
+            TALK,
             EXAMINE,
             INVENTORY,
             KILL
@@ -82,6 +83,7 @@ namespace WorldLib
                 parse_Examine,
                 parse_Inventory,
                 parse_Kill,
+                parse_Talk,
                 parse_SmokePot
             };
             foreach(var parsingFunction in parsingFunctions)
@@ -99,6 +101,17 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Checks if the input is a TALK command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Talk(string uppercaseInput, string originalInput)
+        {
+            // We check if the input starts with a TALK synonym...
+            var synonyms = new List<string> { "TALK TO", "TALK" };
+            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.TALK, synonyms);
+        }
 
         /// <summary>
         /// Checks if the input is a KILL command.

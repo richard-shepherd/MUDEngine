@@ -59,6 +59,27 @@ namespace WorldLib
             public int MaxDamage { get; set; } = 0;
         }
 
+        /// <summary>
+        /// Information about an exchange the character is willing to make.
+        /// </summary>
+        public class ExchangeInfo
+        {
+            /// <summary>
+            /// Gets or sets the text said by the character, offering the exchange.
+            /// </summary>
+            public List<string> Talk { get; set; } = new List<string>();
+
+            /// <summary>
+            /// Gets or sets the ID of the object the character is willing to give.
+            /// </summary>
+            public string Give { get; set; } = "";
+
+            /// <summary>
+            /// Gets or sets the ID of the object the character wants for the exchange.
+            /// </summary>
+            public string For { get; set; } = "";
+        }
+
         #endregion
 
         #region Properties
@@ -84,6 +105,21 @@ namespace WorldLib
         /// </summary>
         public double AttackIntervalSeconds { get; set; } = 0.0;
 
+        /// <summary>
+        /// Gets or sets the player's inventory as held in the config.
+        /// </summary>
+        public List<string> Inventory { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets or sets the player's inventory.
+        /// </summary>
+        public Inventory ParsedInventory { get; set; } = new Inventory();
+
+        /// <summary>
+        /// Gets ot sets details of an exchange the character is willing to make.
+        /// </summary>
+        public ExchangeInfo Exchange { get; set; } = new ExchangeInfo();
+
         #endregion
 
         #region Public methods
@@ -106,6 +142,14 @@ namespace WorldLib
         {
             var args = new GameUpdateArgs { Text = text };
             Utils.raiseEvent(onGameUpdate, this, args);
+        }
+
+        /// <summary>
+        /// Returns text when you talk to the character.
+        /// </summary>
+        public List<string> talk()
+        {
+            return Exchange.Talk;
         }
 
         /// <summary>
@@ -214,11 +258,36 @@ namespace WorldLib
             {
                 parseAttack(attack);
             }
+
+            // Inventory...
+            foreach(var itemName in Inventory)
+            {
+                var item = objectFactory.createObject(itemName);
+                ParsedInventory.add(item);
+            }
         }
 
+        /// <summary>
+        /// Updates the character at regular intervals.
+        /// </summary>
         public override void update(DateTime updateTimeUTC)
         {
+            // We update any ongoing fights...
             fight(updateTimeUTC);
+        }
+
+        /// <summary>
+        /// Returns what you see when the character is examined.
+        /// </summary>
+        public override List<string> examine()
+        {
+            // Base information...
+            var text = base.examine();
+
+            // Inventory...
+            text.AddRange(ParsedInventory.listContents($"{Utils.prefix_The(Name)} is holding"));
+
+            return text;
         }
 
         #endregion

@@ -57,7 +57,7 @@ namespace WorldLib
 
             // We set up player fighting properties...
             HP = 100;
-            Dexterity = 50;
+            Dexterity = 70;
             AttackIntervalSeconds = 1.0;
             Attacks.Add(new Character.AttackType { Name = "punch", MinDamage = 1, MaxDamage = 5 });
         }
@@ -142,6 +142,10 @@ namespace WorldLib
                     kill(parsedInput.Target1);
                     break;
 
+                case InputParser.ActionEnum.TALK:
+                    talkTo(parsedInput.Target1);
+                    break;
+
                 default:
                     throw new Exception($"Action {parsedInput.Action} not handled.");
             }
@@ -184,30 +188,75 @@ namespace WorldLib
         }
 
         /// <summary>
-        /// Starts a fight with the target.
+        /// Talks to the target.
         /// </summary>
-        private void kill(string target)
+        private void talkTo(string target)
+        {
+            // We find the character to talk to...
+            var character = getCharacter(target, "talk to");
+            if(character == null)
+            {
+                return;
+            }
+
+            var results = new List<string>();
+
+            // We find what the character has to say...
+            var characterTalk = character.talk();
+            if(characterTalk.Count == 0)
+            {
+                results.Add($"{Utils.prefix_The(character.Name)} doesn't seem to have anything to say.");
+            }
+            else
+            {
+                results.Add($"{Utils.prefix_The(character.Name)} says:");
+                results.AddRange(Utils.addQuotes(characterTalk));
+            }
+
+            sendUIUpdate(results);
+        }
+
+        /// <summary>
+        /// Returns the Character object for the target specified, or null if
+        /// the target is not a valid character.
+        /// </summary>
+        private Character getCharacter(string target, string verb)
         {
             // We find the item from the current location...
             var objectFromLocation = m_location.findObject(target);
             if (objectFromLocation == null)
             {
-                sendUIUpdate($"There is no {target} to fight.");
-                return;
+                sendUIUpdate($"There is no {target} to {verb}.");
+                return null;
             }
 
             // We check that the target is an character...
-            var opponent = objectFromLocation as Character;
-            if(opponent == null)
+            var character = objectFromLocation as Character;
+            if (character == null)
             {
-                sendUIUpdate($"You cannot fight {Utils.prefix_the(target)}.");
-                return;
+                sendUIUpdate($"You cannot {verb} {Utils.prefix_the(target)}.");
+                return null;
             }
 
             // We check if the opponent is the player themself...
-            if (opponent == this)
+            if (character == this)
             {
-                sendUIUpdate($"It is probably best not to fight yourself.");
+                sendUIUpdate($"It is probably best not to {verb} yourself.");
+                return null;
+            }
+
+            return character;
+        }
+
+        /// <summary>
+        /// Starts a fight with the target.
+        /// </summary>
+        private void kill(string target)
+        {
+            // We find the opponent...
+            var opponent = getCharacter(target, "fight");
+            if(opponent == null)
+            {
                 return;
             }
 
@@ -231,7 +280,7 @@ namespace WorldLib
         /// </summary>
         private void showInventory()
         {
-            sendUIUpdate(m_inventory.examine());
+            sendUIUpdate(ParsedInventory.examine());
         }
 
         /// <summary>
@@ -287,7 +336,7 @@ namespace WorldLib
             }
 
             // We add the object to our inventory...
-            var actionResult = m_inventory.add(objectFromLocation);
+            var actionResult = ParsedInventory.add(objectFromLocation);
             if (actionResult.Status != ActionResult.StatusEnum.SUCCEEDED)
             {
                 return actionResult;
@@ -413,9 +462,6 @@ namespace WorldLib
 
         // Parses user input...
         private readonly InputParser m_inputParser = new InputParser();
-
-        // The player's inventory...
-        private readonly Inventory m_inventory = new Inventory();
 
         // The collection of objects being observed for updates...
         private class ObservedObjects

@@ -8,15 +8,31 @@
     "SBF"
   ],
 
-  "Examine": [
-    "Slartibartfast is looking concerned about something and muttering under his breath, but you cannot hear what he is saying." 
-  ],
-
   "Dimensions": {
     "Height": "180cm",
     "Width": "80cm",
     "Depth": "80cm"
   },
 
-  "Weight": "80kg"
+  "Weight": "80kg",
+
+  "Examine": [
+    "Slartibartfast is looking concerned about something and muttering under his breath, but you cannot hear what he is saying."
+  ],
+
+  "Inventory": [
+    "diamond-key",
+    "apple"
+  ],
+
+  "Exchange": {
+    "Talk": [
+      "I really wish I had an oak leaf. I used to have one when I was a boy.",
+      "It had great sentimental value for me. I really miss that thing.",
+      "I would happily exchange this diamond key for an oak leaf, just to play with one again."
+    ],
+    "Give": "diamond-key",
+    "For": "oak-leaf"
+  }
+
 }
