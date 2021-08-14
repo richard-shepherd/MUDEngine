@@ -18,14 +18,15 @@ namespace WorldLib
         public enum ActionEnum
         {
             NO_ACTION,
-            SMOKE_POT,
-            LOOK,
-            GO_TO_DIRECTION,
-            TAKE,
-            TALK,
             EXAMINE,
+            GIVE,
+            GO_TO_DIRECTION,
             INVENTORY,
-            KILL
+            KILL,
+            LOOK,
+            SMOKE_POT,
+            TAKE,
+            TALK
         }
 
         /// <summary>
@@ -48,11 +49,16 @@ namespace WorldLib
             /// <summary>
             /// Gets or sets the primary target object.
             /// </summary><remarks>
-            /// Used with the TAKE action,    eg TAKE [target-1].
-            /// Used with the EXAMINE action, eg EXAMINE [target-1].
-            /// Used with the KILL action,    eg KILL [target-1].
+            /// For example: TAKE [target1]
             /// </remarks>
             public string Target1 { get; set; } = "";
+
+            /// <summary>
+            /// Gets or sets the secondary target object.
+            /// </summary><remarks>
+            /// For example: GIVE [target1] TO [target2]
+            /// </remarks>
+            public string Target2 { get; set; } = "";
         }
 
         #endregion
@@ -84,6 +90,7 @@ namespace WorldLib
                 parse_Inventory,
                 parse_Kill,
                 parse_Talk,
+                parse_Give,
                 parse_SmokePot
             };
             foreach(var parsingFunction in parsingFunctions)
@@ -101,6 +108,17 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Checks if the input is a GIVE command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Give(string arg1, string arg2)
+        {
+            // We check if the input starts with a GIVE synonym...
+            var synonyms = new List<string> { "GIVE" };
+            return parse_WithTarget1Target2(uppercaseInput, originalInput, ActionEnum.GIVE, synonyms);
+        }
 
         /// <summary>
         /// Checks if the input is a TALK command.
@@ -239,6 +257,25 @@ namespace WorldLib
             {
                 return null;
             }
+            var parsedInput = new ParsedInput();
+            parsedInput.Action = action;
+            parsedInput.Target1 = getTarget(matchingSynonym, originalInput);
+            return parsedInput;
+        }
+
+        /// <summary>
+        /// Returns ParsedInput for a command with two targets: "[command] [target1] [preposition] [target2]", eg, "GIVE apple to dragon".
+        /// Returns null if the input does not match the command.
+        /// </summary>
+        private ParsedInput parse_WithTarget1Target2(string uppercaseInput, string originalInput, ActionEnum action, List<string> synonyms)
+        {
+            // We check if the input starts with a command synonym...
+            var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput.StartsWith(x));
+            if (matchingSynonym == null)
+            {
+                return null;
+            }
+            TODO: DO THIS!!!
             var parsedInput = new ParsedInput();
             parsedInput.Action = action;
             parsedInput.Target1 = getTarget(matchingSynonym, originalInput);
