@@ -21,6 +21,19 @@ namespace Utility
         #region Public methods
 
         /// <summary>
+        /// Returns a trimmed string with the initial text removed, regardless of case.
+        /// </summary>
+        public static string removeInitial(string s, string initialText)
+        {
+            var result = s;
+            if(s.ToUpper().StartsWith(initialText.ToUpper()))
+            {
+                result = s.Substring(initialText.Length);
+            }
+            return result.Trim();
+        }
+
+        /// <summary>
         /// Returns the text passed in, adding quotes at the start and end.
         /// </summary>
         public static List<string> addQuotes(List<string> text)

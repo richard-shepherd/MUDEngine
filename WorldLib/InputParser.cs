@@ -113,7 +113,7 @@ namespace WorldLib
         /// Checks if the input is a GIVE command.
         /// Returns a ParsedInput if so, null if not.
         /// </summary>
-        private ParsedInput parse_Give(string arg1, string arg2)
+        private ParsedInput parse_Give(string uppercaseInput, string originalInput)
         {
             // We check if the input starts with a GIVE synonym...
             var synonyms = new List<string> { "GIVE" };
@@ -230,19 +230,48 @@ namespace WorldLib
         }
 
         /// <summary>
-        /// Returns the target from inputs like "TAKE [target]", "EXAMINE [target]" etc.
+        /// Returns the target from inputs like "TAKE [target]" or "EXAMINE THE [target]".
         /// </summary>
         private string getTarget(string command, string originalInput)
         {
-            var target = originalInput.Substring(command.Length).Trim();
+            var inputWithoutCommand = Utils.removeInitial(originalInput, command);
+            var target = Utils.removeInitial(inputWithoutCommand, "THE ");
+            return target;
+        }
 
-            // If the target starts with "the " we remove this...
-            if (target.ToUpper().StartsWith("THE "))
+        /// <summary>
+        /// Returns the targets from inputs like "GIVE [target1] TO [target2]" or 
+        /// "KILL THE [target1] WITH THE [target2]".
+        /// </summary>
+        private (string target1, string target2) getTarget1Target2(string command, string originalInput)
+        {
+            // We remove the command...
+            var inputWithoutCommand = Utils.removeInitial(originalInput, command);
+
+            // We find the preposition...
+            var prepositions = new List<string> { "WITH", "TO", "AT" };
+            var uppercaseInputWithoutCommand = inputWithoutCommand.ToUpper();
+            var target1 = "";
+            var target2 = "";
+            foreach (var preposition in prepositions)
             {
-                target = target.Substring(4);
+                var prepositionWithSpaces = $" {preposition} ";
+                var index_Preposition = uppercaseInputWithoutCommand.IndexOf(prepositionWithSpaces);
+                if(index_Preposition != -1)
+                {
+                    // We have found the preposition so we can find target1 and target2
+                    // from the string either side of it...
+                    target1 = inputWithoutCommand.Substring(0, index_Preposition);
+                    target2 = inputWithoutCommand.Substring(index_Preposition + prepositionWithSpaces.Length);
+                    break;
+                }
             }
 
-            return target;
+            // We make sure the targets do not start with "the"...
+            target1 = Utils.removeInitial(target1, "THE ");
+            target2 = Utils.removeInitial(target2, "THE ");
+
+            return (target1, target2);
         }
 
         /// <summary>
@@ -275,10 +304,15 @@ namespace WorldLib
             {
                 return null;
             }
-            TODO: DO THIS!!!
+
+            // We find the targets...
+            var targets = getTarget1Target2(matchingSynonym, originalInput);
+
+            // We return the parsed input...
             var parsedInput = new ParsedInput();
             parsedInput.Action = action;
-            parsedInput.Target1 = getTarget(matchingSynonym, originalInput);
+            parsedInput.Target1 = targets.target1;
+            parsedInput.Target2 = targets.target2;
             return parsedInput;
         }
 
