@@ -54,9 +54,6 @@ namespace UI_WinForms
                 m_player = m_worldManager.createPlayer("Dugong");
                 m_player.onUIUpdate += onPlayerUIUpdate;
 
-                var batman = m_worldManager.createPlayer("Batman");
-                //batman.parseInput("kill dragon");
-
                 // We look at the player's initial location...
                 m_player.look();
             }

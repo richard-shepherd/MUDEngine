@@ -194,7 +194,7 @@ namespace Utility
         /// <summary>
         /// Raises an event.
         /// </summary>
-        public static void raiseEvent<T>(object sender, EventHandler<T> eventHandler, T args)
+        public static void raiseEvent<T>(EventHandler<T> eventHandler, object sender, T args)
         {
             eventHandler?.Invoke(sender, args);
         }

@@ -154,7 +154,7 @@ namespace WorldLib
         /// <summary>
         /// Called when we receive updated information from the current location.
         /// </summary>
-        private void onLocationUpdated(object sender, Location.Args args)
+        private void onLocationUpdated(object sender, Location.UpdateArgs args)
         {
             try
             {
@@ -342,6 +342,7 @@ namespace WorldLib
             if(m_observedObjects.Location != null)
             {
                 m_observedObjects.Location.onUpdate -= onLocationUpdated;
+                m_location.onObjectsUpdated -= onLocationObjectsUpdated;
                 m_observedObjects.Location = null;
             }
             foreach(var character in m_observedObjects.Characters)
@@ -357,6 +358,7 @@ namespace WorldLib
             }
             m_observedObjects.Location = m_location;
             m_location.onUpdate += onLocationUpdated;
+            m_location.onObjectsUpdated += onLocationObjectsUpdated;
 
             // We observe characters in the location...
             var characters = m_location.ParsedObjects
@@ -371,6 +373,22 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Called when the collection of objects in the current location has changed.
+        /// </summary>
+        private void onLocationObjectsUpdated(object sender, Location.ObjectsUpdatedArgs e)
+        {
+            try
+            {
+                // We make sure that we are observing the objects...
+                updateObservedObjects();
+            }
+            catch(Exception ex)
+            {
+                Logger.log(ex);
+            }
+        }
+
+        /// <summary>
         /// Raises an event sending updated info about the player to the UI.
         /// </summary>
         public void sendUIUpdate(string text)
@@ -380,7 +398,7 @@ namespace WorldLib
         public void sendUIUpdate(List<string> text)
         {
             var args = new UIUpdateArgs { Text = text };
-            Utils.raiseEvent(this, onUIUpdate, args);
+            Utils.raiseEvent(onUIUpdate, this, args);
         }
 
         #endregion

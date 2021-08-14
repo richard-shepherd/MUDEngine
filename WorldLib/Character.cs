@@ -105,7 +105,7 @@ namespace WorldLib
         public void sendGameUpdate(List<string> text)
         {
             var args = new GameUpdateArgs { Text = text };
-            Utils.raiseEvent(this, onGameUpdate, args);
+            Utils.raiseEvent(onGameUpdate, this, args);
         }
 
         /// <summary>
@@ -176,17 +176,17 @@ namespace WorldLib
             // Attack description...
             update.Add($"{Utils.prefix_The(Name)} launches a {attack.Name} attack at {Utils.prefix_the(opponent.Name)} doing {damage} damage.");
             
-            // Current HP of each fighter (in alphabetical order)...
-            if(opponent.Name.CompareTo(Name) < 0)
-            {
-                update.Add($"{opponent.Name} HP={opponent.HP}");
-                update.Add($"{Name} HP={HP}");
-            }
-            else
-            {
-                update.Add($"{Name} HP={HP}");
-                update.Add($"{opponent.Name} HP={opponent.HP}");
-            }
+            //// Current HP of each fighter (in alphabetical order)...
+            //if(opponent.Name.CompareTo(Name) < 0)
+            //{
+            //    update.Add($"{opponent.Name} HP={opponent.HP}");
+            //    update.Add($"{Name} HP={HP}");
+            //}
+            //else
+            //{
+            //    update.Add($"{Name} HP={HP}");
+            //    update.Add($"{opponent.Name} HP={opponent.HP}");
+            //}
 
             // We note if this character killed the opponent...
             if (opponent.HP <= 0)

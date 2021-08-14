@@ -17,7 +17,7 @@ namespace WorldLib
         /// <summary>
         /// Data passed with the onUpdate event.
         /// </summary>
-        public class Args : EventArgs
+        public class UpdateArgs : EventArgs
         {
             /// <summary>
             /// Gets or sets text sent with the update.
@@ -28,7 +28,19 @@ namespace WorldLib
         /// <summary>
         /// Raised when there is an update to the location.
         /// </summary>
-        public event EventHandler<Args> onUpdate;
+        public event EventHandler<UpdateArgs> onUpdate;
+
+        /// <summary>
+        /// Data passed with the onObjectsUpdateEvent.
+        /// </summary>
+        public class ObjectsUpdatedArgs : EventArgs
+        {
+        }
+
+        /// <summary>
+        /// Raised when objects are added to or removed from the location.
+        /// </summary>
+        public event EventHandler<ObjectsUpdatedArgs> onObjectsUpdated;
 
         #endregion
 
@@ -145,6 +157,7 @@ namespace WorldLib
         public void addObject(ObjectBase objectBase)
         {
             ParsedObjects.Add(objectBase);
+            Utils.raiseEvent(onObjectsUpdated, this, null);
         }
 
         /// <summary>
@@ -153,6 +166,7 @@ namespace WorldLib
         public void removeObject(ObjectBase objectBase)
         {
             ParsedObjects.Remove(objectBase);
+            Utils.raiseEvent(onObjectsUpdated, this, null);
         }
 
         /// <summary>
@@ -265,11 +279,11 @@ namespace WorldLib
         /// </summary>
         private string look_Objects()
         {
-            if (ParsedObjects.Count == 0)
+            var nonPlayerObjects = ParsedObjects.Where(x => x.ObjectType != ObjectTypeEnum.PLAYER);
+            if(nonPlayerObjects.Count() == 0)
             {
                 return null;
             }
-            var nonPlayerObjects = ParsedObjects.Where(x => x.ObjectType != ObjectTypeEnum.PLAYER);
             return $"You can see: {ObjectUtils.objectNamesAndCounts(nonPlayerObjects)}.";
         }
 
@@ -333,8 +347,8 @@ namespace WorldLib
         }
         private void sendUpdate(List<string> text)
         {
-            var args = new Args { Text = text };
-            Utils.raiseEvent(this, onUpdate, args);
+            var args = new UpdateArgs { Text = text };
+            Utils.raiseEvent(onUpdate, this, args);
         }
 
         #endregion
