@@ -19,6 +19,7 @@ namespace WorldLib
         {
             NO_ACTION,
             DROP,
+            EAT,
             EXAMINE,
             GIVE,
             GO_TO_DIRECTION,
@@ -37,7 +38,8 @@ namespace WorldLib
         /// </summary>
         public List<string> Help { get; } = new List<string>
         {
-            "DROP [target],               'drop apple, drop all'",
+            "DROP [target],               'drop apple', 'drop all'",
+            "EAT [target],                'eat apple'",
             "EXAMINE [target],            'examine dragon'",
             "GIVE [target1] TO [target2], 'give apple to dragon'",
             "N,NE,E,SE,S,SW,W,NW          - moves in the direction specified",
@@ -106,6 +108,7 @@ namespace WorldLib
             {
                 parse_CompassDirection,
                 parse_Drop,
+                parse_Eat,
                 parse_Examine,
                 parse_Give,
                 parse_Help,
@@ -134,6 +137,17 @@ namespace WorldLib
         #region Private functions
 
         /// <summary>
+        /// Checks if the input is an EAT command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Eat(string uppercaseInput, string originalInput)
+        {
+            // We check if the input starts with an EAT synonym...
+            var synonyms = new List<string> { "EAT", "MUNCH", "SCOFF" };
+            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.EAT, synonyms);
+        }
+
+        /// <summary>
         /// Checks if the input is a HELP command.
         /// Returns a ParsedInput if so, null if not.
         /// </summary>
@@ -157,7 +171,7 @@ namespace WorldLib
         /// </summary>
         private ParsedInput parse_Stats(string uppercaseInput, string originalInput)
         {
-            // We check if the input starts with a DROP synonym...
+            // We check if the input starts with a STATS synonym...
             var synonyms = new List<string> { "STATS", "SHOW STATS", "SHOW STATS FOR" };
             return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.STATS, synonyms);
         }

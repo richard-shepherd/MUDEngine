@@ -138,6 +138,10 @@ namespace WorldLib
                     drop(parsedInput.Target1);
                     break;
 
+                case InputParser.ActionEnum.EAT:
+                    eat(parsedInput.Target1);
+                    break;
+
                 case InputParser.ActionEnum.EXAMINE:
                     examine(parsedInput.Target1);
                     break;
@@ -220,6 +224,51 @@ namespace WorldLib
         #region Private functions
 
         /// <summary>
+        /// Eats the target item.
+        /// </summary>
+        private void eat(string target)
+        {
+            // We see if the target is in the location...
+            var itemInfo = m_location.findObjectFromName(target);
+            if(!itemInfo.hasObject())
+            {
+                // There is no item in the location, so we see if we have one in our inventory...
+                itemInfo = ParsedInventory.findObjectFromName(target);
+            }
+            if (!itemInfo.hasObject())
+            {
+                sendUIUpdate($"There is no {target} here or in your inventory.");
+                return;
+            }
+
+            // We check that the item is food...
+            var food = itemInfo.getObjectAs<Food>();
+            if(food == null)
+            {
+                sendUIUpdate($"You cannot eat {Utils.prefix_the(target)}.");
+                return;
+            }
+
+            // We check whether we are full...
+            if(HP >= MaxHP)
+            {
+                sendUIUpdate($"You are feeling too full to eat {Utils.prefix_the(target)}.");
+                return;
+            }
+
+            // We remove the item...
+            itemInfo.removeFromContainer();
+
+            // We eat it...
+            sendUIUpdate($"Eating {Utils.prefix_the(target)} restores {food.HP} HP.");
+            HP += food.HP;
+            if(HP > MaxHP)
+            {
+                HP = MaxHP;
+            }
+        }
+
+        /// <summary>
         /// Shows help.
         /// </summary>
         private void showHelp()
@@ -290,7 +339,10 @@ namespace WorldLib
             {
                 m_location.addObject(item);
             }
-            sendUIUpdate($"You drop: {ObjectUtils.objectNamesAndCounts(items)}.");
+            if(items.Count > 0)
+            {
+                sendUIUpdate($"You drop: {ObjectUtils.objectNamesAndCounts(items)}.");
+            }
         }
 
         /// <summary>
@@ -308,7 +360,7 @@ namespace WorldLib
             var item = itemInfo.getObject();
 
             // We check that the target character is in the current location...
-            var characterAsContainedObject = m_location.findObject(characterName);
+            var characterAsContainedObject = m_location.findObjectFromName(characterName);
             if(!characterAsContainedObject.hasObject())
             {
                 sendUIUpdate($"{Utils.prefix_The(characterName)} is not here.");
@@ -421,7 +473,7 @@ namespace WorldLib
         private Character getCharacter(string target, string verb, bool allowSelf=false)
         {
             // We find the item from the current location...
-            var objectFromLocation = m_location.findObject(target);
+            var objectFromLocation = m_location.findObjectFromName(target);
             if (!objectFromLocation.hasObject())
             {
                 sendUIUpdate($"There is no {target} to {verb}.");
@@ -527,7 +579,7 @@ namespace WorldLib
         private ActionResult takeOneItemFromLocation(string item)
         {
             // We find the item from the current location...
-            var objectFromLocation = m_location.findObject(item);
+            var objectFromLocation = m_location.findObjectFromName(item);
             if (!objectFromLocation.hasObject())
             {
                 return ActionResult.failed($"There is no {item} which can be taken.");
@@ -552,7 +604,7 @@ namespace WorldLib
         private void examine(string target)
         {
             // We find the object from the current location...
-            var objectFromLocation = m_location.findObject(target);
+            var objectFromLocation = m_location.findObjectFromName(target);
             if (!objectFromLocation.hasObject())
             {
                 sendUIUpdate($"You cannot examine {Utils.prefix_the(target)}.");

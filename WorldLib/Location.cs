@@ -196,7 +196,7 @@ namespace WorldLib
         /// If there is more than one object of the requested type, the first one is returned.
         /// Return null if there are no objects of the requested type.
         /// </summary>
-        public ContainedObject findObject(string objectName)
+        public ContainedObject findObjectFromName(string objectName)
         {
             return LocationContainer.findObjectFromName(objectName);
         }
