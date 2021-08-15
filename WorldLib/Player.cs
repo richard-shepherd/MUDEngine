@@ -168,6 +168,32 @@ namespace WorldLib
         /// </summary>
         private void drop(string target)
         {
+            if(target.ToUpper() == "ALL")
+            {
+                drop_All();
+            }
+            else
+            {
+                drop_Target(target);
+            }
+        }
+
+        private void drop_Target(string target)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Drops all items from the inventory.
+        /// </summary>
+        private void drop_All()
+        {
+            var items = ParsedInventory.removeAll();
+            foreach(var item in items)
+            {
+                m_location.addObject(item);
+            }
+            sendUIUpdate($"You drop: {ObjectUtils.objectNamesAndCounts(items)}.");
         }
 
         /// <summary>

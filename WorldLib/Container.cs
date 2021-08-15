@@ -57,12 +57,36 @@ namespace WorldLib
         }
 
         /// <summary>
-        /// Returns the first object matching the name specified from the container.
-        /// Returns null if the object is not in the container.
+        /// Finds the named object in this container - including looking in nested containers.
+        /// Returns the object itself and the conatiner which holds it.
+        /// Returned values are null if the object was not found.
         /// </summary>
-        public ObjectBase findObject(string objectName)
+        public (Container container, ObjectBase objectBase) findObject(string objectName)
         {
-            
+            // We check the contents of the container...
+            foreach(var objectBase in m_contents)
+            {
+                // We check the object itself...
+                if(objectBase.Name == objectName)
+                {
+                    return (this, objectBase);
+                }
+
+                // If the object is a container we check its contents...
+                var container = objectBase as Container;
+                if(container == null)
+                {
+                    continue;
+                }
+                var objectInfo = container.findObject(objectName);
+                if(objectInfo.objectBase != null)
+                {
+                    return objectInfo;
+                }
+            }
+
+            // We did not find the object...
+            return (null, null);
         }
 
         /// <summary>
@@ -94,6 +118,27 @@ namespace WorldLib
             // We can add the item to the container...
             m_contents.Add(objectToAdd);
             return ActionResult.succeeded();
+        }
+
+        /// <summary>
+        /// Removes the object from the container.
+        /// Returns the removed object.
+        /// </summary>
+        public ObjectBase remove(ObjectBase objectBase)
+        {
+            m_contents.Remove(objectBase);
+            return objectBase;
+        }
+
+        /// <summary>
+        /// Removes all objects from the container.
+        /// Returns the collection of removed items.
+        /// </summary>
+        public List<ObjectBase> removeAll()
+        {
+            var items = new List<ObjectBase>(m_contents);
+            m_contents.Clear();
+            return items;
         }
 
         #endregion

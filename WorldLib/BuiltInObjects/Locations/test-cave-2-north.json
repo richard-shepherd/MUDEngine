@@ -27,6 +27,12 @@
   "Objects": [
     {
       "ObjectID": "oak-leaf"
+    },
+    {
+      "ObjectID": "apple"
+    },
+    {
+      "ObjectID": "apple"
     }
   ]
 }
