@@ -58,28 +58,61 @@ namespace WorldLib
 
         /// <summary>
         /// Finds the named object in this container - including looking in nested containers.
-        /// Returns the object itself and the conatiner which holds it.
+        /// Returns the object itself and the container which holds it.
         /// Returned values are null if the object was not found.
         /// </summary>
-        public (Container Container, ObjectBase ObjectBase) findObject(string objectName)
+        public (Container Container, ObjectBase ObjectBase) findObjectFromName(string objectName)
         {
             // We check the contents of the container...
-            foreach(var objectBase in m_contents)
+            foreach (var objectBase in m_contents)
             {
                 // We check the object itself...
-                if(objectBase.matchesName(objectName))
+                if (objectBase.matchesName(objectName))
                 {
                     return (this, objectBase);
                 }
 
                 // If the object is a container we check its contents...
                 var container = objectBase as Container;
-                if(container == null)
+                if (container == null)
                 {
                     continue;
                 }
-                var objectInfo = container.findObject(objectName);
-                if(objectInfo.ObjectBase != null)
+                var objectInfo = container.findObjectFromName(objectName);
+                if (objectInfo.ObjectBase != null)
+                {
+                    return objectInfo;
+                }
+            }
+
+            // We did not find the object...
+            return (null, null);
+        }
+
+        /// <summary>
+        /// Finds the specified object in this container - including looking in nested containers.
+        /// Returns the object itself and the container which holds it.
+        /// Returned values are null if the object was not found.
+        /// </summary>
+        public (Container Container, ObjectBase ObjectBase) findObjectFromID(string objectID)
+        {
+            // We check the contents of the container...
+            foreach (var objectBase in m_contents)
+            {
+                // We check the object itself...
+                if (objectBase.ObjectID == objectID)
+                {
+                    return (this, objectBase);
+                }
+
+                // If the object is a container we check its contents...
+                var container = objectBase as Container;
+                if (container == null)
+                {
+                    continue;
+                }
+                var objectInfo = container.findObjectFromID(objectID);
+                if (objectInfo.ObjectBase != null)
                 {
                     return objectInfo;
                 }

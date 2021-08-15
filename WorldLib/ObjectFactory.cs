@@ -102,7 +102,7 @@ namespace WorldLib
         public (string Name, bool IsPlural) getObjectName(string name)
         {
             // We check if we have an object with the name as provided...
-            if(m_objectNames.Contains(name))
+            if(m_objectNamesAndAliases.Contains(name))
             {
                 return (name, false);
             }
@@ -111,7 +111,7 @@ namespace WorldLib
             var singularsForms = Utils.getSingularForms(name);
             foreach(var singularForm in singularsForms)
             {
-                if (m_objectNames.Contains(singularForm))
+                if (m_objectNamesAndAliases.Contains(singularForm))
                 {
                     return (singularForm, true);
                 }
@@ -146,8 +146,13 @@ namespace WorldLib
                 };
                 m_objectDefinitions[objectBase.ObjectID] = objectDefinition;
 
-                // We store the name...
-                m_objectNames.Add(objectBase.Name);
+                // We store the name and aliases...
+                m_objectNamesAndAliases.Add(objectBase.Name);
+                foreach(var alias in objectBase.Aliases)
+                {
+                    m_objectNamesAndAliases.Add(alias);
+                }
+
             }
             catch (Exception ex)
             {
@@ -217,8 +222,8 @@ namespace WorldLib
         // Object JSON definitions, keyed by object ID...
         private readonly Dictionary<string, ObjectDefinition> m_objectDefinitions = new Dictionary<string, ObjectDefinition>();
 
-        // Names of all known objects...
-        private readonly HashSet<string> m_objectNames = new HashSet<string>();
+        // Names and aliases of all known objects...
+        private readonly HashSet<string> m_objectNamesAndAliases = new HashSet<string>();
 
         #endregion
     }

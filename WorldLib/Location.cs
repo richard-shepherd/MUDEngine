@@ -152,12 +152,22 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Adds a collection of objects to the location.
+        /// </summary>
+        public void addObjects(IEnumerable<ObjectBase> objectBases)
+        {
+            foreach(var objectBase in objectBases)
+            {
+                ParsedObjects.Add(objectBase);
+            }
+            Utils.raiseEvent(onObjectsUpdated, this, null);
+        }
+
+        /// <summary>
         /// Adds an object to the location.
         /// </summary>
         public void addObject(ObjectBase objectBase)
         {
-            ParsedObjects.Add(objectBase);
-            Utils.raiseEvent(onObjectsUpdated, this, null);
         }
 
         /// <summary>
@@ -231,10 +241,27 @@ namespace WorldLib
             {
                 if(character.HP <= 0)
                 {
-                    sendUpdate($"A swarm of rats eats the carcass of {Utils.prefix_the(character.Name)}.");
-                    ParsedObjects.Remove(character);
+                    cleanupDeadCharacter(character);
                 }
             }
+        }
+
+        /// <summary>
+        /// Cleans up a character when they are dead.
+        /// </summary>
+        private void cleanupDeadCharacter(Character character)
+        {
+            // The character drops everything...
+            var items = character.ParsedInventory.removeAll();
+            addObjects(items);
+            if(items.Count > 0)
+            {
+                sendUpdate($"{Utils.prefix_The(character.Name)} drops: {ObjectUtils.objectNamesAndCounts(items)}.");
+            }
+
+            // We remove the character from the location...
+            sendUpdate($"A swarm of rats eats the carcass of {Utils.prefix_the(character.Name)}.");
+            ParsedObjects.Remove(character);
         }
 
         /// <summary>

@@ -145,6 +145,30 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Called when the character has been given an item by another character or player.
+        /// If the item is part of an exchange, the exchaged item is returned.
+        /// </summary>
+        public ObjectBase given(ObjectBase item)
+        {
+            // We add the item to the inventory...
+            ParsedInventory.add(item);
+
+            // We check if this item is part of an exchange...
+            if(item.ObjectID != Exchange.For)
+            {
+                return null;
+            }
+
+            // The item is part of an exchange, so we return the exchanged item (if we have it)...
+            var objectToGive = ParsedInventory.findObjectFromID(Exchange.Give);
+            if(objectToGive.Container != null && objectToGive.ObjectBase != null)
+            {
+                objectToGive.Container.remove(objectToGive.ObjectBase);
+            }
+            return objectToGive.ObjectBase;
+        }
+
+        /// <summary>
         /// Returns text when you talk to the character.
         /// </summary>
         public List<string> talk()

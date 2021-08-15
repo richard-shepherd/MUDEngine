@@ -184,7 +184,7 @@ namespace WorldLib
         private void drop_Target(string target)
         {
             // We check that we have the item in the inventory...
-            var objectInfo = ParsedInventory.findObject(target);
+            var objectInfo = ParsedInventory.findObjectFromName(target);
             if(objectInfo.ObjectBase == null)
             {
                 sendUIUpdate($"You are not carrying {Utils.prefix_a_an(target)}.");
@@ -216,12 +216,13 @@ namespace WorldLib
         private void give(string itemName, string characterName)
         {
             // We check that we have the item in the inventory...
-            var objectInfo = ParsedInventory.findObject(itemName);
-            if (objectInfo.ObjectBase == null)
+            var itemInfo = ParsedInventory.findObjectFromName(itemName);
+            if (itemInfo.ObjectBase == null)
             {
                 sendUIUpdate($"You are not carrying {Utils.prefix_a_an(itemName)}.");
                 return;
             }
+            var item = itemInfo.ObjectBase;
 
             // We check that the target character is in the current location...
             var characterAsObjectBase = m_location.findObject(characterName);
@@ -238,6 +239,35 @@ namespace WorldLib
                 sendUIUpdate($"You cannot give {Utils.prefix_the(itemName)} to {Utils.prefix_the(characterName)}.");
                 return;
             }
+
+            var text = new List<string>();
+            text.Add($"You give {Utils.prefix_the(character.Name)} {Utils.prefix_the(itemName)}.");
+
+            // We remove the item from our inventory...
+            itemInfo.Container.remove(itemInfo.ObjectBase);
+
+            // We give the item to the character...
+            var exchangedObject = character.given(item);
+            if(exchangedObject != null)
+            {
+                // The character has given us something in return...
+                text.Add($"{Utils.prefix_The(character.Name)} gives you {Utils.prefix_the(exchangedObject.Name)}.");
+
+                // We add the item to the inventory...
+                var actionResult = ParsedInventory.add(exchangedObject);
+                if(!String.IsNullOrEmpty(actionResult.Message))
+                {
+                    text.Add(actionResult.Message);
+                }
+                if (actionResult.Status != ActionResult.StatusEnum.SUCCEEDED)
+                {
+                    // Adding the item to the inventory failed, so we drop the item...
+                    text.Add($"You drop {Utils.prefix_the(exchangedObject.Name)}.");
+                    m_location.addObject(exchangedObject);
+                }
+            }
+
+            sendUIUpdate(text);
         }
 
         /// <summary>

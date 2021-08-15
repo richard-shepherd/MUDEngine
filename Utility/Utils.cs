@@ -118,6 +118,7 @@ namespace Utility
         /// </summary>
         public static string getPlural(string item)
         {
+            var length = item.Length;
             var uppercaseLastLetter = right(item, 1).ToUpper();
             if (uppercaseLastLetter == "X")
             {
@@ -126,6 +127,10 @@ namespace Utility
             if (uppercaseLastLetter == "S")
             {
                 return $"{item}es";
+            }
+            if (uppercaseLastLetter == "F")
+            {
+                return $"{left(item, length - 1)}ves";
             }
             return $"{item}s";
         }
@@ -137,16 +142,24 @@ namespace Utility
         {
             var results = new List<string>();
 
+            var length = item.Length;
+
             // We try removing "s"...
             if (right(item, 1) == "s")
             {
-                results.Add(left(item, item.Length - 1));
+                results.Add(left(item, length - 1));
             }
 
             // We try removing "es"...
             if (right(item, 2) == "es")
             {
-                results.Add(left(item, item.Length - 2));
+                results.Add(left(item, length - 2));
+            }
+
+            // We try replacing "ves" with "f" (eg, "leaves" -> "leaf")...
+            if (right(item, 3) == "ves")
+            {
+                results.Add($"{left(item, length - 3)}f");
             }
 
             return results;
