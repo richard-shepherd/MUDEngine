@@ -150,6 +150,10 @@ namespace WorldLib
                     goToDirection(parsedInput.Direction);
                     break;
 
+                case InputParser.ActionEnum.HELP:
+                    showHelp();
+                    break;
+
                 case InputParser.ActionEnum.INVENTORY:
                     showInventory();
                     break;
@@ -216,23 +220,29 @@ namespace WorldLib
         #region Private functions
 
         /// <summary>
+        /// Shows help.
+        /// </summary>
+        private void showHelp()
+        {
+            sendUIUpdate(m_inputParser.Help);
+        }
+
+        /// <summary>
         /// Shows stats for the target.
         /// </summary>
         private void stats(string target)
         {
+            // If there is no target, we show our own stats...
             if(String.IsNullOrEmpty(target))
             {
-                // There is no target, so we show our own stats...
-                sendUIUpdate(getStats());
+                target = Name;
             }
-            else
+
+            // We find the target character and show its stats...
+            var character = getCharacter(target, "see stats for", allowSelf: true);
+            if(character != null)
             {
-                // We find the target character and show its stats...
-                var character = getCharacter(target, "see stats for", allowSelf: true);
-                if(character != null)
-                {
-                    sendUIUpdate(character.getStats());
-                }
+                sendUIUpdate(character.getStats());
             }
         }
 

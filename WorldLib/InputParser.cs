@@ -22,6 +22,7 @@ namespace WorldLib
             EXAMINE,
             GIVE,
             GO_TO_DIRECTION,
+            HELP,
             INVENTORY,
             KILL,
             LOOK,
@@ -30,6 +31,24 @@ namespace WorldLib
             TAKE,
             TALK
         }
+
+        /// <summary>
+        /// Gets help for commands.
+        /// </summary>
+        public List<string> Help { get; } = new List<string>
+        {
+            "DROP [target],               'drop apple, drop all'",
+            "EXAMINE [target],            'examine dragon'",
+            "GIVE [target1] TO [target2], 'give apple to dragon'",
+            "N,NE,E,SE,S,SW,W,NW          - moves in the direction specified",
+            "I / INVENTORY                - shows the inventory",
+            "KILL [target]                'kill dragon'",
+            "LOOK                         - looks at the current location",
+            "STATS                        - shows stats for the player",
+            "STATS [target]               'stats dragon'",
+            "TAKE [target]                'take apple', 'take apples'",
+            "TALK (TO) [target]           'talk to shopkeeper', 'talk shopkeeper'"
+        };
 
         /// <summary>
         /// User input parsed into an action enum and the associated objects and directions.
@@ -89,6 +108,7 @@ namespace WorldLib
                 parse_Drop,
                 parse_Examine,
                 parse_Give,
+                parse_Help,
                 parse_Inventory,
                 parse_Kill,
                 parse_Look,
@@ -112,6 +132,24 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Checks if the input is a HELP command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Help(string uppercaseInput, string originalInput)
+        {
+            // We check if the input is one of the synonyms for HELP...
+            var synonyms = new List<string> { "HELP" };
+            var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput == x);
+            if (matchingSynonym == null)
+            {
+                return null;
+            }
+            var parsedInput = new ParsedInput();
+            parsedInput.Action = ActionEnum.HELP;
+            return parsedInput;
+        }
 
         /// <summary>
         /// Checks if the input is a STATS command.
