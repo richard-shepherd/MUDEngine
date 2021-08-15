@@ -168,6 +168,8 @@ namespace WorldLib
         /// </summary>
         public void addObject(ObjectBase objectBase)
         {
+            ParsedObjects.Add(objectBase);
+            Utils.raiseEvent(onObjectsUpdated, this, null);
         }
 
         /// <summary>
