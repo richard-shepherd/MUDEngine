@@ -29,7 +29,7 @@ namespace WorldLib
         /// from the collection of objects passed in.
         /// Return null if no object with the name is found.
         /// </summary>
-        public static ObjectBase findObject(IEnumerable<ObjectBase> objects, string objectName)
+        public static ObjectBase findObjectFromName(IEnumerable<ObjectBase> objects, string objectName)
         {
             // We check each object in the location...
             foreach (var objectInCollection in objects)

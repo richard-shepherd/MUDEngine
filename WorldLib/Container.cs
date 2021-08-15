@@ -203,7 +203,7 @@ namespace WorldLib
         /// </summary>
         public override List<string> examine()
         {
-            return listContents($"The {Name} contains");
+            return listContents($"{Utils.prefix_The(Name)} contains");
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace WorldLib
                 var container = containedObject as Container;
                 if (container != null)
                 {
-                    results.AddRange(container.listContents());
+                    results.AddRange(container.listContents($"{Utils.prefix_The(container.Name)} contains"));
                 }
             }
             return results;

@@ -188,7 +188,7 @@ namespace WorldLib
         /// </summary>
         public ObjectBase findObject(string objectName)
         {
-            return ObjectUtils.findObject(ParsedObjects, objectName);
+            return ObjectUtils.findObjectFromName(ParsedObjects, objectName);
         }
 
         #endregion

@@ -33,7 +33,7 @@ TODO: Implement TALK TO [target]
 
 TODO: Up-arrow gets last entered text
 
-
+TODO; Be able to take a bag from a chest
 
 
 
