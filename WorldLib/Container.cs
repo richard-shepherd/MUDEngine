@@ -61,7 +61,7 @@ namespace WorldLib
         /// Returns the object itself and the container which holds it.
         /// Returned values are null if the object was not found.
         /// </summary>
-        public (Container Container, ObjectBase ObjectBase) findObjectFromName(string objectName)
+        public ContainedObject findObjectFromName(string objectName)
         {
             // We check the contents of the container...
             foreach (var objectBase in m_contents)
@@ -69,7 +69,7 @@ namespace WorldLib
                 // We check the object itself...
                 if (objectBase.matchesName(objectName))
                 {
-                    return (this, objectBase);
+                    return new ContainedObject(this, objectBase);
                 }
 
                 // If the object is a container we check its contents...
@@ -78,15 +78,15 @@ namespace WorldLib
                 {
                     continue;
                 }
-                var objectInfo = container.findObjectFromName(objectName);
-                if (objectInfo.ObjectBase != null)
+                var containedObject = container.findObjectFromName(objectName);
+                if (containedObject.hasObject())
                 {
-                    return objectInfo;
+                    return containedObject;
                 }
             }
 
             // We did not find the object...
-            return (null, null);
+            return new ContainedObject(null, null);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace WorldLib
         /// Returns the object itself and the container which holds it.
         /// Returned values are null if the object was not found.
         /// </summary>
-        public (Container Container, ObjectBase ObjectBase) findObjectFromID(string objectID)
+        public ContainedObject findObjectFromID(string objectID)
         {
             // We check the contents of the container...
             foreach (var objectBase in m_contents)
@@ -102,7 +102,7 @@ namespace WorldLib
                 // We check the object itself...
                 if (objectBase.ObjectID == objectID)
                 {
-                    return (this, objectBase);
+                    return new ContainedObject(this, objectBase);
                 }
 
                 // If the object is a container we check its contents...
@@ -111,15 +111,15 @@ namespace WorldLib
                 {
                     continue;
                 }
-                var objectInfo = container.findObjectFromID(objectID);
-                if (objectInfo.ObjectBase != null)
+                var containedObject = container.findObjectFromID(objectID);
+                if (containedObject.hasObject())
                 {
-                    return objectInfo;
+                    return containedObject;
                 }
             }
 
             // We did not find the object...
-            return (null, null);
+            return new ContainedObject(null, null);
         }
 
         /// <summary>
@@ -172,6 +172,14 @@ namespace WorldLib
             var items = new List<ObjectBase>(m_contents);
             m_contents.Clear();
             return items;
+        }
+
+        /// <summary>
+        /// Returns the collection of objects in the container.
+        /// </summary>
+        public List<ObjectBase> getContents()
+        {
+            return m_contents;
         }
 
         #endregion

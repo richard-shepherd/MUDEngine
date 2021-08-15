@@ -184,16 +184,16 @@ namespace WorldLib
         private void drop_Target(string target)
         {
             // We check that we have the item in the inventory...
-            var objectInfo = ParsedInventory.findObjectFromName(target);
-            if(objectInfo.ObjectBase == null)
+            var containedObject = ParsedInventory.findObjectFromName(target);
+            if(!containedObject.hasObject())
             {
                 sendUIUpdate($"You are not carrying {Utils.prefix_a_an(target)}.");
                 return;
             }
 
             // We drop the item...
-            m_location.addObject(objectInfo.ObjectBase);
-            objectInfo.Container.remove(objectInfo.ObjectBase);
+            m_location.addObject(containedObject);
+            containedObject.removeFromContainer();
             sendUIUpdate($"You drop: {Utils.prefix_the(target)}.");
         }
 
@@ -217,23 +217,23 @@ namespace WorldLib
         {
             // We check that we have the item in the inventory...
             var itemInfo = ParsedInventory.findObjectFromName(itemName);
-            if (itemInfo.ObjectBase == null)
+            if (!itemInfo.hasObject())
             {
                 sendUIUpdate($"You are not carrying {Utils.prefix_a_an(itemName)}.");
                 return;
             }
-            var item = itemInfo.ObjectBase;
+            var item = itemInfo.getObject();
 
             // We check that the target character is in the current location...
-            var characterAsObjectBase = m_location.findObject(characterName);
-            if(characterAsObjectBase == null)
+            var characterAsContainedObject = m_location.findObject(characterName);
+            if(!characterAsContainedObject.hasObject())
             {
                 sendUIUpdate($"{Utils.prefix_The(characterName)} is not here.");
                 return;
             }
 
             // We check that the target character is a character...
-            var character = characterAsObjectBase as Character;
+            var character = characterAsContainedObject.getObjectAs<Character>();
             if(character == null)
             {
                 sendUIUpdate($"You cannot give {Utils.prefix_the(itemName)} to {Utils.prefix_the(characterName)}.");
@@ -244,7 +244,7 @@ namespace WorldLib
             text.Add($"You give {Utils.prefix_the(character.Name)} {Utils.prefix_the(itemName)}.");
 
             // We remove the item from our inventory...
-            itemInfo.Container.remove(itemInfo.ObjectBase);
+            itemInfo.removeFromContainer();
 
             // We give the item to the character...
             var exchangedObject = character.given(item);
@@ -339,14 +339,14 @@ namespace WorldLib
         {
             // We find the item from the current location...
             var objectFromLocation = m_location.findObject(target);
-            if (objectFromLocation == null)
+            if (!objectFromLocation.hasObject())
             {
                 sendUIUpdate($"There is no {target} to {verb}.");
                 return null;
             }
 
             // We check that the target is an character...
-            var character = objectFromLocation as Character;
+            var character = objectFromLocation.getObjectAs<Character>();
             if (character == null)
             {
                 sendUIUpdate($"You cannot {verb} {Utils.prefix_the(target)}.");
@@ -445,13 +445,13 @@ namespace WorldLib
         {
             // We find the item from the current location...
             var objectFromLocation = m_location.findObject(item);
-            if (objectFromLocation == null)
+            if (!objectFromLocation.hasObject())
             {
                 return ActionResult.failed($"There is no {item} which can be taken.");
             }
 
             // We add the object to our inventory...
-            var actionResult = ParsedInventory.add(objectFromLocation);
+            var actionResult = ParsedInventory.add(objectFromLocation.getObject());
             if (actionResult.Status != ActionResult.StatusEnum.SUCCEEDED)
             {
                 return actionResult;
@@ -459,7 +459,7 @@ namespace WorldLib
 
             // The object was successfully added to the inventory, so we remove it 
             // from the location...
-            m_location.removeObject(objectFromLocation);
+            objectFromLocation.removeFromContainer();
             return ActionResult.succeeded($"You add {Utils.prefix_the(item)} to your inventory.");
         }
 
@@ -470,14 +470,14 @@ namespace WorldLib
         {
             // We find the object from the current location...
             var objectFromLocation = m_location.findObject(target);
-            if (objectFromLocation == null)
+            if (!objectFromLocation.hasObject())
             {
                 sendUIUpdate($"You cannot examine {Utils.prefix_the(target)}.");
                 return;
             }
 
             // We examine the object...
-            sendUIUpdate(objectFromLocation.examine());
+            sendUIUpdate(objectFromLocation.getObject().examine());
         }
 
         /// <summary>
@@ -525,7 +525,7 @@ namespace WorldLib
             m_location.onObjectsUpdated += onLocationObjectsUpdated;
 
             // We observe characters in the location...
-            var characters = m_location.ParsedObjects
+            var characters = m_location.LocationContainer.getContents()
                 .Where(x => x is Character)
                 .Select(x => x as Character)
                 .ToList();

@@ -96,12 +96,13 @@ namespace WorldLib
         public List<ObjectInfo> Objects { get; set; } = new List<ObjectInfo>();
 
         /// <summary>
-        /// Gets or sets the collection of parsed-objects in the location.
+        /// Gets or sets the collection of objects in the location.
         /// </summary><remarks>
-        /// These are the the same objects as the Objects collection above, but parsed
-        /// into concrete ObjectBase-derived objects.
+        /// These are initialized from the objects as the Objects collection above, but parsed
+        /// into concrete ObjectBase-derived objects. Other objects can be dynamically added
+        /// or removed.
         /// </remarks>
-        public List<ObjectBase> ParsedObjects { get; set; } = new List<ObjectBase>();
+        public LocationContainer LocationContainer { get; set; } = new LocationContainer();
 
         #endregion
 
@@ -158,7 +159,7 @@ namespace WorldLib
         {
             foreach(var objectBase in objectBases)
             {
-                ParsedObjects.Add(objectBase);
+                LocationContainer.add(objectBase);
             }
             Utils.raiseEvent(onObjectsUpdated, this, null);
         }
@@ -168,7 +169,16 @@ namespace WorldLib
         /// </summary>
         public void addObject(ObjectBase objectBase)
         {
-            ParsedObjects.Add(objectBase);
+            LocationContainer.add(objectBase);
+            Utils.raiseEvent(onObjectsUpdated, this, null);
+        }
+
+        /// <summary>
+        /// Adds an object to the location.
+        /// </summary>
+        public void addObject(ContainedObject containedObject)
+        {
+            LocationContainer.add(containedObject.getObject());
             Utils.raiseEvent(onObjectsUpdated, this, null);
         }
 
@@ -177,7 +187,7 @@ namespace WorldLib
         /// </summary>
         public void removeObject(ObjectBase objectBase)
         {
-            ParsedObjects.Remove(objectBase);
+            LocationContainer.remove(objectBase);
             Utils.raiseEvent(onObjectsUpdated, this, null);
         }
 
@@ -186,9 +196,9 @@ namespace WorldLib
         /// If there is more than one object of the requested type, the first one is returned.
         /// Return null if there are no objects of the requested type.
         /// </summary>
-        public ObjectBase findObject(string objectName)
+        public ContainedObject findObject(string objectName)
         {
-            return ObjectUtils.findObjectFromName(ParsedObjects, objectName);
+            return LocationContainer.findObjectFromName(objectName);
         }
 
         #endregion
@@ -201,7 +211,7 @@ namespace WorldLib
         public override void update(DateTime updateTimeUTC)
         {
             // We update all the objects in the location...
-            foreach(var objectBase in ParsedObjects)
+            foreach(var objectBase in LocationContainer.getContents())
             {
                 objectBase.update(updateTimeUTC);
             }
@@ -222,7 +232,7 @@ namespace WorldLib
             foreach(var objectInfo in Objects)
             {
                 var parsedObject = parseObject(objectInfo, objectFactory);
-                ParsedObjects.Add(parsedObject);
+                LocationContainer.add(parsedObject);
             }
         }
 
@@ -235,7 +245,7 @@ namespace WorldLib
         /// </summary>
         private void cleanupDeadCharacters()
         {
-            var characters = ParsedObjects
+            var characters = LocationContainer.getContents()
                 .Where(x => x is Character)
                 .Select(x => x as Character)
                 .ToList();
@@ -263,7 +273,7 @@ namespace WorldLib
 
             // We remove the character from the location...
             sendUpdate($"A swarm of rats eats the carcass of {Utils.prefix_the(character.Name)}.");
-            ParsedObjects.Remove(character);
+            LocationContainer.remove(character);
         }
 
         /// <summary>
@@ -290,7 +300,8 @@ namespace WorldLib
         /// </summary>
         private string look_Objects()
         {
-            var nonPlayerObjects = ParsedObjects.Where(x => x.ObjectType != ObjectTypeEnum.PLAYER);
+            var nonPlayerObjects = LocationContainer.getContents()
+                .Where(x => x.ObjectType != ObjectTypeEnum.PLAYER);
             if(nonPlayerObjects.Count() == 0)
             {
                 return null;
@@ -303,11 +314,12 @@ namespace WorldLib
         /// </summary>
         private string look_Players()
         {
-            if (ParsedObjects.Count == 0)
+            if (LocationContainer.ItemCount == 0)
             {
                 return null;
             }
-            var players = ParsedObjects.Where(x => x.ObjectType == ObjectTypeEnum.PLAYER);
+            var players = LocationContainer.getContents()
+                .Where(x => x.ObjectType == ObjectTypeEnum.PLAYER);
             return $"Players here: {ObjectUtils.objectNamesAndCounts(players)}.";
         }
 

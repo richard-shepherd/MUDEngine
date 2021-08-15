@@ -161,11 +161,8 @@ namespace WorldLib
 
             // The item is part of an exchange, so we return the exchanged item (if we have it)...
             var objectToGive = ParsedInventory.findObjectFromID(Exchange.Give);
-            if(objectToGive.Container != null && objectToGive.ObjectBase != null)
-            {
-                objectToGive.Container.remove(objectToGive.ObjectBase);
-            }
-            return objectToGive.ObjectBase;
+            objectToGive.removeFromContainer();
+            return objectToGive.getObject();
         }
 
         /// <summary>
