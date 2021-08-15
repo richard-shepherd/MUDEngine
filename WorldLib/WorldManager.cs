@@ -40,7 +40,8 @@ namespace WorldLib
             var utcNow = DateTime.UtcNow;
 
             // We update the locations - which also updates all the items in them...
-            foreach(var location in m_worldState.Locations.Values)
+            var locations = new List<Location>(m_worldState.Locations.Values);
+            foreach(var location in locations)
             {
                 location.update(utcNow);
             }
@@ -69,6 +70,18 @@ namespace WorldLib
             player.setLocation(m_playerStartingLocationID);
 
             return player;
+        }
+
+        /// <summary>
+        /// Respawns the payer (after they have died).
+        /// </summary>
+        public void respawnPlayer(Player player)
+        {
+            // We reset the player's properties...
+            player.setDefaultProperties();
+
+            // We put the player in the starting location...
+            player.setLocation(m_playerStartingLocationID);
         }
 
         /// <summary>

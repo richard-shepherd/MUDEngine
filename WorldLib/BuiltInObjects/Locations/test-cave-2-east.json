@@ -22,6 +22,12 @@
       "Direction": "W",
       "To": "test-cave-2-main"
     }
+  ],
+
+  "Objects": [
+    {
+      "ObjectID": "small-green-dragon"
+    }
   ]
 
 }

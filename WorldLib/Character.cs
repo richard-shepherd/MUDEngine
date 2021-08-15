@@ -145,6 +145,22 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Returns whether the character is alive.
+        /// </summary>
+        public bool isAlive()
+        {
+            return HP > 0;
+        }
+
+        /// <summary>
+        /// Returns whether the character is dead.
+        /// </summary>
+        public bool isDead()
+        {
+            return HP <= 0;
+        }
+
+        /// <summary>
         /// Called when the character has been given an item by another character or player.
         /// If the item is part of an exchange, the exchaged item is returned.
         /// </summary>
@@ -254,7 +270,7 @@ namespace WorldLib
             //}
 
             // We note if this character killed the opponent...
-            if (opponent.HP <= 0)
+            if (opponent.isDead())
             {
                 update.Add($"{Utils.prefix_The(Name)} has killed {Utils.prefix_the(opponent.Name)}.");
             }

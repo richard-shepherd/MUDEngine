@@ -211,7 +211,8 @@ namespace WorldLib
         public override void update(DateTime updateTimeUTC)
         {
             // We update all the objects in the location...
-            foreach(var objectBase in LocationContainer.getContents())
+            var objectsInLocation = new List<ObjectBase>(LocationContainer.getContents());
+            foreach(var objectBase in objectsInLocation)
             {
                 objectBase.update(updateTimeUTC);
             }
@@ -251,7 +252,7 @@ namespace WorldLib
                 .ToList();
             foreach(var character in characters)
             {
-                if(character.HP <= 0)
+                if(character.isDead())
                 {
                     cleanupDeadCharacter(character);
                 }

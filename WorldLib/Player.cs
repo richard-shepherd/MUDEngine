@@ -50,6 +50,15 @@ namespace WorldLib
             Name = name;
 
             // We set up default player properties...
+            setDefaultProperties();
+        }
+
+        /// <summary>
+        /// Sets up default player properties.
+        /// </summary>
+        public void setDefaultProperties()
+        {
+            // We set up default player properties...
             Dimensions.HeightM = 1.8;
             Dimensions.WidthM = 0.6;
             Dimensions.DepthM = 0.6;
@@ -58,7 +67,10 @@ namespace WorldLib
             // We set up player fighting properties...
             HP = 100;
             Dexterity = 70;
+
+            // Attacks...
             AttackIntervalSeconds = 1.0;
+            Attacks.Clear();
             Attacks.Add(new Character.AttackType { Name = "punch", MinDamage = 1, MaxDamage = 5 });
         }
 
@@ -103,6 +115,13 @@ namespace WorldLib
         /// </summary>
         public void parseInput(string input)
         {
+            // We check if we are dead...
+            if(isDead())
+            {
+                sendUIUpdate($"Your ghostly form cannot get to grips with the rapidly fading material plane.");
+                return;
+            }
+
             // We parse the input...
             var parsedInput = m_inputParser.parseInput(input);
             if(parsedInput == null)
@@ -156,6 +175,34 @@ namespace WorldLib
 
                 default:
                     throw new Exception($"Action {parsedInput.Action} not handled.");
+            }
+        }
+
+        #endregion
+
+        #region ObjectBase implementation
+
+        /// <summary>
+        /// Called at regular intervals to update properties and actions of the player.
+        /// </summary>
+        public override void update(DateTime updateTimeUTC)
+        {
+            try
+            {
+                // We perform base (Character) updates...
+                base.update(updateTimeUTC);
+
+                // If the player is dead, we respawn...
+                if(isDead())
+                {
+                    drop_All();
+                    sendUIUpdate("Your spirit finds itself in a new body.");
+                    m_worldManager.respawnPlayer(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.log(ex);
             }
         }
 
