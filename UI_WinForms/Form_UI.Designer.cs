@@ -46,9 +46,9 @@ namespace UI_WinForms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ctrlGroupBox_Output.Controls.Add(this.ctrlOutput);
             this.ctrlGroupBox_Output.Location = new System.Drawing.Point(12, 10);
-            this.ctrlGroupBox_Output.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.ctrlGroupBox_Output.Margin = new System.Windows.Forms.Padding(1);
             this.ctrlGroupBox_Output.Name = "ctrlGroupBox_Output";
-            this.ctrlGroupBox_Output.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.ctrlGroupBox_Output.Padding = new System.Windows.Forms.Padding(1);
             this.ctrlGroupBox_Output.Size = new System.Drawing.Size(1120, 532);
             this.ctrlGroupBox_Output.TabIndex = 1;
             this.ctrlGroupBox_Output.TabStop = false;
@@ -61,7 +61,7 @@ namespace UI_WinForms
             this.ctrlOutput.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ctrlOutput.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.ctrlOutput.Location = new System.Drawing.Point(1, 17);
-            this.ctrlOutput.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.ctrlOutput.Margin = new System.Windows.Forms.Padding(1);
             this.ctrlOutput.Multiline = true;
             this.ctrlOutput.Name = "ctrlOutput";
             this.ctrlOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -74,9 +74,9 @@ namespace UI_WinForms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ctrlGroupBox_Input.Controls.Add(this.ctrlInput);
             this.ctrlGroupBox_Input.Location = new System.Drawing.Point(10, 544);
-            this.ctrlGroupBox_Input.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.ctrlGroupBox_Input.Margin = new System.Windows.Forms.Padding(1);
             this.ctrlGroupBox_Input.Name = "ctrlGroupBox_Input";
-            this.ctrlGroupBox_Input.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.ctrlGroupBox_Input.Padding = new System.Windows.Forms.Padding(1);
             this.ctrlGroupBox_Input.Size = new System.Drawing.Size(1122, 51);
             this.ctrlGroupBox_Input.TabIndex = 1;
             this.ctrlGroupBox_Input.TabStop = false;
@@ -89,15 +89,15 @@ namespace UI_WinForms
             this.ctrlInput.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ctrlInput.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.ctrlInput.Location = new System.Drawing.Point(1, 17);
-            this.ctrlInput.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.ctrlInput.Margin = new System.Windows.Forms.Padding(1);
             this.ctrlInput.Name = "ctrlInput";
             this.ctrlInput.Size = new System.Drawing.Size(1120, 26);
             this.ctrlInput.TabIndex = 0;
             this.ctrlInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ctrlInput_KeyPress);
+            this.ctrlInput.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ctrlInput_PreviewKeyDown);
             // 
             // m_worldUpdateTimer
             // 
-            this.m_worldUpdateTimer.Enabled = false;
             this.m_worldUpdateTimer.Interval = 500;
             this.m_worldUpdateTimer.Tick += new System.EventHandler(this.m_worldUpdateTimer_Tick);
             // 
@@ -108,7 +108,7 @@ namespace UI_WinForms
             this.ClientSize = new System.Drawing.Size(1142, 605);
             this.Controls.Add(this.ctrlGroupBox_Input);
             this.Controls.Add(this.ctrlGroupBox_Output);
-            this.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.Margin = new System.Windows.Forms.Padding(1);
             this.Name = "Form_UI";
             this.Text = "MUDEngine UI";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_UI_FormClosing);

@@ -28,14 +28,10 @@ TODO: Implement TALK TO [target]
       - Should not just be exchange talk
       - Exchange talk should only be done if the character has the object to give
 
-TODO: Up-arrow gets last entered text
-
 TODO: Allow characters to move between locations.
       - When characters leave, we could say the direction they went (??)
 
 TODO: Add shops
-
-TODO: STATS - shows HP, XP etc
 
 TODO: Armour
 

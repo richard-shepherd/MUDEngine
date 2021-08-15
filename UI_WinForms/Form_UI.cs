@@ -105,8 +105,34 @@ namespace UI_WinForms
                 ctrlInput.Text = "";
                 e.Handled = true;  // This stops the 'ding'
 
+                // We store this input (to use again if up-arrow is pressed)...
+                m_previousInput = input.Trim();
+
                 // We pass the input to the player...
                 m_player.parseInput(input);
+            }
+            catch (Exception ex)
+            {
+                Logger.log(ex);
+            }
+        }
+
+        /// <summary>
+        /// Called shortly before key-down events.
+        /// </summary>
+        private void ctrlInput_PreviewKeyDown(object sender, PreviewKeyDownEventArgs args)
+        {
+            try
+            {
+                if (args.KeyCode == Keys.Up)
+                {
+                    // The up arrow is pressed, so we set the input text to the previous input.
+                    // NOTE: We add a space to the end of the previous input, as (for some reason)
+                    //       putting the cursor at the end seems to put it one place before the end.
+                    ctrlInput.Text = $"{m_previousInput} ";
+                    ctrlInput.SelectionStart = ctrlInput.TextLength;
+                    ctrlInput.SelectionLength = 0;
+                }
             }
             catch (Exception ex)
             {
@@ -179,6 +205,9 @@ namespace UI_WinForms
 
         // The player...
         private Player m_player = null;
+
+        // The previous input...
+        private string m_previousInput = "";
 
         #endregion
     }
