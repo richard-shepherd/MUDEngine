@@ -90,10 +90,21 @@ namespace WorldLib
         public int HP { get; set; } = 50;
 
         /// <summary>
+        /// Gets or sets the character's maximum HP - ie, the amount to which 
+        /// it can be boosted by eating, potions etc.
+        /// </summary>
+        public int MaxHP { get; set; } = -1;
+
+        /// <summary>
         /// Gets or sets the character's dexterity. 
         /// (Value between 0 - 100.)
         /// </summary>
         public int Dexterity { get; set; } = 10;
+
+        /// <summary>
+        /// Gets or sets the character's XP.
+        /// </summary>
+        public int XP { get; set; } = 0;
 
         /// <summary>
         /// Gets or sets the collection of attacks which the character can perform.
@@ -142,6 +153,32 @@ namespace WorldLib
         {
             var args = new GameUpdateArgs { Text = text };
             Utils.raiseEvent(onGameUpdate, this, args);
+        }
+
+        /// <summary>
+        /// Gets the character's stats.
+        /// </summary>
+        public List<string> getStats()
+        {
+            var stats = new List<string>();
+
+            // HP...
+            stats.Add($"HP: {HP}/{MaxHP}");
+
+            // XP...
+            stats.Add($"XP: {XP}");
+
+            // Dexterity...
+            stats.Add($"Dexterity: {Dexterity}");
+
+            // Attacks...
+            stats.Add("Attacks:");
+            foreach(var attack in Attacks)
+            {
+                stats.Add($"- {attack.Name}: {attack.MinDamage}-{attack.MaxDamage}");
+            }
+
+            return stats;
         }
 
         /// <summary>
@@ -251,24 +288,15 @@ namespace WorldLib
             var damage = Utils.Rnd.Next(attack.MinDamage, attack.MaxDamage + 1);
             opponent.HP -= damage;
 
+            // We gain XP for damage we inflict...
+            XP += damage;
+
             // We create the update...
             var update = new List<string>();
 
             // Attack description...
             update.Add($"{Utils.prefix_The(Name)} launches a {attack.Name} attack at {Utils.prefix_the(opponent.Name)} doing {damage} damage.");
             
-            //// Current HP of each fighter (in alphabetical order)...
-            //if(opponent.Name.CompareTo(Name) < 0)
-            //{
-            //    update.Add($"{opponent.Name} HP={opponent.HP}");
-            //    update.Add($"{Name} HP={HP}");
-            //}
-            //else
-            //{
-            //    update.Add($"{Name} HP={HP}");
-            //    update.Add($"{opponent.Name} HP={opponent.HP}");
-            //}
-
             // We note if this character killed the opponent...
             if (opponent.isDead())
             {
@@ -289,6 +317,12 @@ namespace WorldLib
         {
             // We parse the base-object values...
             base.parseConfig(objectFactory);
+
+            // If MaxHP is not specified, we set it to the HP...
+            if(MaxHP == -1)
+            {
+                MaxHP = HP;
+            }
 
             // Attacks...
             foreach(var attack in Attacks)

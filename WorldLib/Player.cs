@@ -66,6 +66,7 @@ namespace WorldLib
 
             // We set up player fighting properties...
             HP = 100;
+            MaxHP = 150;
             Dexterity = 70;
 
             // Attacks...
@@ -165,6 +166,10 @@ namespace WorldLib
                     sendUIUpdate("It is not that sort of pot.");
                     break;
 
+                case InputParser.ActionEnum.STATS:
+                    stats(parsedInput.Target1);
+                    break;
+
                 case InputParser.ActionEnum.TAKE:
                     takeTargetFromLocation(parsedInput.Target1);
                     break;
@@ -209,6 +214,27 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Shows stats for the target.
+        /// </summary>
+        private void stats(string target)
+        {
+            if(String.IsNullOrEmpty(target))
+            {
+                // There is no target, so we show our own stats...
+                sendUIUpdate(getStats());
+            }
+            else
+            {
+                // We find the target character and show its stats...
+                var character = getCharacter(target, "see stats for", allowSelf: true);
+                if(character != null)
+                {
+                    sendUIUpdate(character.getStats());
+                }
+            }
+        }
 
         /// <summary>
         /// Drops the target object.
@@ -382,7 +408,7 @@ namespace WorldLib
         /// Returns the Character object for the target specified, or null if
         /// the target is not a valid character.
         /// </summary>
-        private Character getCharacter(string target, string verb)
+        private Character getCharacter(string target, string verb, bool allowSelf=false)
         {
             // We find the item from the current location...
             var objectFromLocation = m_location.findObject(target);
@@ -401,7 +427,7 @@ namespace WorldLib
             }
 
             // We check if the opponent is the player themself...
-            if (character == this)
+            if (character == this && !allowSelf)
             {
                 sendUIUpdate($"It is probably best not to {verb} yourself.");
                 return null;

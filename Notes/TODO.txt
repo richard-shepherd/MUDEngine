@@ -33,7 +33,15 @@ TODO: Up-arrow gets last entered text
 TODO: Allow characters to move between locations.
       - When characters leave, we could say the direction they went (??)
 
+TODO: Add shops
 
+TODO: STATS - shows HP, XP etc
+
+TODO: Armour
+
+TODO: KILL target WITH sword
+
+  
 
 
 

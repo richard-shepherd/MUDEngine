@@ -26,6 +26,7 @@ namespace WorldLib
             KILL,
             LOOK,
             SMOKE_POT,
+            STATS,
             TAKE,
             TALK
         }
@@ -92,6 +93,7 @@ namespace WorldLib
                 parse_Kill,
                 parse_Look,
                 parse_SmokePot,
+                parse_Stats,
                 parse_Take,
                 parse_Talk
             };
@@ -110,6 +112,17 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Checks if the input is a STATS command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Stats(string uppercaseInput, string originalInput)
+        {
+            // We check if the input starts with a DROP synonym...
+            var synonyms = new List<string> { "STATS", "SHOW STATS", "SHOW STATS FOR" };
+            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.STATS, synonyms);
+        }
 
         /// <summary>
         /// Checks if the input is a DROP command.
