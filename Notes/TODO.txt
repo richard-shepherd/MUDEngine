@@ -9,6 +9,7 @@ TODO: Have a reset button
 TODO: Allow items to respawn afer a period of time
 
 TODO: DROP object
+      - Support plurals, eg DROP apples
 
 TODO: Only allow TAKE from a container if it is unlocked
 
@@ -26,13 +27,11 @@ TODO: Implement locked doors
 
 TODO: Allow exits to be blocked by monsters
 
-TODO; Gets objects from NPCs
-
-TODO: Get objects from NPCs only if you give them something
-      ie, a quest
-      Implement GIVE [target1] to [target2]
-
 TODO: Implement TALK TO [target]
+      - Should not just be exchange talk
+      - Exchange talk should only be done if the character has the object to give
+
+TODO: Up-arrow gets last entered text
 
 
 
