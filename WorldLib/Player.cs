@@ -123,7 +123,7 @@ namespace WorldLib
                     break;
 
                 case InputParser.ActionEnum.GIVE:
-                    give(parsedInput.Target1, parsedInput.Target1);
+                    give(parsedInput.Target1, parsedInput.Target2);
                     break;
 
                 case InputParser.ActionEnum.GO_TO_DIRECTION:
@@ -211,10 +211,33 @@ namespace WorldLib
         }
 
         /// <summary>
-        /// Gives target1 to target2.
+        /// Gives an item to a character.
         /// </summary>
-        private void give(string target11, string target12)
+        private void give(string itemName, string characterName)
         {
+            // We check that we have the item in the inventory...
+            var objectInfo = ParsedInventory.findObject(itemName);
+            if (objectInfo.ObjectBase == null)
+            {
+                sendUIUpdate($"You are not carrying {Utils.prefix_a_an(itemName)}.");
+                return;
+            }
+
+            // We check that the target character is in the current location...
+            var characterAsObjectBase = m_location.findObject(characterName);
+            if(characterAsObjectBase == null)
+            {
+                sendUIUpdate($"{Utils.prefix_The(characterName)} is not here.");
+                return;
+            }
+
+            // We check that the target character is a character...
+            var character = characterAsObjectBase as Character;
+            if(character == null)
+            {
+                sendUIUpdate($"You cannot give {Utils.prefix_the(itemName)} to {Utils.prefix_the(characterName)}.");
+                return;
+            }
         }
 
         /// <summary>
