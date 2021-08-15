@@ -96,11 +96,11 @@ namespace WorldLib
         public List<ObjectInfo> Objects { get; set; } = new List<ObjectInfo>();
 
         /// <summary>
-        /// Gets or sets the collection of objects in the location.
+        /// Gets or sets the location-container which manages the collection of objects in the location.
         /// </summary><remarks>
-        /// These are initialized from the objects as the Objects collection above, but parsed
+        /// This is initialized from the objects from the Objects collection above, but parsed
         /// into concrete ObjectBase-derived objects. Other objects can be dynamically added
-        /// or removed.
+        /// or removed as the game is played.
         /// </remarks>
         public LocationContainer LocationContainer { get; set; } = new LocationContainer();
 

@@ -33,7 +33,9 @@ TODO: Implement TALK TO [target]
 
 TODO: Up-arrow gets last entered text
 
-TODO; Be able to take a bag from a chest
+TODO: Allow characters to move between locations.
+      - When characters leave, we could say the direction they went (??)
+
 
 
 
