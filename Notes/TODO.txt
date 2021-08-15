@@ -20,9 +20,6 @@ TODO: Implement XP
 
 TODO: EAT - Looks in the location first for the object, then in the inventory
 
-TODO: You cannot do anything if you are dead
-      Make the player respawn after a few seconds.
-
 TODO: Implement locked doors
 
 TODO: Allow exits to be blocked by monsters
