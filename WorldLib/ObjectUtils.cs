@@ -32,17 +32,9 @@ namespace WorldLib
         public static ObjectBase findObject(IEnumerable<ObjectBase> objects, string objectName)
         {
             // We check each object in the location...
-            objectName = objectName.ToUpper();
             foreach (var objectInCollection in objects)
             {
-                // We check its name...
-                if (objectInCollection.Name.ToUpper() == objectName)
-                {
-                    return objectInCollection;
-                }
-
-                // We check its aliases...
-                if (objectInCollection.Aliases.Any(x => x.ToUpper() == objectName))
+                if(objectInCollection.matchesName(objectName))
                 {
                     return objectInCollection;
                 }

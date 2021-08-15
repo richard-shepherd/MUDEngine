@@ -145,6 +145,26 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Returns true if the name specified matches the name or aliases of the object, false otherwise.
+        /// </summary>
+        public bool matchesName(string name)
+        {
+            var uppercaseName = name.ToUpper();
+            if(Name.ToUpper() == uppercaseName)
+            {
+                return true;
+            }
+            foreach(var alias in Aliases)
+            {
+                if(alias.ToUpper() == uppercaseName)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Returns the dimensions of the object in meters, ordered from largest to smallest.
         /// </summary>
         public List<double> getOrderedDimensions()

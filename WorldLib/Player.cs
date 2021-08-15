@@ -178,9 +178,23 @@ namespace WorldLib
             }
         }
 
+        /// <summary>
+        /// Drops the item specified.
+        /// </summary>
         private void drop_Target(string target)
         {
-            throw new NotImplementedException();
+            // We check that we have the item in the inventory...
+            var objectInfo = ParsedInventory.findObject(target);
+            if(objectInfo.ObjectBase == null)
+            {
+                sendUIUpdate($"You are not carrying {Utils.prefix_a_an(target)}.");
+                return;
+            }
+
+            // We drop the item...
+            m_location.addObject(objectInfo.ObjectBase);
+            objectInfo.Container.remove(objectInfo.ObjectBase);
+            sendUIUpdate($"You drop: {Utils.prefix_the(target)}.");
         }
 
         /// <summary>
