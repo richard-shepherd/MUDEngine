@@ -206,6 +206,16 @@ namespace WorldLib
             return LocationContainer.findObjectFromName(objectName);
         }
 
+        /// <summary>
+        /// Returns an object from this location for the object-ID specified.
+        /// If there is more than one object of the requested type, the first one is returned.
+        /// Return null if there are no objects of the requested type.
+        /// </summary>
+        public ContainedObject findObjectFromID(string objectName)
+        {
+            return LocationContainer.findObjectFromID(objectName);
+        }
+
         #endregion
 
         #region ObjectBase implementation
@@ -307,16 +317,23 @@ namespace WorldLib
             if (Exits.Count > 1)
             {
                 var directions = Exits.Select(x => x.Direction);
-                exits.Add(($"There are exits: {string.Join(", ", directions)}.");
+                exits.Add($"There are exits: {string.Join(", ", directions)}.");
             }
 
             // Doors...
             var exitsWithDoors = Exits.Where(x => !String.IsNullOrEmpty(x.Door));
             foreach(var exit in exitsWithDoors)
             {
+                var doorInfo = findObjectFromID(exit.Door);
+                if(!doorInfo.hasObject())
+                {
+                    continue;
+                }
+                var door = doorInfo.getObjectAs<Door>();
+                exits.Add($"There is {Utils.prefix_a_an(door.Name)} at the {exit.Direction} exit. The {door.Name} is {door.getLockedText()}.");
             }
 
-            return null;
+            return exits;
         }
 
         /// <summary>

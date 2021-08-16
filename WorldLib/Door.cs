@@ -32,6 +32,14 @@ namespace WorldLib
         {
         }
 
+        /// <summary>
+        /// Returns 'locked' or 'unlocked'.
+        /// </summary>
+        public string getLockedText()
+        {
+            return Locked ? "locked" : "unlocked";
+        }
+
         #endregion
 
         #region ILockable implementation
@@ -99,8 +107,7 @@ namespace WorldLib
             }
 
             // Whether the door is locked or unlocked...
-            var lockedText = Locked ? "locked" : "unlocked";
-            examine.Add($"The {Name} is {lockedText}.");
+            examine.Add($"The {Name} is {getLockedText()}.");
 
             return examine;
         }
