@@ -1,7 +1,7 @@
 ﻿{
   "ObjectType": "MONSTER",
 
-  "Name": "platipus",
+  "Name": "platypus",
   "Aliases": [
   ],
 
@@ -15,5 +15,19 @@
     "Depth": "20cm"
   },
 
-  "Weight": "8kg"
+  "Weight": "8kg",
+
+  "HP": 50,
+
+  "Dexterity": 70,
+
+  "AttackIntervalSeconds": 2.0,
+
+  "Attacks": [
+    {
+      "Name": "duckbill slash",
+      "Damage": "1-10"
+    }
+  ]
+
 }

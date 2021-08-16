@@ -65,9 +65,14 @@ namespace WorldLib
             public string To { get; set; } = "";
 
             /// <summary>
-            /// Gets or sets the object-ID for the optional door for this exit.
+            /// Gets or sets the object-ID for the (optional) door for this exit.
             /// </summary>
             public string Door { get; set; } = "";
+
+            /// <summary>
+            /// Gets or sets the object-ID for the optional object blocking this exit.
+            /// </summary>
+            public string BlockedBy { get; set; } = "";
         }
 
         /// <summary>
@@ -141,6 +146,14 @@ namespace WorldLib
                 {
                     return ActionResult.failed($"Cannot go {direction}. The {door.Name} is locked.");
                 }
+            }
+
+            // We check if there is an object blocking this direction...
+            var blockingObjectInfo = findObjectFromID(exit.BlockedBy);
+            if(blockingObjectInfo.hasObject())
+            {
+                var blockingObject = blockingObjectInfo.getObject();
+                return ActionResult.failed($"The exit {direction} is blocked by {Utils.prefix_the(blockingObject.Name)}.");
             }
 
             return ActionResult.succeeded();
@@ -277,13 +290,23 @@ namespace WorldLib
                 LocationContainer.add(parsedObject);
             }
 
-            // We add objects for doors...
+            // We add objects for doors and objects blocking exits...
             foreach(var exit in Exits)
             {
+                // Door...
                 if(!String.IsNullOrEmpty(exit.Door))
                 {
                     var door = objectFactory.createObject(exit.Door);
+                    door.LocationID = ObjectID;
                     LocationContainer.add(door);
+                }
+
+                // Blocking object...
+                if (!String.IsNullOrEmpty(exit.BlockedBy))
+                {
+                    var blockingObject = objectFactory.createObject(exit.BlockedBy);
+                    blockingObject.LocationID = ObjectID;
+                    LocationContainer.add(blockingObject);
                 }
             }
         }
@@ -348,15 +371,28 @@ namespace WorldLib
 
             // Doors...
             var exitsWithDoors = Exits.Where(x => !String.IsNullOrEmpty(x.Door));
-            foreach(var exit in exitsWithDoors)
+            foreach (var exit in exitsWithDoors)
             {
                 var doorInfo = findObjectFromID(exit.Door);
-                if(!doorInfo.hasObject())
+                if (!doorInfo.hasObject())
                 {
                     continue;
                 }
                 var door = doorInfo.getObjectAs<Door>();
                 exits.Add($"There is {Utils.prefix_a_an(door.Name)} at the {exit.Direction} exit. The {door.Name} is {door.getLockedText()}.");
+            }
+
+            // Blocking objects...
+            var exitsWithBlockingObjects = Exits.Where(x => !String.IsNullOrEmpty(x.BlockedBy));
+            foreach (var exit in exitsWithBlockingObjects)
+            {
+                var blockingObjectInfo = findObjectFromID(exit.BlockedBy);
+                if (!blockingObjectInfo.hasObject())
+                {
+                    continue;
+                }
+                var blockingObject = blockingObjectInfo.getObject();
+                exits.Add($"The exit {exit.Direction} is blocked by {Utils.prefix_a_an(blockingObject.Name)}.");
             }
 
             return exits;

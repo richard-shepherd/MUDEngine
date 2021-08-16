@@ -13,7 +13,8 @@
     },
     {
       "Direction": "E",
-      "To": "test-cave-2-east"
+      "To": "test-cave-2-east",
+      "BlockedBy":  "platypus"
     }
   ],
 
