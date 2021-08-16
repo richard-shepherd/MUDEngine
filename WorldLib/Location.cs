@@ -121,6 +121,32 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Checks whether it is possible to go in the direction specified.
+        /// </summary>
+        public ActionResult canGoInDirection(string direction)
+        {
+            // We find the location in the direction specified...
+            var exit = Exits.FirstOrDefault(x => x.Direction == direction);
+            if (exit == null)
+            {
+                return ActionResult.failed($"There is no exit to the {direction}.");
+            }
+
+            // We check if there is a locked door in this direction...
+            var doorInfo = findObjectFromID(exit.Door);
+            if(doorInfo.hasObject())
+            {
+                var door = doorInfo.getObjectAs<Door>();
+                if(door.Locked)
+                {
+                    return ActionResult.failed($"Cannot go {direction}. The {door.Name} is locked.");
+                }
+            }
+
+            return ActionResult.succeeded();
+        }
+
+        /// <summary>
         /// Returns what you see when you look at a location - including when you
         /// first enter a location. This includes the location's description, as 
         /// well its exits and an overview of objects in it.

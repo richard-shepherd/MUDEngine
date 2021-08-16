@@ -668,15 +668,16 @@ namespace WorldLib
         /// </summary>
         private void goToDirection(string direction)
         {
-            // We find the location in the direction specified...
-            var exit = m_location.Exits.FirstOrDefault(x => x.Direction == direction);
-            if(exit == null)
+            // We check if the player can go in the direction requested...
+            var actionResult = m_location.canGoInDirection(direction);
+            if(actionResult.Status != ActionResult.StatusEnum.SUCCEEDED)
             {
-                sendUIUpdate($"There is no exit to the {direction}.");
+                sendUIUpdate(actionResult.Message);
                 return;
             }
 
-            // We set this as our new location...
+            // We find the location in the direction specified and set it as the new location...
+            var exit = m_location.Exits.FirstOrDefault(x => x.Direction == direction);
             setLocation(exit.To);
         }
 
