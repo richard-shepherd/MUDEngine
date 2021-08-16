@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Utility;
 
 namespace WorldLib
 {
     /// <summary>
     /// Represents doors.
     /// </summary>
-    public class Door : ObjectBase
+    public class Door : ObjectBase, ILockable
     {
         #region Properties
 
@@ -29,6 +30,34 @@ namespace WorldLib
         /// </summary>
         public Door()
         {
+        }
+
+        #endregion
+
+        #region ILockable implementation
+
+        /// <summary>
+        /// Returns the ID of the object which unlocks the door.
+        /// </summary>
+        public string getKeyID()
+        {
+            return Key;
+        }
+
+        /// <summary>
+        /// Unlocks the object with the key specified.
+        /// </summary>
+        public ActionResult unlock(ObjectBase key)
+        {
+            // We check if the right key was provided...
+            if(key.ObjectID != Key)
+            {
+                return ActionResult.failed($"{Utils.prefix_The(key.Name)} cannot be used to unlock {Utils.prefix_the(Name)}.");
+            }
+
+            // The right key was used, so we unlock the door...
+            Locked = false;
+            return ActionResult.succeeded();
         }
 
         #endregion

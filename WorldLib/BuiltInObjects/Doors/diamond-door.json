@@ -4,7 +4,7 @@
   "Name": "diamond door",
 
   "Description": [
-    "The diamond door refracts the light striking it."
+    "Light is refreacted through the diamond crystal, casting multicoloured rays over the surroundings."
   ],
 
   "Key":  "diamond-key"

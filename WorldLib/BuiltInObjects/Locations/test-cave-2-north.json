@@ -32,6 +32,9 @@
 
   "Objects": [
     {
+      "ObjectID": "diamond-key"
+    },
+    {
       "ObjectID": "diamond-door"
     },
     {

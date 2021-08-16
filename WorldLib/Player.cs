@@ -186,6 +186,10 @@ namespace WorldLib
                     talkTo(parsedInput.Target1);
                     break;
 
+                case InputParser.ActionEnum.UNLOCK:
+                    unlock(parsedInput.Target1);
+                    break;
+
                 default:
                     throw new Exception($"Action {parsedInput.Action} not handled.");
             }
@@ -222,6 +226,48 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Unlocks the target.
+        /// </summary>
+        private void unlock(string target)
+        {
+            // We see if the target is in the location...
+            var targetInfo = m_location.findObjectFromName(target);
+            if (!targetInfo.hasObject())
+            {
+                sendUIUpdate($"There is no {target} here.");
+                return;
+            }
+
+            // We check that the target is a lockable object...
+            var lockable = targetInfo.getObjectAs<ILockable>();
+            if(lockable == null)
+            {
+                sendUIUpdate($"You cannot unlock {Utils.prefix_the(target)}.");
+                return;
+            }
+
+            // We get the ID of the target's key, and check if we have it...
+            var keyID = lockable.getKeyID();
+            var keyInfo = ParsedInventory.findObjectFromID(keyID);
+            if(!keyInfo.hasObject())
+            {
+                sendUIUpdate($"You do not have the right key to unlock {Utils.prefix_the(target)}.");
+                return;
+            }
+
+            // We unlock the target...
+            var actionResult = lockable.unlock(keyInfo.getObject());
+            if(actionResult.Status == ActionResult.StatusEnum.SUCCEEDED)
+            {
+                sendUIUpdate($"You unlock {Utils.prefix_the(target)}.");
+            }
+            else
+            {
+                sendUIUpdate(actionResult.Message);
+            }
+        }
 
         /// <summary>
         /// Eats the target item.

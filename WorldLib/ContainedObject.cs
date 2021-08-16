@@ -49,7 +49,7 @@
         /// Returns the object as type T.
         /// Returns null if the object is not a T.
         /// </summary>
-        public T getObjectAs<T>() where T : ObjectBase
+        public T getObjectAs<T>() where T : class
         {
             return m_object as T;
         }

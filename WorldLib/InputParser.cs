@@ -120,7 +120,8 @@ namespace WorldLib
                 parse_SmokePot,
                 parse_Stats,
                 parse_Take,
-                parse_Talk
+                parse_Talk,
+                parse_Unlock
             };
             foreach(var parsingFunction in parsingFunctions)
             {
@@ -137,6 +138,17 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Checks if the input is an UNLOCK command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Unlock(string uppercaseInput, string originalInput)
+        {
+            // We check if the input starts with an UNLOCK synonym...
+            var synonyms = new List<string> { "UNLOCK" };
+            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.UNLOCK, synonyms);
+        }
 
         /// <summary>
         /// Checks if the input is an EAT command.
