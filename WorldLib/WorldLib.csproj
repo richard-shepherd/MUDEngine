@@ -38,6 +38,9 @@
     <None Update="BuiltInObjects\Doors\diamond-door.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="BuiltInObjects\Doors\wooden-trapdoor.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="BuiltInObjects\Food\apple.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

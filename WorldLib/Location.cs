@@ -47,27 +47,6 @@ namespace WorldLib
         #region Public types
 
         /// <summary>
-        /// Information about a door.
-        /// </summary>
-        public class DoorInfo
-        {
-            /// <summary>
-            /// Gets or sets the door's name.
-            /// </summary>
-            public string Name { get; set; } = "";
-
-            /// <summary>
-            /// Gets or sets the ID of the key required to unlock the door.
-            /// </summary>
-            public string Key { get; set; } = "";
-
-            /// <summary>
-            /// Gets or sets whether the door is locked.
-            /// </summary>
-            public bool Locked { get; set; } = true;
-        }
-
-        /// <summary>
         /// Information about a 'simple' exit from the location.
         /// </summary><remarks>
         /// A simple exit is one which you can take without any conditions, 
@@ -86,9 +65,9 @@ namespace WorldLib
             public string To { get; set; } = "";
 
             /// <summary>
-            /// Gets or sets information about the optional door for this exit.
+            /// Gets or sets the object-ID for the optional door for this exit.
             /// </summary>
-            public DoorInfo Door { get; set; } = new DoorInfo();
+            public string Door { get; set; } = "";
         }
 
         /// <summary>
@@ -153,10 +132,10 @@ namespace WorldLib
 
             // Exits...
             var exits = look_Exits();
-            if(exits != null)
+            if(exits.Count > 0)
             {
                 results.Add("");
-                results.Add(exits);
+                results.AddRange(exits);
             }
 
             // Objects...
@@ -261,6 +240,16 @@ namespace WorldLib
                 var parsedObject = parseObject(objectInfo, objectFactory);
                 LocationContainer.add(parsedObject);
             }
+
+            // We add objects for doors...
+            foreach(var exit in Exits)
+            {
+                if(!String.IsNullOrEmpty(exit.Door))
+                {
+                    var door = objectFactory.createObject(exit.Door);
+                    LocationContainer.add(door);
+                }
+            }
         }
 
         #endregion
@@ -306,17 +295,25 @@ namespace WorldLib
         /// <summary>
         /// Returns a string description of the location's exits.
         /// </summary>
-        private string look_Exits()
+        private List<string> look_Exits()
         {
+            var exits = new List<string>();
+
+            // Exit directions...
             if (Exits.Count == 1)
             {
-                return $"There is an exit {Exits[0].Direction}.";
+                exits.Add($"There is an exit {Exits[0].Direction}.");
             }
-
             if (Exits.Count > 1)
             {
                 var directions = Exits.Select(x => x.Direction);
-                return $"There are exits: {string.Join(", ", directions)}.";
+                exits.Add(($"There are exits: {string.Join(", ", directions)}.");
+            }
+
+            // Doors...
+            var exitsWithDoors = Exits.Where(x => !String.IsNullOrEmpty(x.Door));
+            foreach(var exit in exitsWithDoors)
+            {
             }
 
             return null;

@@ -146,7 +146,7 @@ namespace WorldLib
         private ParsedInput parse_Unlock(string uppercaseInput, string originalInput)
         {
             // We check if the input starts with an UNLOCK synonym...
-            var synonyms = new List<string> { "UNLOCK" };
+            var synonyms = new List<string> { "UNLOCK", "OPEN" };
             return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.UNLOCK, synonyms);
         }
 

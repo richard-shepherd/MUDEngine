@@ -1,0 +1,15 @@
+﻿{
+  "ObjectType": "DOOR",
+
+  "Name": "wooden trapdoor",
+
+  "Description": [
+    "You cannot see a keyhole in the trapdoor, but there is an indentation shaped like an oak leaf where a keyhole might be."
+  ],
+
+  "Aliases": [
+    "trapdoor"
+  ],
+
+  "Key": "oak-leaf"
+}

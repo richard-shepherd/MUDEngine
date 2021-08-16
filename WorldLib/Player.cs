@@ -239,12 +239,13 @@ namespace WorldLib
                 sendUIUpdate($"There is no {target} here.");
                 return;
             }
+            var targetName = targetInfo.getObject().Name;
 
             // We check that the target is a lockable object...
             var lockable = targetInfo.getObjectAs<ILockable>();
             if(lockable == null)
             {
-                sendUIUpdate($"You cannot unlock {Utils.prefix_the(target)}.");
+                sendUIUpdate($"You cannot unlock {Utils.prefix_the(targetName)}.");
                 return;
             }
 
@@ -253,7 +254,7 @@ namespace WorldLib
             var keyInfo = ParsedInventory.findObjectFromID(keyID);
             if(!keyInfo.hasObject())
             {
-                sendUIUpdate($"You do not have the right key to unlock {Utils.prefix_the(target)}.");
+                sendUIUpdate($"You do not have the right key to unlock {Utils.prefix_the(targetName)}.");
                 return;
             }
 
@@ -261,7 +262,7 @@ namespace WorldLib
             var actionResult = lockable.unlock(keyInfo.getObject());
             if(actionResult.Status == ActionResult.StatusEnum.SUCCEEDED)
             {
-                sendUIUpdate($"You unlock {Utils.prefix_the(target)}.");
+                sendUIUpdate($"You unlock {Utils.prefix_the(targetName)}.");
             }
             else
             {
@@ -275,38 +276,39 @@ namespace WorldLib
         private void eat(string target)
         {
             // We see if the target is in the location...
-            var itemInfo = m_location.findObjectFromName(target);
-            if(!itemInfo.hasObject())
+            var targetInfo = m_location.findObjectFromName(target);
+            if(!targetInfo.hasObject())
             {
                 // There is no item in the location, so we see if we have one in our inventory...
-                itemInfo = ParsedInventory.findObjectFromName(target);
+                targetInfo = ParsedInventory.findObjectFromName(target);
             }
-            if (!itemInfo.hasObject())
+            if (!targetInfo.hasObject())
             {
                 sendUIUpdate($"There is no {target} here or in your inventory.");
                 return;
             }
+            var targetName = targetInfo.getObject().Name;
 
             // We check that the item is food...
-            var food = itemInfo.getObjectAs<Food>();
+            var food = targetInfo.getObjectAs<Food>();
             if(food == null)
             {
-                sendUIUpdate($"You cannot eat {Utils.prefix_the(target)}.");
+                sendUIUpdate($"You cannot eat {Utils.prefix_the(targetName)}.");
                 return;
             }
 
             // We check whether we are full...
             if(HP >= MaxHP)
             {
-                sendUIUpdate($"You are feeling too full to eat {Utils.prefix_the(target)}.");
+                sendUIUpdate($"You are feeling too full to eat {Utils.prefix_the(targetName)}.");
                 return;
             }
 
             // We remove the item...
-            itemInfo.removeFromContainer();
+            targetInfo.removeFromContainer();
 
             // We eat it...
-            sendUIUpdate($"Eating {Utils.prefix_the(target)} restores {food.HP} HP.");
+            sendUIUpdate($"Eating {Utils.prefix_the(targetName)} restores {food.HP} HP.");
             HP += food.HP;
             if(HP > MaxHP)
             {

@@ -9,20 +9,12 @@
     {
       "Direction": "N",
       "To": "test-cave-2-treasure-room",
-      "Door": {
-        "Name": "diamond door",
-        "Key": "diamond-key",
-        "Locked": true
-      }
+      "Door": "diamond-door"
     },
     {
       "Direction": "DOWN",
       "To": "test-cave-2-cellar",
-      "Door": {
-        "Name": "trapdoor",
-        "Key": "wooden-key",
-        "Locked": true
-      }
+      "Door": "wooden-trapdoor"
     },
     {
       "Direction": "S",
@@ -33,9 +25,6 @@
   "Objects": [
     {
       "ObjectID": "diamond-key"
-    },
-    {
-      "ObjectID": "diamond-door"
     },
     {
       "ObjectID": "oak-leaf"
