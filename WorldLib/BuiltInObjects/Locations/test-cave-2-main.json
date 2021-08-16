@@ -1,17 +1,5 @@
 ﻿{
-  "ObjectID": "test-cave-2-main",
   "ObjectType": "LOCATION",
-
-  "Name": "test cave 2 main",
-  "Aliases": [
-    "cave"
-  ],
-
-  "Dimensions": {
-    "Height": "20m",
-    "Width": "30m",
-    "Depth": "30m"
-  },
 
   "Description": [
     "You are in a cave.",

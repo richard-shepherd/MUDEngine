@@ -399,7 +399,7 @@ namespace WorldLib
         #region Private data
 
         // Compass directions...
-        private readonly HashSet<string> m_directions = new HashSet<string> { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
+        private readonly HashSet<string> m_directions = new HashSet<string> { "N", "NE", "E", "SE", "S", "SW", "W", "NW", "UP", "DOWN" };
         
         #endregion
     }

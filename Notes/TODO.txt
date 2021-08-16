@@ -35,6 +35,8 @@ TODO: Armour
 
 TODO: KILL target WITH sword
 
+TODO: load and save
+
 
 
   

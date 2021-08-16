@@ -1,17 +1,5 @@
 ﻿{
-  "ObjectID": "test-cave-2-north",
   "ObjectType": "LOCATION",
-
-  "Name": "test cave 2 north",
-  "Aliases": [
-    "cave"
-  ],
-
-  "Dimensions": {
-    "Height": "20m",
-    "Width": "30m",
-    "Depth": "30m"
-  },
 
   "Description": [
     "You are in the north cave."
@@ -19,15 +7,30 @@
 
   "Exits": [
     {
+      "Direction": "N",
+      "To": "test-cave-2-treasure-room",
+      "Door": {
+        "Name": "diamond door",
+        "Key": "diamond-key",
+        "Locked": true
+      }
+    },
+    {
+      "Direction": "DOWN",
+      "To": "test-cave-2-cellar",
+      "Door": {
+        "Name": "trapdoor",
+        "Key": "wooden-key",
+        "Locked": true
+      }
+    },
+    {
       "Direction": "S",
       "To": "test-cave-2-main"
     }
   ],
 
   "Objects": [
-    {
-      "ObjectID": "oak-leaf"
-    },
     {
       "ObjectID": "oak-leaf"
     },

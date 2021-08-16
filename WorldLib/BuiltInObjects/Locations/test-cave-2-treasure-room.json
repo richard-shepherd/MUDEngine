@@ -1,0 +1,17 @@
+﻿{
+  "ObjectType": "LOCATION",
+
+  "Description": [
+    "You are in the treasure room."
+  ],
+
+  "Exits": [
+    {
+      "Direction": "S",
+      "To": "test-cave-2-north"
+    }
+  ],
+
+  "Objects": [
+  ]
+}

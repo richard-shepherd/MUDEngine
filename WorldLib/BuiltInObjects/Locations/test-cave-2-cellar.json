@@ -1,0 +1,17 @@
+﻿{
+  "ObjectType": "LOCATION",
+
+  "Description": [
+    "You are in the celar."
+  ],
+
+  "Exits": [
+    {
+      "Direction": "UP",
+      "To": "test-cave-2-north"
+    }
+  ],
+
+  "Objects": [
+  ]
+}

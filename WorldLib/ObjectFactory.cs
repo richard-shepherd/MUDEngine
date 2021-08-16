@@ -137,11 +137,19 @@ namespace WorldLib
                 var json = File.ReadAllText(path);
                 var objectBase = Utils.fromJSON<ObjectBase>(json);
 
+                // If the ID is not specified, we use the file name...
+                if(String.IsNullOrEmpty(objectBase.ObjectID))
+                {
+                    var filename = Path.GetFileNameWithoutExtension(path);
+                    objectBase.ObjectID = filename;
+                }
+
                 // We store the object definition against the object ID...
                 var objectDefinition = new ObjectDefinition
                 {
                     JSON = json,
                     ObjectType = objectBase.ObjectType,
+                    ObjectID = objectBase.ObjectID,
                     ObjectName = objectBase.Name
                 };
                 m_objectDefinitions[objectBase.ObjectID] = objectDefinition;
@@ -198,6 +206,9 @@ namespace WorldLib
                     throw new Exception($"Failed to parse object type {objectDefinition.ObjectType}. You may need to add a case statement to ObjectFactory.parseObject().");
             }
 
+            // We set the object ID (as it may not be in the json definition)...
+            objectBase.ObjectID = objectDefinition.ObjectID;
+
             // We set the object-factory...
             objectBase.setObjectFactory(this);
 
@@ -216,6 +227,7 @@ namespace WorldLib
         {
             public string JSON { get; set; } = "";
             public ObjectTypeEnum ObjectType { get; set; } = ObjectTypeEnum.NOT_SPECIFIED;
+            public string ObjectID { get; set; } = "";
             public string ObjectName { get; set; } = "";
         }
 

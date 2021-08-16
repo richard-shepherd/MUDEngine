@@ -47,6 +47,27 @@ namespace WorldLib
         #region Public types
 
         /// <summary>
+        /// Information about a door.
+        /// </summary>
+        public class DoorInfo
+        {
+            /// <summary>
+            /// Gets or sets the door's name.
+            /// </summary>
+            public string Name { get; set; } = "";
+
+            /// <summary>
+            /// Gets or sets the ID of the key required to unlock the door.
+            /// </summary>
+            public string Key { get; set; } = "";
+
+            /// <summary>
+            /// Gets or sets whether the door is locked.
+            /// </summary>
+            public bool Locked { get; set; } = true;
+        }
+
+        /// <summary>
         /// Information about a 'simple' exit from the location.
         /// </summary><remarks>
         /// A simple exit is one which you can take without any conditions, 
@@ -63,6 +84,11 @@ namespace WorldLib
             /// Gets or sets the ObjectID of the location to which the exit leads.
             /// </summary>
             public string To { get; set; } = "";
+
+            /// <summary>
+            /// Gets or sets information about the optional door for this exit.
+            /// </summary>
+            public DoorInfo Door { get; set; } = new DoorInfo();
         }
 
         /// <summary>
@@ -284,13 +310,13 @@ namespace WorldLib
         {
             if (Exits.Count == 1)
             {
-                return $"There is an exit to the {Exits[0].Direction}.";
+                return $"There is an exit {Exits[0].Direction}.";
             }
 
             if (Exits.Count > 1)
             {
                 var directions = Exits.Select(x => x.Direction);
-                return $"There are exits to the {string.Join(", ", directions)}.";
+                return $"There are exits: {string.Join(", ", directions)}.";
             }
 
             return null;
