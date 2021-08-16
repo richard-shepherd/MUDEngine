@@ -1,0 +1,11 @@
+﻿{
+  "ObjectType": "DOOR",
+
+  "Name": "diamond door",
+
+  "Description": [
+    "The diamond door refracts the light striking it."
+  ],
+
+  "Key":  "diamond-key"
+}

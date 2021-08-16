@@ -19,6 +19,7 @@ namespace WorldLib
             NOT_SPECIFIED,
             CHARACTER,
             CONTAINER,
+            DOOR,
             FOOD,
             LOCATION,
             MONSTER,

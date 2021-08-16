@@ -186,6 +186,10 @@ namespace WorldLib
                     objectBase = Utils.fromJSON<Container>(objectDefinition.JSON);
                     break;
 
+                case ObjectTypeEnum.DOOR:
+                    objectBase = Utils.fromJSON<Door>(objectDefinition.JSON);
+                    break;
+
                 case ObjectTypeEnum.FOOD:
                     objectBase = Utils.fromJSON<Food>(objectDefinition.JSON);
                     break;

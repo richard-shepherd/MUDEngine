@@ -30,7 +30,8 @@ namespace WorldLib
             SMOKE_POT,
             STATS,
             TAKE,
-            TALK
+            TALK,
+            UNLOCK
         }
 
         /// <summary>
@@ -49,7 +50,8 @@ namespace WorldLib
             "STATS                        - shows stats for the player",
             "STATS [target]               'stats dragon'",
             "TAKE [target]                'take apple', 'take apples'",
-            "TALK (TO) [target]           'talk to shopkeeper', 'talk shopkeeper'"
+            "TALK (TO) [target]           'talk to shopkeeper', 'talk shopkeeper'",
+            "UNLOCK [target]              'unlock trapdoor' (the right key will be chosen if you have it)"
         };
 
         /// <summary>
