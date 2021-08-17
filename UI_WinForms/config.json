@@ -1,6 +1,6 @@
 ﻿{
   "ObjectFolders": [
-    "../WorldLib/BuiltInObjects"
+    "./BuiltInObjects"
   ],
 
   "StartingLocationID": "test-cave-2-main"

@@ -39,19 +39,19 @@ namespace WorldLib
         /// </summary>
         public List<string> Help { get; } = new List<string>
         {
-            "DROP [target],               'drop apple', 'drop all'",
-            "EAT [target],                'eat apple'",
-            "EXAMINE [target],            'examine dragon'",
-            "GIVE [target1] TO [target2], 'give apple to dragon'",
-            "N,NE,E,SE,S,SW,W,NW          - moves in the direction specified",
-            "I / INVENTORY                - shows the inventory",
-            "KILL [target]                'kill dragon'",
-            "LOOK                         - looks at the current location",
-            "STATS                        - shows stats for the player",
-            "STATS [target]               'stats dragon'",
-            "TAKE [target]                'take apple', 'take apples'",
-            "TALK (TO) [target]           'talk to shopkeeper', 'talk shopkeeper'",
-            "UNLOCK [target]              'unlock trapdoor' (the right key will be chosen if you have it)"
+            "DROP [target],                'drop apple', 'drop all'",
+            "EAT [target],                 'eat apple'",
+            "EXAMINE [target],             'examine dragon'",
+            "GIVE [target1] TO [target2]   'give apple to dragon'",
+            "N,NE,E,SE,S,SW,W,NW,UP,DOWN   moves in the direction specified",
+            "I / INVENTORY                 shows the inventory",
+            "KILL [target]                 'kill dragon'",
+            "LOOK                          looks at the current location",
+            "STATS                         shows stats for the player",
+            "STATS [target]                'stats dragon'",
+            "TAKE [target]                 'take apple', 'take apples'",
+            "TALK (TO) [target]            'talk to shopkeeper', 'talk shopkeeper'",
+            "UNLOCK [target]               'unlock trapdoor' (the right key will be chosen if you have it)"
         };
 
         /// <summary>
