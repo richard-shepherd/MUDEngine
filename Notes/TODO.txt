@@ -16,9 +16,7 @@ TODO: PUT [target1] in/into [target2]
 TODO: Implement XP
       Updates other stats at certain levels.
 
-TODO: Implement TALK TO [target]
-      - Should not just be exchange talk
-      - Exchange talk should only be done if the character has the object to give
+TODO: Exchange talk should only be done if the character has the object to give
 
 TODO: Allow characters to move between locations.
       - When characters leave, we could say the direction they went (??)

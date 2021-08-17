@@ -104,7 +104,7 @@ namespace WorldLib
         /// This is stored as a list of strings to allow for multi-line descriptions
         /// to be neatly specified in JSON config.
         /// </remarks>
-        public List<string> Description { get; set; } = new List<string>();
+        public MultilineText Description { get; set; } = new MultilineText();
 
         /// <summary>
         /// Gets or sets optional text returned when the object is examined.

@@ -36,7 +36,7 @@ namespace Utility
         /// <summary>
         /// Returns the text passed in, adding quotes at the start and end.
         /// </summary>
-        public static List<string> addQuotes(List<string> text)
+        public static MultilineText addQuotes(MultilineText text)
         {
             // We check if we have any text...
             if(text == null)
@@ -53,14 +53,14 @@ namespace Utility
             if(numLines == 1)
             {
                 var line = text[0];
-                return new List<string> { $"\"{line}\"" };
+                return new MultilineText { $"\"{line}\"" };
             }
 
             // We have multiple lines, so we add quotes at the start and end, and copy in
             // the middle lines...
             var firstLine = $"\"{text[0]}";
             var lastLine = $" {text[numLines - 1]}\"";
-            var quotedText = new List<string>();
+            var quotedText = new MultilineText();
             quotedText.Add(firstLine);
             for(var i=1; i<numLines-1; ++i)
             {

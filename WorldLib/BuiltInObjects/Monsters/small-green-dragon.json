@@ -29,5 +29,16 @@
       "Name": "fire breath",
       "Damage": "1-200"
     }
+  ],
+
+  "Talk": [
+    [
+      "Hello, little one! What are you doing in my domain?",
+      "I hope - for your sake - that you have not come here for my gold."
+    ],
+    [
+      "Hmmmm... This little creature seems to be attracting my attention.",
+      "I wonder if it would be good to eat?"
+    ]
   ]
 }

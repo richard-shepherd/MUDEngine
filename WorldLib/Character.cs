@@ -42,7 +42,7 @@ namespace WorldLib
             /// <summary>
             /// Gets or sets the text said by the character, offering the exchange.
             /// </summary>
-            public List<string> Talk { get; set; } = new List<string>();
+            public MultilineText Talk { get; set; } = new MultilineText();
 
             /// <summary>
             /// Gets or sets the ID of the object the character is willing to give.
@@ -105,6 +105,11 @@ namespace WorldLib
         /// Gets ot sets details of an exchange the character is willing to make.
         /// </summary>
         public ExchangeInfo Exchange { get; set; } = new ExchangeInfo();
+
+        /// <summary>
+        /// Gets or sets the collection of things the character can say when you talk to them.
+        /// </summary>
+        public List<MultilineText> Talk { get; set; } = new List<MultilineText>();
 
         #endregion
 
@@ -196,9 +201,32 @@ namespace WorldLib
         /// <summary>
         /// Returns text when you talk to the character.
         /// </summary>
-        public List<string> talk()
+        public MultilineText talk()
         {
-            return Exchange.Talk;
+            var talk = new MultilineText();
+
+            // If Talk items are set up, we say the next one...
+            if(Talk.Count > 0)
+            {
+                talk.AddRange(Talk[m_talkIndex]);
+                m_talkIndex++;
+                if(m_talkIndex >= Talk.Count)
+                {
+                    m_talkIndex = 0;
+                }
+            }
+
+            // If there is an exchange available, the character talks about it...
+            if(Exchange.Talk.Count > 0)
+            {
+                if(talk.Count > 0)
+                {
+                    talk.Add("");
+                }
+                talk.AddRange(Exchange.Talk);
+            }
+
+            return talk;
         }
 
         /// <summary>
@@ -479,6 +507,9 @@ namespace WorldLib
 
         // The time the next attack can be made...
         private DateTime? m_nextAttackTime = null;
+
+        // The index of the next Talk text to return...
+        private int m_talkIndex = 0;
 
         #endregion
     }
