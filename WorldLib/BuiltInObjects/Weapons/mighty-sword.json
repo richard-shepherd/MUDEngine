@@ -1,0 +1,28 @@
+﻿{
+  "ObjectType": "WEAPON",
+
+  "Name": "mighty sword",
+  "Aliases": [
+    "sword"
+  ],
+
+  "Dimensions": {
+    "Height": "70cm",
+    "Width": "10cm",
+    "Depth": "5cm"
+  },
+
+  "Weight": "10kg",
+
+  "Attacks": [
+    {
+      "Name": "mighty sword slash",
+      "Damage": "100-200"
+    },
+    {
+      "Name": "mighty sword stab",
+      "Damage": "30-80"
+    }
+  ]
+
+}

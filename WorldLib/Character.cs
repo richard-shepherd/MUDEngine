@@ -204,9 +204,14 @@ namespace WorldLib
         /// <summary>
         /// Adds an opponent to the collection currently being fought.
         /// </summary>
-        public void addFightOpponent(Character opponent)
+        public void addFightOpponent(Character opponent, string weaponName)
         {
-            m_fightOpponents.Add(opponent);
+            var fightOpponentInfo = new FightOpponentInfo
+            {
+                Opponent = opponent,
+                WeaponName = weaponName
+            };
+            m_fightOpponentInfos.Add(fightOpponentInfo);
         }
 
         /// <summary>
@@ -214,7 +219,7 @@ namespace WorldLib
         /// </summary>
         public bool isFightingOpponent(Character opponent)
         {
-            return m_fightOpponents.Contains(opponent);
+            return m_fightOpponentInfos.Any(x => x.Opponent == opponent);
         }
 
         /// <summary>
@@ -225,7 +230,7 @@ namespace WorldLib
             // We remove any opponents who are dead, or no longer in the same location
             // and check that there are still opponents left to fight...
             cleanupFightOppenents();
-            if(m_fightOpponents.Count == 0)
+            if(m_fightOpponentInfos.Count == 0)
             {
                 return;
             }
@@ -236,16 +241,17 @@ namespace WorldLib
                 return;
             }
 
+            // We choose a random opponent...
+            var opponentIndex = Utils.Rnd.Next(0, m_fightOpponentInfos.Count);
+            var opponentInfo = m_fightOpponentInfos[opponentIndex];
+            var opponent = opponentInfo.Opponent;
+
             // We find the attack to perform...
-            var attack = chooseAttack();
-            if(attack == null)
+            var attack = chooseAttack(opponentInfo.WeaponName);
+            if (attack == null)
             {
                 return;
             }
-
-            // We choose a random opponent...
-            var opponentIndex = Utils.Rnd.Next(0, m_fightOpponents.Count);
-            var opponent = m_fightOpponents[opponentIndex];
 
             // We check our dexterity...
             var dexterity = Utils.Rnd.Next(0, 100);
@@ -342,15 +348,23 @@ namespace WorldLib
         /// <summary>
         /// Returns an attack to use in a round of fighting.
         /// </summary>
-        private AttackInfo chooseAttack()
+        private AttackInfo chooseAttack(string selectedWeaponName)
         {
-            // We check if we are attacking using a selected weapon...
-            //todo
+            var attackInfos = new List<AttackInfo>();
 
-            // There is no selected weapon, so we choose a random attack.
-            // This is chosen from the character's configured attacks and any weapons
-            // they are holding.
-            var attackInfos = getAllAttacks();
+            // If we are using a weapon, we find its attacks...
+            if(!String.IsNullOrEmpty(selectedWeaponName))
+            {
+                attackInfos.AddRange(getAttacksForWeapon(selectedWeaponName));
+            }
+
+            // If we do not have any attacks, we select a random one...
+            if(attackInfos.Count == 0)
+            {
+                attackInfos.AddRange(getAllAttacks());
+            }
+
+            // We choose a random attack...
             if(attackInfos.Count == 0)
             {
                 return null;
@@ -358,6 +372,37 @@ namespace WorldLib
             var attackIndex = Utils.Rnd.Next(0, attackInfos.Count);
             var attackInfo = attackInfos[attackIndex];
             return attackInfo;
+        }
+
+        /// <summary>
+        /// Returns attacks to use in a round of fighting using the specified weapon.
+        /// </summary>
+        private List<AttackInfo> getAttacksForWeapon(string weaponName)
+        {
+            var attackInfos = new List<AttackInfo>();
+
+            // We check that a weapon is specified...
+            if(String.IsNullOrEmpty(weaponName))
+            {
+                return attackInfos;
+            }
+
+            // We check that we have the weapon...
+            var weaponInfo = ParsedInventory.findObjectFromName(weaponName);
+            if(!weaponInfo.hasObject())
+            {
+                return attackInfos;
+            }
+
+            // We check that it is a weapon...
+            var weapon = weaponInfo.getObjectAs<Weapon>();
+            if(weapon == null)
+            {
+                return attackInfos;
+            }
+
+            // We have the weapon, so we returns its attacks...
+            return weapon.Attacks;
         }
 
         /// <summary>
@@ -403,18 +448,19 @@ namespace WorldLib
             // If this character is dead, we remove all opponents...
             if(HP <= 0)
             {
-                m_fightOpponents.Clear();
+                m_fightOpponentInfos.Clear();
             }
 
             // We check if any opponents are dead or no longer in the same location...
-            var opponents = new List<Character>(m_fightOpponents);
-            foreach (var opponent in opponents)
+            var opponentInfos = new List<FightOpponentInfo>(m_fightOpponentInfos);
+            foreach (var opponentInfo in opponentInfos)
             {
+                var opponent = opponentInfo.Opponent;
                 if( opponent.HP <= 0
                     ||
                     opponent.LocationID != LocationID)
                 {
-                    m_fightOpponents.Remove(opponent);
+                    m_fightOpponentInfos.Remove(opponentInfo);
                 }
             }
         }
@@ -424,7 +470,12 @@ namespace WorldLib
         #region Private data
 
         // Opponets currently being fought...
-        private readonly List<Character> m_fightOpponents = new List<Character>();
+        private class FightOpponentInfo
+        {
+            public Character Opponent { get; set; } = null;
+            public string WeaponName { get; set; } = "";
+        }
+        private readonly List<FightOpponentInfo> m_fightOpponentInfos = new List<FightOpponentInfo>();
 
         // The time the next attack can be made...
         private DateTime? m_nextAttackTime = null;

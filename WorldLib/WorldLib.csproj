@@ -80,6 +80,9 @@
     <None Update="BuiltInObjects\Objects\oak-leaf.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="BuiltInObjects\Weapons\mighty-sword.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="BuiltInObjects\Weapons\wooden-sword.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

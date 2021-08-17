@@ -549,7 +549,7 @@ namespace WorldLib
         /// <summary>
         /// Starts a fight with the target.
         /// </summary>
-        private void kill(string target, string weapon)
+        private void kill(string target, string weaponName)
         {
             // We find the opponent...
             var opponent = getCharacter(target, "fight");
@@ -566,8 +566,8 @@ namespace WorldLib
             }
 
             // We note that the player is fighting the opponent (and that it is fighting the player)...
-            addFightOpponent(opponent);
-            opponent.addFightOpponent(this);
+            addFightOpponent(opponent, weaponName);
+            opponent.addFightOpponent(this, "");
 
             // The player takes the first swing at the opponent...
             fight(DateTime.UtcNow);
