@@ -86,6 +86,16 @@ namespace WorldLib
             public string ObjectID { get; set; } = "";
 
             /// <summary>
+            /// Gets or sets whether the object is locked (if it is a container).
+            /// </summary>
+            public bool Locked { get; set; } = false;
+
+            /// <summary>
+            /// Gets or sets the ID of the key which unlocks the object (if it is a container).
+            /// </summary>
+            public string Key { get; set; } = "";
+
+            /// <summary>
             /// Gets or sets the collection of objects held by the object (if it is a container).
             /// </summary>
             public List<ObjectInfo> Contains { get; set; } = new List<ObjectInfo>();
@@ -437,8 +447,8 @@ namespace WorldLib
             // We set its location to this location...
             objectBase.LocationID = ObjectID;
 
-            // We parse any contents (if it is a container)...
-            parseContents(objectBase, objectInfo, objectFactory);
+            // If the object is a container, we parse its properties and contents...
+            parseContainer(objectBase, objectInfo, objectFactory);
 
             return objectBase;
         }
@@ -446,7 +456,7 @@ namespace WorldLib
         /// <summary>
         /// If the object passed in is a container, we add any contained objects to it.
         /// </summary>
-        private void parseContents(ObjectBase objectBase, ObjectInfo objectInfo, ObjectFactory objectFactory)
+        private void parseContainer(ObjectBase objectBase, ObjectInfo objectInfo, ObjectFactory objectFactory)
         {
             // Is the object a container?
             var container = objectBase as Container;
@@ -454,6 +464,10 @@ namespace WorldLib
             {
                 return;
             }
+
+            // We set if the container is locked, and the ID of the key to unlock it...
+            container.Locked = objectInfo.Locked;
+            container.Key = objectInfo.Key;
 
             // The object is a container, so we add any contents to it...
             foreach(var containedObjectInfo in objectInfo.Contains)

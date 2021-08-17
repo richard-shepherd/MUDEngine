@@ -24,6 +24,8 @@
     },
     {
       "ObjectID": "wooden-chest",
+      "Locked": true,
+      "Key": "wooden-key",
       "Contains": [
         {
           "ObjectID": "wooden-sword"

@@ -40,6 +40,16 @@ namespace WorldLib
         public CapacityType Capacity { get; set; } = new CapacityType();
 
         /// <summary>
+        /// Gets or sets whether the container is locked.
+        /// </summary>
+        public bool Locked { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets the ID of the key which unlocks the container.
+        /// </summary>
+        public string Key { get; set; } = "";
+
+        /// <summary>
         /// Gets the number of items held by the container.
         /// </summary>
         public int ItemCount => m_contents.Count;
@@ -236,6 +246,11 @@ namespace WorldLib
         /// </summary>
         public List<string> listContents(string messagePrefix = "")
         {
+            if(Locked)
+            {
+                return new List<string> { $"{Utils.prefix_The(Name)} is locked." };
+            }
+
             if (m_contents.Count == 0)
             {
                 return new List<string> { $"{messagePrefix} nothing." };
