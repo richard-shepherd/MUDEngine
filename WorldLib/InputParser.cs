@@ -147,7 +147,7 @@ namespace WorldLib
         {
             // We check if the input starts with an UNLOCK synonym...
             var synonyms = new List<string> { "UNLOCK", "OPEN" };
-            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.UNLOCK, synonyms);
+            return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.UNLOCK, synonyms);
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace WorldLib
         {
             // We check if the input starts with an EAT synonym...
             var synonyms = new List<string> { "EAT", "MUNCH", "SCOFF" };
-            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.EAT, synonyms);
+            return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.EAT, synonyms);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace WorldLib
         {
             // We check if the input starts with a STATS synonym...
             var synonyms = new List<string> { "STATS", "SHOW STATS", "SHOW STATS FOR" };
-            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.STATS, synonyms);
+            return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.STATS, synonyms);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace WorldLib
         {
             // We check if the input starts with a DROP synonym...
             var synonyms = new List<string> { "DROP" };
-            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.DROP, synonyms);
+            return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.DROP, synonyms);
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace WorldLib
         {
             // We check if the input starts with a GIVE synonym...
             var synonyms = new List<string> { "GIVE" };
-            return parse_WithTarget1Target2(uppercaseInput, originalInput, ActionEnum.GIVE, synonyms);
+            return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.GIVE, synonyms);
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace WorldLib
         {
             // We check if the input starts with a TALK synonym...
             var synonyms = new List<string> { "TALK TO", "TALK" };
-            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.TALK, synonyms);
+            return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.TALK, synonyms);
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace WorldLib
         {
             // We check if the input starts with a KILL synonym...
             var synonyms = new List<string> { "KILL", "FIGHT", "ATTACK" };
-            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.KILL, synonyms);
+            return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.KILL, synonyms);
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace WorldLib
         {
             // We check if the input starts with a TAKE synonym...
             var synonyms = new List<string> { "TAKE", "PICK UP", "GET" };
-            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.TAKE, synonyms);
+            return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.TAKE, synonyms);
         }
 
 
@@ -318,24 +318,14 @@ namespace WorldLib
         {
             // We check if the input starts with an EXAMINE synonym...
             var synonyms = new List<string> { "EXAMINE", "LOOK AT" };
-            return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.EXAMINE, synonyms);
-        }
-
-        /// <summary>
-        /// Returns the target from inputs like "TAKE [target]" or "EXAMINE THE [target]".
-        /// </summary>
-        private string getTarget(string command, string originalInput)
-        {
-            var inputWithoutCommand = Utils.removeInitial(originalInput, command);
-            var target = Utils.removeInitial(inputWithoutCommand, "THE ");
-            return target;
+            return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.EXAMINE, synonyms);
         }
 
         /// <summary>
         /// Returns the targets from inputs like "GIVE [target1] TO [target2]" or 
         /// "KILL THE [target1] WITH THE [target2]".
         /// </summary>
-        private (string target1, string target2) getTarget1Target2(string command, string originalInput)
+        private (string target1, string target2) getTargets(string command, string originalInput)
         {
             // We remove the command...
             var inputWithoutCommand = Utils.removeInitial(originalInput, command);
@@ -359,6 +349,13 @@ namespace WorldLib
                 }
             }
 
+            // If no targets were found, this means that the command did not include a preposition.
+            // In this case we do not have a target2...
+            if(String.IsNullOrEmpty(target1))
+            {
+                target1 = inputWithoutCommand;
+            }
+
             // We make sure the targets do not start with "the"...
             target1 = Utils.removeInitial(target1, "THE ");
             target2 = Utils.removeInitial(target2, "THE ");
@@ -367,28 +364,10 @@ namespace WorldLib
         }
 
         /// <summary>
-        /// Returns ParsedInput for a command with a target: "[command] [target]", eg, "TAKE apple".
-        /// Returns null if the input does not match the command.
-        /// </summary>
-        private ParsedInput parse_WithTarget(string uppercaseInput, string originalInput, ActionEnum action, List<string> synonyms)
-        {
-            // We check if the input starts with a command synonym...
-            var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput.StartsWith(x));
-            if (matchingSynonym == null)
-            {
-                return null;
-            }
-            var parsedInput = new ParsedInput();
-            parsedInput.Action = action;
-            parsedInput.Target1 = getTarget(matchingSynonym, originalInput);
-            return parsedInput;
-        }
-
-        /// <summary>
         /// Returns ParsedInput for a command with two targets: "[command] [target1] [preposition] [target2]", eg, "GIVE apple to dragon".
         /// Returns null if the input does not match the command.
         /// </summary>
-        private ParsedInput parse_WithTarget1Target2(string uppercaseInput, string originalInput, ActionEnum action, List<string> synonyms)
+        private ParsedInput parse_WithTargets(string uppercaseInput, string originalInput, ActionEnum action, List<string> synonyms)
         {
             // We check if the input starts with a command synonym...
             var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput.StartsWith(x));
@@ -398,7 +377,7 @@ namespace WorldLib
             }
 
             // We find the targets...
-            var targets = getTarget1Target2(matchingSynonym, originalInput);
+            var targets = getTargets(matchingSynonym, originalInput);
 
             // We return the parsed input...
             var parsedInput = new ParsedInput();

@@ -221,10 +221,9 @@ namespace WorldLib
         /// </summary>
         public void fight(DateTime updateTimeUTC)
         {
-            // We remove any opponents who are dead, or no longer in the same location...
+            // We remove any opponents who are dead, or no longer in the same location
+            // and check that there are still opponents left to fight...
             cleanupFightOppenents();
-
-            // We check if we have any opponents we are currently fighting...
             if(m_fightOpponents.Count == 0)
             {
                 return;
@@ -242,9 +241,8 @@ namespace WorldLib
                 return;
             }
 
-            // We choose a random attack...
-            var attackIndex = Utils.Rnd.Next(0, Attacks.Count);
-            var attack = Attacks[attackIndex];
+            // We find the attack to perform...
+            var attack = chooseAttack();
 
             // We choose a random opponent...
             var opponentIndex = Utils.Rnd.Next(0, m_fightOpponents.Count);
@@ -341,6 +339,19 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Returns an attack to use in a round of fighting.
+        /// </summary>
+        private AttackInfo chooseAttack()
+        {
+            // We check if we are attacking using a selected weapon...
+            //todo
+
+            var attackIndex = Utils.Rnd.Next(0, Attacks.Count);
+            var attackInfo = Attacks[attackIndex];
+            return attackInfo;
+        }
 
         /// <summary>
         /// Checks if we can attack (and sets the next attack time).

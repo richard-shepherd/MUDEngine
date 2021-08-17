@@ -175,11 +175,28 @@ namespace WorldLib
         }
 
         /// <summary>
-        /// Returns the collection of objects in the container.
+        /// Returns the collection of objects in the container, including recursing into 
+        /// other containers we hold.
         /// </summary>
-        public List<ObjectBase> getContents()
+        public List<ObjectBase> getContents(bool recursive = true)
         {
-            return m_contents;
+            // We include the items held in the container...
+            var contents = new List<ObjectBase>(m_contents);
+
+            if(recursive)
+            {
+                // We add items held in any containers we hold...
+                var containers = contents
+                    .Where(x => x.ObjectType == ObjectTypeEnum.CONTAINER)
+                    .Select(x => x as Container)
+                    .ToList();
+                foreach (var container in containers)
+                {
+                    contents.AddRange(container.getContents());
+                }
+            }
+
+            return contents;
         }
 
         #endregion

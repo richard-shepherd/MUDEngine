@@ -134,7 +134,7 @@ namespace WorldLib
             var exit = Exits.FirstOrDefault(x => x.Direction == direction);
             if (exit == null)
             {
-                return ActionResult.failed($"There is no exit to the {direction}.");
+                return ActionResult.failed($"There is no exit {direction}.");
             }
 
             // We check if there is a locked door in this direction...
@@ -403,7 +403,7 @@ namespace WorldLib
         /// </summary>
         private string look_Objects()
         {
-            var nonPlayerObjects = LocationContainer.getContents()
+            var nonPlayerObjects = LocationContainer.getContents(recursive: false)
                 .Where(x => x.ObjectType != ObjectTypeEnum.PLAYER);
             if(nonPlayerObjects.Count() == 0)
             {
