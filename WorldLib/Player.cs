@@ -565,6 +565,17 @@ namespace WorldLib
                 return;
             }
 
+            // If a weapon is not specified, we choose the weapon with the best average attack score
+            // from the inventory...
+            if(String.IsNullOrEmpty(weaponName))
+            {
+                var bestWeapon = ObjectUtils.getBestWeapon(ParsedInventory.getContents());
+                if(bestWeapon != null)
+                {
+                    weaponName = bestWeapon.Name;
+                }
+            }
+
             // We note that the player is fighting the opponent (and that it is fighting the player)...
             addFightOpponent(opponent, weaponName);
             opponent.addFightOpponent(this, "");

@@ -23,8 +23,22 @@
       "ObjectID": "Slartibartfast"
     },
     {
-      "ObjectID": "mighty-sword"
+      "ObjectID": "wooden-chest",
+      "Contains": [
+        {
+          "ObjectID": "wooden-sword"
+        },
+        {
+          "ObjectID": "small-bag",
+          "Contains": [
+            { "ObjectID": "apple" },
+            { "ObjectID": "apple" },
+            { "ObjectID": "apple" }
+          ]
+        }
+      ]
     }
+
   ]
 
 }

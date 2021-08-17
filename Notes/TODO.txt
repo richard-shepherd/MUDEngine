@@ -6,7 +6,7 @@ TODO: Have a reset button
 
 TODO: Allow items to respawn afer a period of time
 
-TODO: DROP object
+TODO: DROP object, EAT object
       - Support plurals, eg DROP apples
 
 TODO: Only allow TAKE from a container if it is unlocked
@@ -26,8 +26,6 @@ TODO: Allow characters to move between locations.
 TODO: Add shops
 
 TODO: Armour
-
-TODO: KILL target WITH sword
 
 TODO: load and save
 

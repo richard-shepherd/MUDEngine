@@ -25,6 +25,26 @@ namespace WorldLib
         {
         }
 
+        /// <summary>
+        /// Returns the average attack score.
+        /// </summary>
+        public double getAverageAttackScore()
+        {
+            if(Attacks.Count == 0)
+            {
+                return 0.0;
+            }
+
+            var total = 0.0;
+            foreach(var attack in Attacks)
+            {
+                var attackAverage = (attack.MinDamage + attack.MaxDamage) / 2.0;
+                total += attackAverage;
+            }
+            var average = total / Attacks.Count;
+            return average;
+        }
+
         #endregion
 
         #region ObjectBase implementation
