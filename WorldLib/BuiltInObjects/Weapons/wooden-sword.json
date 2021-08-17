@@ -6,11 +6,27 @@
     "sword"
   ],
 
+  "Description": [
+    "The wooden sword does not look very effective, but is probably better than nothing."
+  ],
+
   "Dimensions": {
     "Height": "70cm",
     "Width": "10cm",
     "Depth": "5cm"
   },
 
-  "Weight": "5kg"
+  "Weight": "5kg",
+
+  "Attacks": [
+    {
+      "Name": "slash",
+      "Damage": "5-10"
+    },
+    {
+      "Name": "stab",
+      "Damage": "3-8"
+    }
+  ]
+
 }

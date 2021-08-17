@@ -230,7 +230,7 @@ namespace WorldLib
         private ParsedInput parse_Kill(string uppercaseInput, string originalInput)
         {
             // We check if the input starts with a KILL synonym...
-            var synonyms = new List<string> { "KILL", "FIGHT" };
+            var synonyms = new List<string> { "KILL", "FIGHT", "ATTACK" };
             return parse_WithTarget(uppercaseInput, originalInput, ActionEnum.KILL, synonyms);
         }
 

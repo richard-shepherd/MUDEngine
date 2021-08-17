@@ -72,7 +72,7 @@ namespace WorldLib
             // Attacks...
             AttackIntervalSeconds = 1.0;
             Attacks.Clear();
-            Attacks.Add(new Character.AttackType { Name = "punch", MinDamage = 1, MaxDamage = 5 });
+            Attacks.Add(new AttackInfo { Name = "punch", MinDamage = 1, MaxDamage = 5 });
         }
 
         /// <summary>

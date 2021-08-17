@@ -34,32 +34,6 @@ namespace WorldLib
         #region Public types
 
         /// <summary>
-        /// Info about one attack which the character can perform.
-        /// </summary>
-        public class AttackType
-        {
-            /// <summary>
-            /// Gets or sets the name of the attack.
-            /// </summary>
-            public string Name { get; set; } = "";
-
-            /// <summary>
-            /// Gets or sets the string version of the damage range, eg "50-90".
-            /// </summary>
-            public string Damage { get; set; } = "";
-
-            /// <summary>
-            /// Gets or sets the parsed version of the minimum damage.
-            /// </summary>
-            public int MinDamage { get; set; } = 0;
-
-            /// <summary>
-            /// Gets or sets the parsed version of the maximum damage.
-            /// </summary>
-            public int MaxDamage { get; set; } = 0;
-        }
-
-        /// <summary>
         /// Information about an exchange the character is willing to make.
         /// </summary>
         public class ExchangeInfo
@@ -109,7 +83,7 @@ namespace WorldLib
         /// <summary>
         /// Gets or sets the collection of attacks which the character can perform.
         /// </summary>
-        public List<AttackType> Attacks { get; set; } = new List<AttackType>();
+        public List<AttackInfo> Attacks { get; set; } = new List<AttackInfo>();
 
         /// <summary>
         /// Gets or sets the inteval at which the character performs attacks.
@@ -175,7 +149,7 @@ namespace WorldLib
             stats.Add("Attacks:");
             foreach(var attack in Attacks)
             {
-                stats.Add($"- {attack.Name}: {attack.MinDamage}-{attack.MaxDamage}");
+                stats.Add($"- {attack.getStats()}");
             }
 
             return stats;
@@ -327,7 +301,7 @@ namespace WorldLib
             // Attacks...
             foreach(var attack in Attacks)
             {
-                parseAttack(attack);
+                attack.parseConfig();
             }
 
             // Inventory...
@@ -353,40 +327,20 @@ namespace WorldLib
         public override List<string> examine()
         {
             // Base information...
-            var text = base.examine();
+            var examine = base.examine();
 
             // Inventory...
-            text.AddRange(ParsedInventory.listContents($"{Utils.prefix_The(Name)} is holding"));
+            examine.AddRange(ParsedInventory.listContents($"{Utils.prefix_The(Name)} is holding"));
 
-            return text;
+            // Stats...
+            examine.AddRange(getStats());
+
+            return examine;
         }
 
         #endregion
 
         #region Private functions
-
-        /// <summary>
-        /// Parses information for the attck.
-        /// </summary>
-        private void parseAttack(AttackType attack)
-        {
-            // We parse the damage string, eg "60-120", into its min and max values...
-            var tokens = attack.Damage.Split('-');
-            if(tokens.Length != 2)
-            {
-                Logger.error($"Invalid damage format '{attack.Damage}' for attack={attack.Name}, object={Name}.");
-                return;
-            }
-            try
-            {
-                attack.MinDamage = Convert.ToInt32(tokens[0]);
-                attack.MaxDamage = Convert.ToInt32(tokens[1]);
-            }
-            catch (Exception ex)
-            {
-                Logger.error($"Invalid damage format '{attack.Damage}' for attack={attack.Name}, object={Name}. Message={ex.Message}.");
-            }
-        }
 
         /// <summary>
         /// Checks if we can attack (and sets the next attack time).
