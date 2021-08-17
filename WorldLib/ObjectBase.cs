@@ -24,7 +24,8 @@ namespace WorldLib
             LOCATION,
             MONSTER,
             OBJECT,
-            PLAYER
+            PLAYER,
+            WEAPON
         }
 
         /// <summary>

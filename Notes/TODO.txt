@@ -1,5 +1,3 @@
-TODO: Create collections, eg Pile. ("The dragon is lying on a pile of gold coins.")
-
 TODO: Implement EXAMINE
       You cannot see what is in containers if they are locked
 
@@ -17,10 +15,6 @@ TODO: PUT [target1] in/into [target2]
 
 TODO: Implement XP
       Updates other stats at certain levels.
-
-TODO: Implement locked doors
-
-TODO: Allow exits to be blocked by monsters
 
 TODO: Implement TALK TO [target]
       - Should not just be exchange talk

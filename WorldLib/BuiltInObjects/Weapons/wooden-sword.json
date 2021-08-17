@@ -1,0 +1,16 @@
+﻿{
+  "ObjectType": "WEAPON",
+
+  "Name": "wooden sword",
+  "Aliases": [
+    "sword"
+  ],
+
+  "Dimensions": {
+    "Height": "70cm",
+    "Width": "10cm",
+    "Depth": "5cm"
+  },
+
+  "Weight": "5kg"
+}

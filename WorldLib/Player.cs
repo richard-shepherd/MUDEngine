@@ -651,16 +651,21 @@ namespace WorldLib
         /// </summary>
         private void examine(string target)
         {
-            // We find the object from the current location...
-            var objectFromLocation = m_location.findObjectFromName(target);
-            if (!objectFromLocation.hasObject())
+            // We find the target from the current location...
+            var targetInfo = m_location.findObjectFromName(target);
+            if (!targetInfo.hasObject())
+            {
+                // The target is not in the current location, so we see if we have it in our inventory...
+                targetInfo = ParsedInventory.findObjectFromName(target);
+            }
+            if (!targetInfo.hasObject())
             {
                 sendUIUpdate($"You cannot examine {Utils.prefix_the(target)}.");
                 return;
             }
 
             // We examine the object...
-            sendUIUpdate(objectFromLocation.getObject().examine());
+            sendUIUpdate(targetInfo.getObject().examine());
         }
 
         /// <summary>
