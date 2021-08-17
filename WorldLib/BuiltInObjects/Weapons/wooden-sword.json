@@ -20,11 +20,11 @@
 
   "Attacks": [
     {
-      "Name": "slash",
+      "Name": "wooden sword slash",
       "Damage": "5-10"
     },
     {
-      "Name": "stab",
+      "Name": "wooden sword stab",
       "Damage": "3-8"
     }
   ]

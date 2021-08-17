@@ -163,7 +163,7 @@ namespace WorldLib
                     break;
 
                 case InputParser.ActionEnum.KILL:
-                    kill(parsedInput.Target1);
+                    kill(parsedInput.Target1, parsedInput.Target2);
                     break;
 
                 case InputParser.ActionEnum.LOOK:
@@ -549,7 +549,7 @@ namespace WorldLib
         /// <summary>
         /// Starts a fight with the target.
         /// </summary>
-        private void kill(string target)
+        private void kill(string target, string weapon)
         {
             // We find the opponent...
             var opponent = getCharacter(target, "fight");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Utility;
 
 namespace WorldLib
@@ -73,7 +74,7 @@ namespace WorldLib
         /// Gets or sets the character's dexterity. 
         /// (Value between 0 - 100.)
         /// </summary>
-        public int Dexterity { get; set; } = 10;
+        public int Dexterity { get; set; } = 50;
 
         /// <summary>
         /// Gets or sets the character's XP.
@@ -88,7 +89,7 @@ namespace WorldLib
         /// <summary>
         /// Gets or sets the inteval at which the character performs attacks.
         /// </summary>
-        public double AttackIntervalSeconds { get; set; } = 0.0;
+        public double AttackIntervalSeconds { get; set; } = 2.0;
 
         /// <summary>
         /// Gets or sets the player's inventory as held in the config.
@@ -147,7 +148,7 @@ namespace WorldLib
 
             // Attacks...
             stats.Add("Attacks:");
-            foreach(var attack in Attacks)
+            foreach(var attack in getAllAttacks())
             {
                 stats.Add($"- {attack.getStats()}");
             }
@@ -229,12 +230,6 @@ namespace WorldLib
                 return;
             }
 
-            // We check if this character has any attacks it can perform...
-            if (Attacks.Count == 0)
-            {
-                return;
-            }
-
             // We check if we can attack now...
             if (!canAttack(updateTimeUTC))
             {
@@ -243,6 +238,10 @@ namespace WorldLib
 
             // We find the attack to perform...
             var attack = chooseAttack();
+            if(attack == null)
+            {
+                return;
+            }
 
             // We choose a random opponent...
             var opponentIndex = Utils.Rnd.Next(0, m_fightOpponents.Count);
@@ -348,9 +347,32 @@ namespace WorldLib
             // We check if we are attacking using a selected weapon...
             //todo
 
-            var attackIndex = Utils.Rnd.Next(0, Attacks.Count);
-            var attackInfo = Attacks[attackIndex];
+            // There is no selected weapon, so we choose a random attack.
+            // This is chosen from the character's configured attacks and any weapons
+            // they are holding.
+            var attackInfos = getAllAttacks();
+            if(attackInfos.Count == 0)
+            {
+                return null;
+            }
+            var attackIndex = Utils.Rnd.Next(0, attackInfos.Count);
+            var attackInfo = attackInfos[attackIndex];
             return attackInfo;
+        }
+
+        /// <summary>
+        /// Gets all attacks the character can perform, including built-in attacks
+        /// and attacks based on weapons they hold.
+        /// </summary>
+        private List<AttackInfo> getAllAttacks()
+        {
+            var attackInfos = new List<AttackInfo>(Attacks);
+            var weaponAttacks = ParsedInventory.getContents()
+                .Where(x => x.ObjectType == ObjectTypeEnum.WEAPON)
+                .Select(x => x as Weapon)
+                .SelectMany(x => x.Attacks);
+            attackInfos.AddRange(weaponAttacks);
+            return attackInfos;
         }
 
         /// <summary>
