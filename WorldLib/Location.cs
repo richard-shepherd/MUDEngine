@@ -331,16 +331,26 @@ namespace WorldLib
         /// </summary>
         private void cleanupDeadCharacters()
         {
+            // We clean up dead characters...
             var characters = LocationContainer.getContents()
                 .Where(x => x is Character)
-                .Select(x => x as Character)
+                .Select(x => x as Character);
+            var deadCharacters = characters
+                .Where(x => x.isDead())
                 .ToList();
-            foreach(var character in characters)
+            foreach(var deadCharacter in deadCharacters)
             {
-                if(character.isDead())
-                {
-                    cleanupDeadCharacter(character);
-                }
+                cleanupDeadCharacter(deadCharacter);
+            }
+
+            // We notify any dead players that they are dead...
+            var deadPlayers = deadCharacters
+                .Where(x => x is Player)
+                .Select(x => x as Player)
+                .ToList();
+            foreach(var deadPlayer in deadPlayers)
+            {
+                deadPlayer.onDeath();
             }
         }
 

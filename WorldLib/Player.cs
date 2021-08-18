@@ -195,27 +195,17 @@ namespace WorldLib
             }
         }
 
-        #endregion
-
-        #region ObjectBase implementation
-
         /// <summary>
-        /// Called at regular intervals to update properties and actions of the player.
+        /// Called when the player has died.
         /// </summary>
-        public override void update(DateTime updateTimeUTC)
+        public void onDeath()
         {
             try
             {
-                // We perform base (Character) updates...
-                base.update(updateTimeUTC);
-
-                // If the player is dead, we respawn...
-                if(isDead())
-                {
-                    drop_All();
-                    sendUIUpdate("Your spirit finds itself in a new body.");
-                    m_worldManager.respawnPlayer(this);
-                }
+                // We respawn...
+                drop_All();
+                sendUIUpdate("Your spirit finds itself in a new body.");
+                m_worldManager.respawnPlayer(this);
             }
             catch (Exception ex)
             {
