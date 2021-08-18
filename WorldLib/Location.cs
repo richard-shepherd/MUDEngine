@@ -213,6 +213,7 @@ namespace WorldLib
         {
             foreach(var objectBase in objectBases)
             {
+                objectBase.LocationID = ObjectID;
                 LocationContainer.add(objectBase);
             }
             Utils.raiseEvent(onObjectsUpdated, this, null);
@@ -224,6 +225,7 @@ namespace WorldLib
         public void addObject(ObjectBase objectBase)
         {
             LocationContainer.add(objectBase);
+            objectBase.LocationID = ObjectID;
             Utils.raiseEvent(onObjectsUpdated, this, null);
         }
 
@@ -232,8 +234,7 @@ namespace WorldLib
         /// </summary>
         public void addObject(ContainedObject containedObject)
         {
-            LocationContainer.add(containedObject.getObject());
-            Utils.raiseEvent(onObjectsUpdated, this, null);
+            addObject(containedObject.getObject());
         }
 
         /// <summary>

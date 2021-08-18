@@ -8,7 +8,7 @@ namespace WorldLib
     /// <summary>
     /// Represents containers such as bags, boxes, chests etc.
     /// </summary>
-    public class Container : ObjectBase
+    public class Container : ObjectBase, ILockable
     {
         #region Public types
 
@@ -73,30 +73,13 @@ namespace WorldLib
         /// </summary>
         public ContainedObject findObjectFromName(string objectName)
         {
-            // We check the contents of the container...
-            foreach (var objectBase in m_contents)
+            var containedObjects = getContainedObjects();
+            var result = containedObjects.FirstOrDefault(x => x.getObject().matchesName(objectName));
+            if (result == null)
             {
-                // We check the object itself...
-                if (objectBase.matchesName(objectName))
-                {
-                    return new ContainedObject(this, objectBase);
-                }
-
-                // If the object is a container we check its contents...
-                var container = objectBase as Container;
-                if (container == null)
-                {
-                    continue;
-                }
-                var containedObject = container.findObjectFromName(objectName);
-                if (containedObject.hasObject())
-                {
-                    return containedObject;
-                }
+                result = new ContainedObject(null, null);
             }
-
-            // We did not find the object...
-            return new ContainedObject(null, null);
+            return result;
         }
 
         /// <summary>
@@ -106,30 +89,13 @@ namespace WorldLib
         /// </summary>
         public ContainedObject findObjectFromID(string objectID)
         {
-            // We check the contents of the container...
-            foreach (var objectBase in m_contents)
+            var containedObjects = getContainedObjects();
+            var result = containedObjects.FirstOrDefault(x => x.getObject().ObjectID == objectID);
+            if(result == null)
             {
-                // We check the object itself...
-                if (objectBase.ObjectID == objectID)
-                {
-                    return new ContainedObject(this, objectBase);
-                }
-
-                // If the object is a container we check its contents...
-                var container = objectBase as Container;
-                if (container == null)
-                {
-                    continue;
-                }
-                var containedObject = container.findObjectFromID(objectID);
-                if (containedObject.hasObject())
-                {
-                    return containedObject;
-                }
+                result = new ContainedObject(null, null);
             }
-
-            // We did not find the object...
-            return new ContainedObject(null, null);
+            return result;
         }
 
         /// <summary>
@@ -190,23 +156,42 @@ namespace WorldLib
         /// </summary>
         public List<ObjectBase> getContents(bool recursive = true)
         {
-            // We include the items held in the container...
-            var contents = new List<ObjectBase>(m_contents);
+            var containedObjects = getContainedObjects(recursive);
+            return containedObjects
+                .Select(x => x.getObject())
+                .ToList();
+        }
 
-            if(recursive)
+        /// <summary>
+        /// Returns the list of items in the container.
+        /// </summary>
+        public List<string> listContents(string messagePrefix = "")
+        {
+            if (Locked)
             {
-                // We add items held in any containers we hold...
-                var containers = contents
-                    .Where(x => x.ObjectType == ObjectTypeEnum.CONTAINER)
-                    .Select(x => x as Container)
-                    .ToList();
-                foreach (var container in containers)
-                {
-                    contents.AddRange(container.getContents());
-                }
+                return new List<string> { $"{Utils.prefix_The(Name)} is locked." };
             }
 
-            return contents;
+            if (m_contents.Count == 0)
+            {
+                return new List<string> { $"{messagePrefix} nothing." };
+            }
+
+            var results = new List<string>();
+
+            // We list the contents of the container...
+            results.Add($"{messagePrefix}: {ObjectUtils.objectNamesAndCounts(m_contents)}.");
+
+            // If any of the contained objects is itself a container, we list what is in it...
+            foreach (var containedObject in m_contents)
+            {
+                var container = containedObject as Container;
+                if (container != null)
+                {
+                    results.AddRange(container.listContents($"{Utils.prefix_The(container.Name)} contains"));
+                }
+            }
+            return results;
         }
 
         #endregion
@@ -241,41 +226,73 @@ namespace WorldLib
             return listContents($"{Utils.prefix_The(Name)} contains");
         }
 
+        #endregion
+
+        #region ILockable implementation
+
         /// <summary>
-        /// Returns the list of items in the container.
+        /// Returns the ID of the object which unlocks the container.
         /// </summary>
-        public List<string> listContents(string messagePrefix = "")
+        public string getKeyID()
         {
-            if(Locked)
+            return Key;
+        }
+
+        /// <summary>
+        /// Unlocks the container.
+        /// </summary>
+        public ActionResult unlock(ObjectBase key)
+        {
+            // We check if the right key was provided...
+            if (key.ObjectID != Key)
             {
-                return new List<string> { $"{Utils.prefix_The(Name)} is locked." };
+                return ActionResult.failed($"{Utils.prefix_The(key.Name)} cannot be used to unlock {Utils.prefix_the(Name)}.");
             }
 
-            if (m_contents.Count == 0)
-            {
-                return new List<string> { $"{messagePrefix} nothing." };
-            }
-
-            var results = new List<string>();
-
-            // We list the contents of the container...
-            results.Add($"{messagePrefix}: {ObjectUtils.objectNamesAndCounts(m_contents)}.");
-
-            // If any of the contained objects is itself a container, we list what is in it...
-            foreach (var containedObject in m_contents)
-            {
-                var container = containedObject as Container;
-                if (container != null)
-                {
-                    results.AddRange(container.listContents($"{Utils.prefix_The(container.Name)} contains"));
-                }
-            }
-            return results;
+            // The right key was used, so we unlock the door...
+            Locked = false;
+            return ActionResult.succeeded();
         }
 
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Returns the collection of objects in the container, including recursing into 
+        /// other containers we hold.
+        /// 
+        /// Objects are returned as ContainedObjects.
+        /// </summary>
+        private List<ContainedObject> getContainedObjects(bool recursive = true)
+        {
+            // If the container is locked, we return an empty list of objects
+            // as the contents cannot be seen...
+            if (Locked)
+            {
+                return new List<ContainedObject>();
+            }
+
+            // We include the items held in the container...
+            var contents = m_contents
+                .Select(x => new ContainedObject(this, x))
+                .ToList();
+
+            if (recursive)
+            {
+                // We add items held in any containers we hold...
+                var containers = m_contents
+                    .Where(x => x.ObjectType == ObjectTypeEnum.CONTAINER)
+                    .Select(x => x as Container)
+                    .ToList();
+                foreach (var container in containers)
+                {
+                    contents.AddRange(container.getContainedObjects());
+                }
+            }
+
+            return contents;
+        }
 
         /// <summary>
         /// Called when an item is being added to check that we have capacity to

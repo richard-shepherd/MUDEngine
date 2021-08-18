@@ -1,0 +1,16 @@
+﻿{
+  "ObjectType": "OBJECT",
+
+  "Name": "wooden key",
+  "Aliases": [
+    "key"
+  ],
+
+  "Dimensions": {
+    "Height": "8cm",
+    "Width": "2cm",
+    "Depth": "1cm"
+  },
+
+  "Weight": "10g"
+}
