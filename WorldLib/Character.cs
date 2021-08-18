@@ -308,6 +308,9 @@ namespace WorldLib
                 update.Add($"{Utils.prefix_The(Name)} has killed {Utils.prefix_the(opponent.Name)}.");
             }
 
+            // We clean up fight opponents, in case we have killed the opponet...
+            cleanupFightOppenents();
+
             sendGameUpdate(update);
         }
 
