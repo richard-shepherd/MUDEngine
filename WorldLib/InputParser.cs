@@ -309,7 +309,6 @@ namespace WorldLib
             return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.TAKE, synonyms);
         }
 
-
         /// <summary>
         /// Checks if the input is a examine command.
         /// Returns a ParsedInput if so, null if not.
