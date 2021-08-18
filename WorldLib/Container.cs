@@ -169,7 +169,8 @@ namespace WorldLib
         {
             if (Locked)
             {
-                return new List<string> { $"{Utils.prefix_The(Name)} is locked." };
+                var keyName = getObjectFactory().getObjectNameFromID(Key);
+                return new List<string> { $"{Utils.prefix_The(Name)} is locked. You need {Utils.prefix_a_an(keyName)} to unlock it." };
             }
 
             if (m_contents.Count == 0)

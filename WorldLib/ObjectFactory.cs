@@ -94,6 +94,21 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Returns the object name for the ID specified.
+        /// </summary>
+        public string getObjectNameFromID(string objectID)
+        {
+            if(m_objectDefinitions.TryGetValue(objectID, out var objectDefinition))
+            {
+                return objectDefinition.ObjectName;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        /// <summary>
         /// Gets the object-name for the object-name provided.
         /// 
         /// The name provided can be singular or plural. The singular form is returned, along

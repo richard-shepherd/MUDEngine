@@ -38,6 +38,8 @@
         },
         {
           "ObjectID": "small-bag",
+          "Locked": true,
+          "Key": "platypus",
           "Contains": [
             { "ObjectID": "apple" },
             { "ObjectID": "apple" },
