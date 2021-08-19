@@ -209,6 +209,14 @@ namespace WorldLib
             return m_worldManager.ObjectFactory;
         }
 
+        /// <summary>
+        /// Gets the object's ocation.
+        /// </summary>
+        public Location getLocation()
+        {
+            return m_worldManager.getLocation(LocationID);
+        }
+
         #endregion
 
         #region Virtual functions

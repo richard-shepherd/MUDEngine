@@ -1,5 +1,4 @@
-TODO: Locked containers
-      - EXAMINE: You cannot see what is in containers if they are locked
+TODO: Sort out "YOU do X" when sent from Character.
 
 TODO: Have a reset button
       If a player presses this, they should be transported to the starting location.
@@ -8,8 +7,6 @@ TODO: Allow items to respawn afer a period of time
 
 TODO: DROP object, EAT object
       - Support plurals, eg DROP apples
-
-TODO: Only allow TAKE from a container if it is unlocked
 
 TODO: PUT [target1] in/into [target2]
 

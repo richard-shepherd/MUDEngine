@@ -153,8 +153,22 @@ namespace WorldLib
         public void wear(Armour armour)
         {
             // If the character is currently wearing armour, we move it to
-            // the inventory if it fits, or drop it if it does not.
+            // the inventory if it fits, or drop it if it does not...
+            if(Armour != null)
+            {
+                var actionResult = ParsedInventory.add(Armour);
+                if(actionResult.Status == ActionResult.StatusEnum.SUCCEEDED)
+                {
+                    sendGameUpdate($"{Utils.prefix_The(Name)} adds {Utils.prefix_the(Armour.Name)} to their inventory.");
+                }
+                else
+                {
+                    getLocation().addObject(Armour);
+                    sendGameUpdate($"{Utils.prefix_The(Name)} drops {Utils.prefix_the(Armour.Name)}.");
+                }
+            }
 
+            // The character wears the new armour...
             Armour = armour;
         }
 
@@ -206,19 +220,30 @@ namespace WorldLib
         /// </summary>
         public ObjectBase given(ObjectBase item)
         {
-            // We add the item to the inventory...
-            ParsedInventory.add(item);
+            ObjectBase exchangedObject = null;
 
-            // We check if this item is part of an exchange...
-            if(item.ID != Exchange.For)
+            var armour = item as Armour;
+            if(armour != null)
             {
-                return null;
+                // The object is armour, so the character wears it...
+                wear(armour);
+            }
+            else
+            {
+                // We add non-armour items to the inventory...
+                ParsedInventory.add(item);
             }
 
-            // The item is part of an exchange, so we return the exchanged item (if we have it)...
-            var objectToGive = ParsedInventory.findObjectFromID(Exchange.Give);
-            objectToGive.removeFromContainer();
-            return objectToGive.getObject();
+            // We check if this item is part of an exchange...
+            if (item.ID == Exchange.For)
+            {
+                // The item is part of an exchange, so we return the exchanged item (if we have it)...
+                var objectToGive = ParsedInventory.findObjectFromID(Exchange.Give);
+                objectToGive.removeFromContainer();
+                exchangedObject = objectToGive.getObject();
+            }
+
+            return exchangedObject;
         }
 
         /// <summary>

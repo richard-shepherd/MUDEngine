@@ -90,7 +90,7 @@ namespace WorldLib
             LocationID = locationID;
 
             // We get the Location and add the player to it...
-            m_location = getWorldManager().getLocation(locationID);
+            m_location = getLocation();
             m_location.addObject(this);
 
             // We observe events from the location and characters in it...
