@@ -46,7 +46,7 @@ namespace WorldLib
 
             // We set up the player's identity...
             ObjectType = ObjectTypeEnum.PLAYER;
-            ObjectID = id;
+            ID = id;
             Name = name;
 
             // We set up default player properties...

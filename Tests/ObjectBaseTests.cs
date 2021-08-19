@@ -31,7 +31,7 @@ namespace Tests
             var smallBag = m_objectFactory.createObjectAs<Container>("small-bag");
 
             // We check base-object properties...
-            Assert.AreEqual("small-bag", smallBag.ObjectID);
+            Assert.AreEqual("small-bag", smallBag.ID);
             Assert.AreEqual(ObjectTypeEnum.CONTAINER, smallBag.ObjectType);
             Assert.AreEqual("small bag", smallBag.Name);
             Assert.IsTrue(smallBag.Aliases.Contains("bag"));

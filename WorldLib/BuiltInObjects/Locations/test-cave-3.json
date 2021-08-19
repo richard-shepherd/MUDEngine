@@ -19,23 +19,23 @@
 
   "Objects": [
     {
-      "ObjectID": "Slartibartfast"
+      "ID": "Slartibartfast"
     },
     {
-      "ObjectID": "small-green-dragon"
+      "ID": "small-green-dragon"
     },
     {
-      "ObjectID": "lobster-pot"
+      "ID": "lobster-pot"
     },
     {
-      "ObjectID": "wooden-chest",
+      "ID": "wooden-chest",
       "Contains": [
         {
-          "ObjectID": "small-bag",
+          "ID": "small-bag",
           "Contains": [
-            { "ObjectID": "apple" },
-            { "ObjectID": "apple" },
-            { "ObjectID": "apple" }
+            { "ID": "apple" },
+            { "ID": "apple" },
+            { "ID": "apple" }
           ]
         }
       ]

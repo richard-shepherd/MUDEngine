@@ -72,7 +72,7 @@ namespace WorldLib
         /// <summary>
         /// Gets or sets the object's ID.
         /// </summary>
-        public string ObjectID { get; set; } = "";
+        public string ID { get; set; } = "";
 
         /// <summary>
         /// Gets or sets the object type.

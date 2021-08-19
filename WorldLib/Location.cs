@@ -60,7 +60,7 @@ namespace WorldLib
             public string Direction { get; set; } = "";
 
             /// <summary>
-            /// Gets or sets the ObjectID of the location to which the exit leads.
+            /// Gets or sets the ID of the location to which the exit leads.
             /// </summary>
             public string To { get; set; } = "";
 
@@ -83,7 +83,7 @@ namespace WorldLib
             /// <summary>
             /// Gets or sets the ID of the object.
             /// </summary>
-            public string ObjectID { get; set; } = "";
+            public string ID { get; set; } = "";
 
             /// <summary>
             /// Gets or sets whether the object is locked (if it is a container).
@@ -164,7 +164,7 @@ namespace WorldLib
             }
 
             // We check if there is an object blocking this direction...
-            var blockingObjectInfo = findObjectFromID(exit.BlockedBy.ObjectID);
+            var blockingObjectInfo = findObjectFromID(exit.BlockedBy.ID);
             if(blockingObjectInfo.hasObject())
             {
                 var blockingObject = blockingObjectInfo.getObject();
@@ -218,7 +218,7 @@ namespace WorldLib
         {
             foreach(var objectBase in objectBases)
             {
-                objectBase.LocationID = ObjectID;
+                objectBase.LocationID = ID;
                 LocationContainer.add(objectBase);
             }
             Utils.raiseEvent(onObjectsUpdated, this, null);
@@ -230,7 +230,7 @@ namespace WorldLib
         public void addObject(ObjectBase objectBase)
         {
             LocationContainer.add(objectBase);
-            objectBase.LocationID = ObjectID;
+            objectBase.LocationID = ID;
             Utils.raiseEvent(onObjectsUpdated, this, null);
         }
 
@@ -313,15 +313,15 @@ namespace WorldLib
                 if(!String.IsNullOrEmpty(exit.Door))
                 {
                     var door = getObjectFactory().createObject(exit.Door);
-                    door.LocationID = ObjectID;
+                    door.LocationID = ID;
                     LocationContainer.add(door);
                 }
 
                 // Blocking object...
-                if (!String.IsNullOrEmpty(exit.BlockedBy.ObjectID))
+                if (!String.IsNullOrEmpty(exit.BlockedBy.ID))
                 {
                     var blockingObject =  parseObject(exit.BlockedBy);
-                    blockingObject.LocationID = ObjectID;
+                    blockingObject.LocationID = ID;
                     LocationContainer.add(blockingObject);
                 }
             }
@@ -414,10 +414,10 @@ namespace WorldLib
             }
 
             // Blocking objects...
-            var exitsWithBlockingObjects = Exits.Where(x => !String.IsNullOrEmpty(x.BlockedBy.ObjectID));
+            var exitsWithBlockingObjects = Exits.Where(x => !String.IsNullOrEmpty(x.BlockedBy.ID));
             foreach (var exit in exitsWithBlockingObjects)
             {
-                var blockingObjectInfo = findObjectFromID(exit.BlockedBy.ObjectID);
+                var blockingObjectInfo = findObjectFromID(exit.BlockedBy.ID);
                 if (!blockingObjectInfo.hasObject())
                 {
                     continue;
@@ -463,10 +463,10 @@ namespace WorldLib
         private ObjectBase parseObject(ObjectInfo objectInfo)
         {
             // We get the object from its ID...
-            var objectBase =  getObjectFactory().createObject(objectInfo.ObjectID);
+            var objectBase =  getObjectFactory().createObject(objectInfo.ID);
 
             // We set its location to this location...
-            objectBase.LocationID = ObjectID;
+            objectBase.LocationID = ID;
 
             // If the object is a container, we parse its properties and contents...
             parseContainer(objectBase, objectInfo);

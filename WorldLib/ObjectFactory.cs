@@ -153,10 +153,10 @@ namespace WorldLib
                 var objectBase = Utils.fromJSON<ObjectBase>(json);
 
                 // If the ID is not specified, we use the file name...
-                if(String.IsNullOrEmpty(objectBase.ObjectID))
+                if(String.IsNullOrEmpty(objectBase.ID))
                 {
                     var filename = Path.GetFileNameWithoutExtension(path);
-                    objectBase.ObjectID = filename;
+                    objectBase.ID = filename;
                 }
 
                 // We parse the object (as an object-base) to update
@@ -169,10 +169,10 @@ namespace WorldLib
                 {
                     JSON = json,
                     ObjectType = objectBase.ObjectType,
-                    ObjectID = objectBase.ObjectID,
+                    ObjectID = objectBase.ID,
                     ObjectName = objectBase.Name
                 };
-                m_objectDefinitions[objectBase.ObjectID] = objectDefinition;
+                m_objectDefinitions[objectBase.ID] = objectDefinition;
 
                 // We store the name and aliases...
                 m_objectNamesAndAliases.Add(objectBase.Name);
@@ -238,7 +238,7 @@ namespace WorldLib
             }
 
             // We set the object ID (as it may not be in the json definition)...
-            objectBase.ObjectID = objectDefinition.ObjectID;
+            objectBase.ID = objectDefinition.ObjectID;
 
             // We set the object-factory...
             objectBase.setObjectFactory(this);

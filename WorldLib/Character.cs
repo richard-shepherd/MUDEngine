@@ -207,7 +207,7 @@ namespace WorldLib
             ParsedInventory.add(item);
 
             // We check if this item is part of an exchange...
-            if(item.ObjectID != Exchange.For)
+            if(item.ID != Exchange.For)
             {
                 return null;
             }

@@ -15,7 +15,7 @@
       "Direction": "E",
       "To": "test-cave-2-east",
       "BlockedBy": {
-        "ObjectID": "platypus",
+        "ID": "platypus",
         "Wearing": "fedora"
       }
     }
@@ -23,31 +23,31 @@
 
   "Objects": [
     {
-      "ObjectID": "Slartibartfast"
+      "ID": "Slartibartfast"
     },
     {
-      "ObjectID": "wooden-key"
+      "ID": "wooden-key"
     },
     {
-      "ObjectID": "fedora"
+      "ID": "fedora"
     },
     {
-      "ObjectID": "steel-armour"
+      "ID": "steel-armour"
     },
     {
-      "ObjectID": "wooden-chest",
+      "ID": "wooden-chest",
       "Locked": true,
       "Key": "wooden-key",
       "Contains": [
         {
-          "ObjectID": "wooden-sword"
+          "ID": "wooden-sword"
         },
         {
-          "ObjectID": "small-bag",
+          "ID": "small-bag",
           "Contains": [
-            { "ObjectID": "apple" },
-            { "ObjectID": "apple" },
-            { "ObjectID": "apple" }
+            { "ID": "apple" },
+            { "ID": "apple" },
+            { "ID": "apple" }
           ]
         }
       ]

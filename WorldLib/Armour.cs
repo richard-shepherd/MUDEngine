@@ -94,7 +94,7 @@ namespace WorldLib
             // We expect the damage reduction string to end in "%"...
             if(Utils.right(DamageReduction, 1) != "%")
             {
-                throw new Exception($"DamageReduction must end in %. Object={ObjectID}.");
+                throw new Exception($"DamageReduction must end in %. Object={ID}.");
             }
 
             // We get the damage reduction, and convert it to the damage factor...
@@ -106,7 +106,7 @@ namespace WorldLib
             }
             catch (Exception)
             {
-                throw new Exception($"Bad DamageReduction format. Object={ObjectID}.");
+                throw new Exception($"Bad DamageReduction format. Object={ID}.");
             }
         }
 

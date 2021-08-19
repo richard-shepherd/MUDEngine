@@ -58,7 +58,7 @@ namespace WorldLib
         public ActionResult unlock(ObjectBase key)
         {
             // We check if the right key was provided...
-            if(key.ObjectID != Key)
+            if(key.ID != Key)
             {
                 return ActionResult.failed($"{Utils.prefix_The(key.Name)} cannot be used to unlock {Utils.prefix_the(Name)}.");
             }
