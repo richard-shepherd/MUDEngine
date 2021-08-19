@@ -26,9 +26,6 @@
       "ObjectID": "wooden-key"
     },
     {
-      "ObjectID": "mighty-sword"
-    },
-    {
       "ObjectID": "wooden-chest",
       "Locked": true,
       "Key": "wooden-key",

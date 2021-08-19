@@ -2,8 +2,6 @@
   "ObjectType": "MONSTER",
 
   "Name": "platypus",
-  "Aliases": [
-  ],
 
   "Examine": [
     "What a peculiar creature!"

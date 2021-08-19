@@ -17,6 +17,7 @@ namespace WorldLib
         public enum ObjectTypeEnum
         {
             NOT_SPECIFIED,
+            ARMOUR,
             CHARACTER,
             CONTAINER,
             DOOR,
@@ -211,6 +212,9 @@ namespace WorldLib
         /// </summary>
         public virtual void parseConfig(ObjectFactory objectFactory)
         {
+            // We add default aliases based on the name...
+            addDefaultAliases();
+
             // We parse the dimensions...
             Dimensions.HeightM = UnitsHelper.parse(Dimensions.Height);
             Dimensions.WidthM = UnitsHelper.parse(Dimensions.Width);
@@ -255,6 +259,37 @@ namespace WorldLib
         public virtual void update(DateTime updateTimeUTC)
         {
         }
+
+        #endregion
+
+        #region Private functions
+
+        /// <summary>
+        /// Adds default aliases for the object name, based on parsing the name.
+        /// </summary>
+        private void addDefaultAliases()
+        {
+            var defaultAliases = new List<string>();
+
+            // We split the name by spaces and use the last one as an alias.
+            // eg, "oak leaf" -> "leaf" as an alias.
+            var tokens = Name.Split(' ');
+            var numTokens = tokens.Length;
+            if (numTokens > 1)
+            {
+                defaultAliases.Add(tokens[numTokens - 1]);
+            }
+
+            // We add the default aliases...
+            foreach(var defaultAlias in defaultAliases)
+            {
+                if(!Aliases.Contains(defaultAlias))
+                {
+                    Aliases.Add(defaultAlias);
+                }
+            }
+        }
+
 
         #endregion
 

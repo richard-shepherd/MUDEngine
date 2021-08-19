@@ -2,9 +2,6 @@
   "ObjectType": "WEAPON",
 
   "Name": "wooden sword",
-  "Aliases": [
-    "sword"
-  ],
 
   "Description": [
     "The wooden sword does not look very effective, but is probably better than nothing."

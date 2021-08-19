@@ -3,8 +3,6 @@
   "ObjectType": "CONTAINER",
 
   "Name": "backpack",
-  "Aliases": [
-  ],
 
   "Dimensions": {
     "Height": "150cm",

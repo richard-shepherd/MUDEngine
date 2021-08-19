@@ -3,9 +3,6 @@
   "ObjectType": "CONTAINER",
 
   "Name": "lobster pot",
-  "Aliases": [
-    "pot"
-  ],
 
   "Dimensions": {
     "Height": "60cm",

@@ -3,9 +3,6 @@
   "ObjectType": "CONTAINER",
 
   "Name": "wooden chest",
-  "Aliases": [
-    "chest"
-  ],
 
   "Dimensions": {
     "Height": "1m",

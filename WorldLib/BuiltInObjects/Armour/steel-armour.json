@@ -1,0 +1,13 @@
+﻿{
+  "ObjectType": "ARMOUR",
+
+  "Name": "steel armour",
+
+  "Dimensions": {
+    "Height": "150cm",
+    "Width": "80cm",
+    "Depth": "80cm"
+  },
+
+  "Weight": "50kg"
+}

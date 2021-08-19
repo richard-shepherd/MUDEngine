@@ -2,9 +2,6 @@
   "ObjectType": "LOCATION",
 
   "Name": "test cave 3",
-  "Aliases": [
-    "cave"
-  ],
 
   "Dimensions": {
     "Height": "20m",

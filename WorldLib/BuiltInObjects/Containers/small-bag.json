@@ -3,9 +3,6 @@
   "ObjectType": "CONTAINER",
 
   "Name": "small bag",
-  "Aliases": [
-    "bag"
-  ],
 
   "Dimensions": {
     "Height": "60cm",

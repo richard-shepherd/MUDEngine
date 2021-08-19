@@ -244,7 +244,14 @@ namespace Utility
         /// </summary>
         public static string left(string s, int length)
         {
-            return s.Substring(0, length);
+            if (String.IsNullOrEmpty(s))
+            {
+                return s;
+            }
+            else
+            {
+                return s.Substring(0, length);
+            }
         }
 
         /// <summary>
@@ -252,7 +259,14 @@ namespace Utility
         /// </summary>
         public static string right(string s, int length)
         {
-            return s.Substring(s.Length-length, length);
+            if (String.IsNullOrEmpty(s))
+            {
+                return s;
+            }
+            else
+            {
+                return s.Substring(s.Length - length, length);
+            }
         }
 
         /// <summary>

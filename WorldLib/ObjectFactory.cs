@@ -159,6 +159,10 @@ namespace WorldLib
                     objectBase.ObjectID = filename;
                 }
 
+                // We parse the object (as an object-base) to update
+                // its properties...
+                objectBase.parseConfig(this);
+
                 // We store the object definition against the object ID...
                 var objectDefinition = new ObjectDefinition
                 {
@@ -171,11 +175,10 @@ namespace WorldLib
 
                 // We store the name and aliases...
                 m_objectNamesAndAliases.Add(objectBase.Name);
-                foreach(var alias in objectBase.Aliases)
+                foreach (var alias in objectBase.Aliases)
                 {
                     m_objectNamesAndAliases.Add(alias);
                 }
-
             }
             catch (Exception ex)
             {
@@ -193,6 +196,10 @@ namespace WorldLib
             ObjectBase objectBase = null;
             switch (objectDefinition.ObjectType)
             {
+                case ObjectTypeEnum.ARMOUR:
+                    objectBase = Utils.fromJSON<Armour>(objectDefinition.JSON);
+                    break;
+
                 case ObjectTypeEnum.CHARACTER:
                     objectBase = Utils.fromJSON<Character>(objectDefinition.JSON);
                     break;

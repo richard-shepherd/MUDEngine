@@ -2,9 +2,6 @@
   "ObjectType": "MONSTER",
 
   "Name": "small green dragon",
-  "Aliases": [
-    "dragon"
-  ],
 
   "Dimensions": {
     "Height": "200cm",

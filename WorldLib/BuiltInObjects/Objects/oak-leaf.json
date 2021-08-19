@@ -2,9 +2,6 @@
   "ObjectType": "OBJECT",
 
   "Name": "oak leaf",
-  "Aliases": [
-    "leaf"
-  ],
 
   "Dimensions": {
     "Height": "8cm",

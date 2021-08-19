@@ -2,9 +2,6 @@
   "ObjectType": "OBJECT",
 
   "Name": "wooden key",
-  "Aliases": [
-    "key"
-  ],
 
   "Dimensions": {
     "Height": "8cm",

@@ -398,6 +398,11 @@ namespace WorldLib
             var item = itemInfo.getObject();
 
             // We check that the target character is in the current location...
+            if(String.IsNullOrEmpty(characterName))
+            {
+                sendUIUpdate($"To whom do you want to give {Utils.prefix_the(item.Name)}?");
+                return;
+            }
             var characterAsContainedObject = m_location.findObjectFromName(characterName);
             if(!characterAsContainedObject.hasObject())
             {

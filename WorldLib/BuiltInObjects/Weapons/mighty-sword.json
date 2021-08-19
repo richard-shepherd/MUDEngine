@@ -2,9 +2,6 @@
   "ObjectType": "WEAPON",
 
   "Name": "mighty sword",
-  "Aliases": [
-    "sword"
-  ],
 
   "Dimensions": {
     "Height": "70cm",
