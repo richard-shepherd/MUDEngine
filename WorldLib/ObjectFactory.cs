@@ -161,7 +161,8 @@ namespace WorldLib
 
                 // We parse the object (as an object-base) to update
                 // its properties...
-                objectBase.parseConfig(this);
+                objectBase.setObjectFactory(this);
+                objectBase.parseConfig();
 
                 // We store the object definition against the object ID...
                 var objectDefinition = new ObjectDefinition
@@ -243,7 +244,7 @@ namespace WorldLib
             objectBase.setObjectFactory(this);
 
             // We parse the string values, eg dimensions into numeric values...
-            objectBase.parseConfig(this);
+            objectBase.parseConfig();
 
             return objectBase;
         }

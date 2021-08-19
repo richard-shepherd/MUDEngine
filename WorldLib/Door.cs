@@ -75,10 +75,10 @@ namespace WorldLib
         /// <summary>
         /// Parses door-specific config.
         /// </summary>
-        public override void parseConfig(ObjectFactory objectFactory)
+        public override void parseConfig()
         {
             // We parse the base-object config...
-            base.parseConfig(objectFactory);
+            base.parseConfig();
 
             // We make the door very heavy, so it cannot be moved...
             if(String.IsNullOrEmpty(Weight))

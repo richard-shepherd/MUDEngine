@@ -1,0 +1,20 @@
+﻿{
+  "ObjectType": "ARMOUR",
+
+  "Name": "fedora",
+  "Aliases": [
+    "hat"
+  ],
+
+  "Dimensions": {
+    "Height": "20cm",
+    "Width": "30cm",
+    "Depth": "30cm"
+  },
+
+  "Weight": "1kg",
+
+  "HP": 100,
+
+  "DamageReduction": "75%"
+}

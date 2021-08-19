@@ -23,6 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="BuiltInObjects\Armour\fedora.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="BuiltInObjects\Armour\leather-armour.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

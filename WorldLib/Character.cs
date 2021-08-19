@@ -111,6 +111,11 @@ namespace WorldLib
         /// </summary>
         public List<MultilineText> Talk { get; set; } = new List<MultilineText>();
 
+        /// <summary>
+        /// Gets or sets armour worn by the character.
+        /// </summary>
+        public Armour Armour { get; set; } = null;
+
         #endregion
 
         #region Public methods
@@ -129,10 +134,25 @@ namespace WorldLib
         {
             sendGameUpdate(new List<string> { text });
         }
+
+        /// <summary>
+        /// Raises an event sending updated info about the character.
+        /// </summary>
         public void sendGameUpdate(List<string> text)
         {
             var args = new GameUpdateArgs { Text = text };
             Utils.raiseEvent(onGameUpdate, this, args);
+        }
+
+        /// <summary>
+        /// Wears the armour specified.
+        /// </summary><remarks>
+        /// If we are already wearing armour, the current armour is moved to the inventory if there
+        /// is enough room, or dropped if not.
+        /// </remarks>
+        public void wear(Armour armour)
+        {
+            Armour = armour;
         }
 
         /// <summary>
@@ -321,10 +341,10 @@ namespace WorldLib
         /// <summary>
         /// Parses the config.
         /// </summary>
-        public override void parseConfig(ObjectFactory objectFactory)
+        public override void parseConfig()
         {
             // We parse the base-object values...
-            base.parseConfig(objectFactory);
+            base.parseConfig();
 
             // If MaxHP is not specified, we set it to the HP...
             if(MaxHP == -1)
@@ -341,7 +361,7 @@ namespace WorldLib
             // Inventory...
             foreach(var itemName in Inventory)
             {
-                var item = objectFactory.createObject(itemName);
+                var item = getObjectFactory().createObject(itemName);
                 ParsedInventory.add(item);
             }
         }
@@ -365,6 +385,12 @@ namespace WorldLib
 
             // Inventory...
             examine.AddRange(ParsedInventory.listContents($"{Utils.prefix_The(Name)} is holding"));
+
+            // Armour...
+            if(Armour != null)
+            {
+                examine.Add($"{Utils.prefix_The(Name)} is wearing {Utils.prefix_a_an(Armour.Name)}.");
+            }
 
             // Stats...
             examine.AddRange(getStats());

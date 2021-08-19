@@ -72,7 +72,7 @@ namespace WorldLib
             /// <summary>
             /// Gets or sets the object-ID for the optional object blocking this exit.
             /// </summary>
-            public string BlockedBy { get; set; } = "";
+            public ObjectInfo BlockedBy { get; set; } = new ObjectInfo();
         }
 
         /// <summary>
@@ -94,6 +94,11 @@ namespace WorldLib
             /// Gets or sets the ID of the key which unlocks the object (if it is a container).
             /// </summary>
             public string Key { get; set; } = "";
+
+            /// <summary>
+            /// Gets or sets the ID of armour worn by the object  (if it is a character).
+            /// </summary>
+            public string Wearing { get; set; } = "";
 
             /// <summary>
             /// Gets or sets the collection of objects held by the object (if it is a container).
@@ -159,7 +164,7 @@ namespace WorldLib
             }
 
             // We check if there is an object blocking this direction...
-            var blockingObjectInfo = findObjectFromID(exit.BlockedBy);
+            var blockingObjectInfo = findObjectFromID(exit.BlockedBy.ObjectID);
             if(blockingObjectInfo.hasObject())
             {
                 var blockingObject = blockingObjectInfo.getObject();
@@ -289,15 +294,15 @@ namespace WorldLib
         /// <summary>
         /// Parses the location config, in particular the objects in the location.
         /// </summary>
-        public override void parseConfig(ObjectFactory objectFactory)
+        public override void parseConfig()
         {
             // We parse the ObjectBase...
-            base.parseConfig(objectFactory);
+            base.parseConfig();
 
             // We parse the objects...
             foreach(var objectInfo in Objects)
             {
-                var parsedObject = parseObject(objectInfo, objectFactory);
+                var parsedObject = parseObject(objectInfo);
                 LocationContainer.add(parsedObject);
             }
 
@@ -307,15 +312,15 @@ namespace WorldLib
                 // Door...
                 if(!String.IsNullOrEmpty(exit.Door))
                 {
-                    var door = objectFactory.createObject(exit.Door);
+                    var door = getObjectFactory().createObject(exit.Door);
                     door.LocationID = ObjectID;
                     LocationContainer.add(door);
                 }
 
                 // Blocking object...
-                if (!String.IsNullOrEmpty(exit.BlockedBy))
+                if (!String.IsNullOrEmpty(exit.BlockedBy.ObjectID))
                 {
-                    var blockingObject = objectFactory.createObject(exit.BlockedBy);
+                    var blockingObject =  parseObject(exit.BlockedBy);
                     blockingObject.LocationID = ObjectID;
                     LocationContainer.add(blockingObject);
                 }
@@ -359,8 +364,13 @@ namespace WorldLib
         /// </summary>
         private void cleanupDeadCharacter(Character character)
         {
-            // The character drops everything...
+            // The character drops everything from the inventory, and any
+            // armour they are wearing...
             var items = character.ParsedInventory.removeAll();
+            if(character.Armour != null)
+            {
+                items.Add(character.Armour);
+            }
             addObjects(items);
             if(items.Count > 0)
             {
@@ -404,10 +414,10 @@ namespace WorldLib
             }
 
             // Blocking objects...
-            var exitsWithBlockingObjects = Exits.Where(x => !String.IsNullOrEmpty(x.BlockedBy));
+            var exitsWithBlockingObjects = Exits.Where(x => !String.IsNullOrEmpty(x.BlockedBy.ObjectID));
             foreach (var exit in exitsWithBlockingObjects)
             {
-                var blockingObjectInfo = findObjectFromID(exit.BlockedBy);
+                var blockingObjectInfo = findObjectFromID(exit.BlockedBy.ObjectID);
                 if (!blockingObjectInfo.hasObject())
                 {
                     continue;
@@ -450,28 +460,51 @@ namespace WorldLib
         /// <summary>
         /// Parses one ObjectInfo into a concrete ObjectBase-derived object.
         /// </summary>
-        private ObjectBase parseObject(ObjectInfo objectInfo, ObjectFactory objectFactory)
+        private ObjectBase parseObject(ObjectInfo objectInfo)
         {
             // We get the object from its ID...
-            var objectBase = objectFactory.createObject(objectInfo.ObjectID);
+            var objectBase =  getObjectFactory().createObject(objectInfo.ObjectID);
 
             // We set its location to this location...
             objectBase.LocationID = ObjectID;
 
             // If the object is a container, we parse its properties and contents...
-            parseContainer(objectBase, objectInfo, objectFactory);
+            parseContainer(objectBase, objectInfo);
+
+            // If the object is a character, we parse its properties...
+            parseCharacter(objectBase, objectInfo);
 
             return objectBase;
         }
 
         /// <summary>
+        /// If the object passed in is a character, we parse additional properties for them.
+        /// </summary>
+        private void parseCharacter(ObjectBase objectBase, ObjectInfo objectInfo)
+        {
+            // Is the object a character?
+            var character = objectBase as Character;
+            if (character == null)
+            {
+                return;
+            }
+
+            // Armour...
+            if(!String.IsNullOrEmpty(objectInfo.Wearing))
+            {
+                var armour = getObjectFactory().createObjectAs<Armour>(objectInfo.Wearing);
+                character.wear(armour);
+            }
+        }
+
+        /// <summary>
         /// If the object passed in is a container, we add any contained objects to it.
         /// </summary>
-        private void parseContainer(ObjectBase objectBase, ObjectInfo objectInfo, ObjectFactory objectFactory)
+        private void parseContainer(ObjectBase objectBase, ObjectInfo objectInfo)
         {
             // Is the object a container?
             var container = objectBase as Container;
-            if(container == null)
+            if (container == null)
             {
                 return;
             }
@@ -481,9 +514,9 @@ namespace WorldLib
             container.Key = objectInfo.Key;
 
             // The object is a container, so we add any contents to it...
-            foreach(var containedObjectInfo in objectInfo.Contains)
+            foreach (var containedObjectInfo in objectInfo.Contains)
             {
-                var containedObject = parseObject(containedObjectInfo, objectFactory);
+                var containedObject = parseObject(containedObjectInfo);
                 container.add(containedObject);
             }
         }

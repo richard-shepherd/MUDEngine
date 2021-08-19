@@ -53,10 +53,10 @@ namespace WorldLib
         /// <summary>
         /// Parses the config.
         /// </summary>
-        public override void parseConfig(ObjectFactory objectFactory)
+        public override void parseConfig()
         {
             // We parse the object-base config...
-            base.parseConfig(objectFactory);
+            base.parseConfig();
 
             // We parse the attacks...
             foreach(var attack in Attacks)

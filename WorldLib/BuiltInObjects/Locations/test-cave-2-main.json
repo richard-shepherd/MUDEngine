@@ -14,17 +14,14 @@
     {
       "Direction": "E",
       "To": "test-cave-2-east",
-      "BlockedBy":  "platypus"
+      "BlockedBy": {
+        "ObjectID": "platypus",
+        "Wearing": "fedora"
+      }
     }
   ],
 
   "Objects": [
-    {
-      "ObjectID": "steel-armour"
-    },
-    {
-      "ObjectID": "leather-armour"
-    },
     {
       "ObjectID": "Slartibartfast"
     },

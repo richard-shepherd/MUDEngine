@@ -210,7 +210,7 @@ namespace WorldLib
         /// NOTE: Derived implementations must call this method as well as parsing their
         ///       own values.
         /// </summary>
-        public virtual void parseConfig(ObjectFactory objectFactory)
+        public virtual void parseConfig()
         {
             // We add default aliases based on the name...
             addDefaultAliases();

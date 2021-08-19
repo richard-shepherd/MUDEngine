@@ -31,7 +31,8 @@ namespace WorldLib
             STATS,
             TAKE,
             TALK,
-            UNLOCK
+            UNLOCK,
+            WEAR
         }
 
         /// <summary>
@@ -51,7 +52,8 @@ namespace WorldLib
             "STATS [target]                'stats dragon'",
             "TAKE [target]                 'take apple', 'take apples'",
             "TALK (TO) [target]            'talk to shopkeeper', 'talk shopkeeper'",
-            "UNLOCK [target]               'unlock trapdoor' (the right key will be chosen if you have it)"
+            "UNLOCK [target]               'unlock trapdoor' (the right key will be chosen if you have it)",
+            "WEAR [target]                 'wear leather armour'"
         };
 
         /// <summary>
@@ -121,7 +123,8 @@ namespace WorldLib
                 parse_Stats,
                 parse_Take,
                 parse_Talk,
-                parse_Unlock
+                parse_Unlock,
+                parse_Wear
             };
             foreach(var parsingFunction in parsingFunctions)
             {
@@ -138,6 +141,17 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Checks if the input is an WEAR command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Wear(string uppercaseInput, string originalInput)
+        {
+            // We check if the input starts with a WEAR synonym...
+            var synonyms = new List<string> { "WEAR ", "PUT ON " };
+            return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.WEAR, synonyms);
+        }
 
         /// <summary>
         /// Checks if the input is an UNLOCK command.
