@@ -16,9 +16,11 @@ namespace Tests
         [SetUp]
         public void setup()
         {
-            m_objectFactory = new ObjectFactory();
-            m_objectFactory.addRootFolder("../WorldLib/BuiltInObjects");
+            m_worldManager = new WorldManager("");
+            m_worldManager.ObjectFactory.addRootFolder("../WorldLib/BuiltInObjects");
+            m_objectFactory = m_worldManager.ObjectFactory;
         }
+        private WorldManager m_worldManager;
         private ObjectFactory m_objectFactory;
 
         /// <summary>

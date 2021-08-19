@@ -17,8 +17,9 @@ namespace WorldLib
         /// <summary>
         /// Constructor.
         /// </summary>
-        public ObjectFactory()
+        public ObjectFactory(WorldManager worldManager)
         {
+            m_worldManager = worldManager;
         }
 
         /// <summary>
@@ -161,7 +162,7 @@ namespace WorldLib
 
                 // We parse the object (as an object-base) to update
                 // its properties...
-                objectBase.setObjectFactory(this);
+                objectBase.setWorldManager(m_worldManager);
                 objectBase.parseConfig();
 
                 // We store the object definition against the object ID...
@@ -241,7 +242,7 @@ namespace WorldLib
             objectBase.ID = objectDefinition.ObjectID;
 
             // We set the object-factory...
-            objectBase.setObjectFactory(this);
+            objectBase.setWorldManager(m_worldManager);
 
             // We parse the string values, eg dimensions into numeric values...
             objectBase.parseConfig();
@@ -252,6 +253,9 @@ namespace WorldLib
         #endregion
 
         #region Private data
+
+        // Construction parameters...
+        private readonly WorldManager m_worldManager;
 
         // JSON object definition and associated info...
         private class ObjectDefinition

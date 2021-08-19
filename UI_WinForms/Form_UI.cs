@@ -39,16 +39,14 @@ namespace UI_WinForms
                 var jsonConfig = File.ReadAllText("config.json");
                 var config = Utils.fromJSON<ParsedConfig>(jsonConfig);
 
-                // We create the object factor and load object defintions...
-                m_objectFactory = new ObjectFactory();
+                // We create the world, and load object definitions...
+                m_worldManager = new WorldManager(config.StartingLocationID);
                 foreach(var folder in config.ObjectFolders)
                 {
-                    m_objectFactory.addRootFolder(folder);
+                    m_worldManager.ObjectFactory.addRootFolder(folder);
                 }
-                m_objectFactory.validateObjects();
-
-                // We create the world...
-                m_worldManager = new WorldManager(m_objectFactory, config.StartingLocationID);
+                m_worldManager.ObjectFactory.validateObjects();
+                m_worldManager.resetWorld();
 
                 // We create the player and observe updates for them...
                 m_player = m_worldManager.createPlayer("Dugong");
@@ -196,9 +194,6 @@ namespace UI_WinForms
         #endregion
 
         #region Private data
-
-        // The object factory...
-        private ObjectFactory m_objectFactory = null;
 
         // The world-manager...
         private WorldManager m_worldManager = null;

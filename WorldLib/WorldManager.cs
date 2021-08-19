@@ -25,11 +25,10 @@ namespace WorldLib
         /// <summary>
         /// Constructor.
         /// </summary>
-        public WorldManager(ObjectFactory objectFactory, string playerStartingLocationID)
+        public WorldManager(string playerStartingLocationID)
         {
-            m_objectFactory = objectFactory;
+            m_objectFactory = new ObjectFactory(this);
             m_playerStartingLocationID = playerStartingLocationID;
-            resetWorld();
         }
 
         /// <summary>
@@ -101,8 +100,10 @@ namespace WorldLib
         #region Private data
 
         // Construction parameters...
-        private readonly ObjectFactory m_objectFactory;
         private readonly string m_playerStartingLocationID;
+
+        // The object factory...
+        private readonly ObjectFactory m_objectFactory;
 
         // The world state...
         private WorldState m_worldState = new WorldState();

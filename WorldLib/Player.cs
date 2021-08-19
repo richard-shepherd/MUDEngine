@@ -42,7 +42,7 @@ namespace WorldLib
         /// </summary>
         public Player(WorldManager worldManager, string id, string name)
         {
-            m_worldManager = worldManager;
+            setWorldManager( worldManager);
 
             // We set up the player's identity...
             ObjectType = ObjectTypeEnum.PLAYER;
@@ -90,7 +90,7 @@ namespace WorldLib
             LocationID = locationID;
 
             // We get the Location and add the player to it...
-            m_location = m_worldManager.getLocation(locationID);
+            m_location = getWorldManager().getLocation(locationID);
             m_location.addObject(this);
 
             // We observe events from the location and characters in it...
@@ -209,7 +209,7 @@ namespace WorldLib
                 // We respawn...
                 drop_All();
                 sendUIUpdate("Your spirit finds itself in a new body.");
-                m_worldManager.respawnPlayer(this);
+                getWorldManager().respawnPlayer(this);
             }
             catch (Exception ex)
             {
@@ -636,7 +636,7 @@ namespace WorldLib
         {
             // The target could be expressed as a singular or plural form.
             // We find the singular version of the object name and whether it is a plural...
-            var targetInfo = m_worldManager.ObjectFactory.getObjectName(target);
+            var targetInfo = getObjectFactory().getObjectName(target);
             var item = targetInfo.Name;
             if(targetInfo.IsPlural)
             {
@@ -804,10 +804,7 @@ namespace WorldLib
 
         #region Private data
 
-        // Construction parameters...
-        private readonly WorldManager m_worldManager;
-
-        // THe player's current location...
+        // The player's current location...
         private Location m_location = null;
 
         // Parses user input...

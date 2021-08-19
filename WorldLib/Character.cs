@@ -152,6 +152,9 @@ namespace WorldLib
         /// </remarks>
         public void wear(Armour armour)
         {
+            // If the character is currently wearing armour, we move it to
+            // the inventory if it fits, or drop it if it does not.
+
             Armour = armour;
         }
 

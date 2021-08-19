@@ -182,13 +182,21 @@ namespace WorldLib
         }
 
         /// <summary>
-        /// Sets the object-factory used to create the object.
+        /// Sets the world-manager.
         /// </summary><remarks>
         /// Note: This is not a propertiy, as we do not want to serialize it.
         /// </remarks>
-        public void setObjectFactory(ObjectFactory objectFactory)
+        public void setWorldManager(WorldManager worldManager)
         {
-            m_objectFactory = objectFactory;
+            m_worldManager = worldManager; ;
+        }
+
+        /// <summary>
+        /// Gets the world-manager.
+        /// </summary>
+        public WorldManager getWorldManager()
+        {
+            return m_worldManager;
         }
 
         /// <summary>
@@ -198,7 +206,7 @@ namespace WorldLib
         /// </remarks>
         public ObjectFactory getObjectFactory()
         {
-            return m_objectFactory;
+            return m_worldManager.ObjectFactory;
         }
 
         #endregion
@@ -302,9 +310,8 @@ namespace WorldLib
 
         #region Private data
 
-        // The object facgtory which created this object. 
-        // This can be used if the object itself needs to create other objects.
-        private ObjectFactory m_objectFactory = null;
+        // Manages all locations, and the object-factory... 
+        private WorldManager m_worldManager = null;
 
         #endregion
     }
