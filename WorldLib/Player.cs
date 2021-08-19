@@ -190,6 +190,10 @@ namespace WorldLib
                     unlock(parsedInput.Target1);
                     break;
 
+                case InputParser.ActionEnum.WEAR:
+                    wear(parsedInput.Target1);
+                    break;
+
                 default:
                     throw new Exception($"Action {parsedInput.Action} not handled.");
             }
@@ -258,6 +262,42 @@ namespace WorldLib
             {
                 sendUIUpdate(actionResult.Message);
             }
+        }
+
+        /// <summary>
+        /// Wears a piece of armour.
+        /// </summary>
+        private void wear(string target)
+        {
+            // We see if the target is in the location...
+            var targetInfo = m_location.findObjectFromName(target);
+            if (!targetInfo.hasObject())
+            {
+                // There is no item in the location, so we see if we have one in our inventory...
+                targetInfo = ParsedInventory.findObjectFromName(target);
+            }
+            if (!targetInfo.hasObject())
+            {
+                sendUIUpdate($"There is no {target} here or in your inventory.");
+                return;
+            }
+            var targetName = targetInfo.getObject().Name;
+
+            // We check that the item is armour...
+            var armour = targetInfo.getObjectAs<Armour>();
+            if (armour == null)
+            {
+                sendUIUpdate($"You cannot wear {Utils.prefix_the(targetName)}.");
+                return;
+            }
+
+            // We wear the armour...
+            wear(armour);
+
+            // We remove the item...
+            targetInfo.removeFromContainer();
+
+            sendUIUpdate($"You wear {Utils.prefix_the(armour.Name)}. It is a perfect fit.");
         }
 
         /// <summary>

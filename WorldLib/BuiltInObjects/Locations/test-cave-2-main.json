@@ -29,6 +29,12 @@
       "ObjectID": "wooden-key"
     },
     {
+      "ObjectID": "fedora"
+    },
+    {
+      "ObjectID": "steel-armour"
+    },
+    {
       "ObjectID": "wooden-chest",
       "Locked": true,
       "Key": "wooden-key",
