@@ -1,7 +1,7 @@
 ﻿{
   "ObjectType": "ARMOUR",
 
-  "Name": "suit of steel armour",
+  "Name": "outfit of leather armour",
 
   "Dimensions": {
     "Height": "150cm",
@@ -9,9 +9,9 @@
     "Depth": "80cm"
   },
 
-  "Weight": "50kg",
+  "Weight": "25kg",
 
-  "HP": 500,
+  "HP": 100,
 
-  "DamageReduction":  "75%"
+  "DamageReduction": "25%"
 }

@@ -96,9 +96,9 @@ namespace WorldLib
         /// <summary>
         /// Returns the text when you examine the door.
         /// </summary>
-        public override List<string> examine()
+        public override MultilineText examine()
         {
-            var examine = new List<string>();
+            var examine = new MultilineText();
 
             // Description if available...
             if(Description.Count > 0)

@@ -240,9 +240,9 @@ namespace WorldLib
         /// Returns the description of the object.
         /// Can be overridden in derived classes to provide a more detailed description.
         /// </summary>
-        public virtual List<string> examine()
+        public virtual MultilineText examine()
         {
-            var result = new List<string>();
+            var result = new MultilineText();
             result.AddRange(Description);
             result.AddRange(Examine);
             if(result.Count == 0)
@@ -280,8 +280,15 @@ namespace WorldLib
                 defaultAliases.Add(tokens[numTokens - 1]);
             }
 
+            // If there are more than two words we use the last two as an alias,
+            // eg "suit of steel armour" -> "steel armour" as an alias.
+            if (numTokens > 2)
+            {
+                defaultAliases.Add($"{tokens[numTokens - 2]} {tokens[numTokens - 1]}");
+            }
+
             // We add the default aliases...
-            foreach(var defaultAlias in defaultAliases)
+            foreach (var defaultAlias in defaultAliases)
             {
                 if(!Aliases.Contains(defaultAlias))
                 {

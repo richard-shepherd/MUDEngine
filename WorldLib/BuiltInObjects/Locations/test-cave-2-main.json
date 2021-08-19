@@ -20,6 +20,12 @@
 
   "Objects": [
     {
+      "ObjectID": "steel-armour"
+    },
+    {
+      "ObjectID": "leather-armour"
+    },
+    {
       "ObjectID": "Slartibartfast"
     },
     {

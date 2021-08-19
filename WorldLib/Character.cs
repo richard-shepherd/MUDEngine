@@ -358,7 +358,7 @@ namespace WorldLib
         /// <summary>
         /// Returns what you see when the character is examined.
         /// </summary>
-        public override List<string> examine()
+        public override MultilineText examine()
         {
             // Base information...
             var examine = base.examine();

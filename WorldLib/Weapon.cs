@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Utility;
 
 namespace WorldLib
 {
@@ -67,7 +68,7 @@ namespace WorldLib
         /// <summary>
         /// Examines the weapon.
         /// </summary>
-        public override List<string> examine()
+        public override MultilineText examine()
         {
             var examine = base.examine();
 

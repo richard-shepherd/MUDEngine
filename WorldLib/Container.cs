@@ -165,20 +165,20 @@ namespace WorldLib
         /// <summary>
         /// Returns the list of items in the container.
         /// </summary>
-        public List<string> listContents(string messagePrefix = "")
+        public MultilineText listContents(string messagePrefix = "")
         {
             if (Locked)
             {
                 var keyName = getObjectFactory().getObjectNameFromID(Key);
-                return new List<string> { $"{Utils.prefix_The(Name)} is locked. You need {Utils.prefix_a_an(keyName)} to unlock it." };
+                return new MultilineText { $"{Utils.prefix_The(Name)} is locked. You need {Utils.prefix_a_an(keyName)} to unlock it." };
             }
 
             if (m_contents.Count == 0)
             {
-                return new List<string> { $"{messagePrefix} nothing." };
+                return new MultilineText { $"{messagePrefix} nothing." };
             }
 
-            var results = new List<string>();
+            var results = new MultilineText();
 
             // We list the contents of the container...
             results.Add($"{messagePrefix}: {ObjectUtils.objectNamesAndCounts(m_contents)}.");
@@ -222,7 +222,7 @@ namespace WorldLib
         /// <summary>
         /// Returns the list of items in the container.
         /// </summary>
-        public override List<string> examine()
+        public override MultilineText examine()
         {
             return listContents($"{Utils.prefix_The(Name)} contains");
         }
