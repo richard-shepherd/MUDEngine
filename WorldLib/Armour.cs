@@ -73,6 +73,14 @@ namespace WorldLib
             return examine;
         }
 
+        /// <summary>
+        /// Returns the damage reduction factor.
+        /// </summary>
+        public double getDamageReductionFactor()
+        {
+            return m_damageReductionFactor;
+        }
+
         #endregion
 
         #region Private functions
@@ -87,7 +95,7 @@ namespace WorldLib
             // of 1.0 - ie, we take full damage...
             if(String.IsNullOrEmpty(DamageReduction))
             {
-                m_damageFactor = 1.0;
+                m_damageReductionFactor = 0.0;
                 return;
             }
 
@@ -102,7 +110,7 @@ namespace WorldLib
             {
                 var strDamageReductionPercent = DamageReduction.Substring(0, DamageReduction.Length - 1);
                 var dDamageReductionPercent = Convert.ToDouble(strDamageReductionPercent);
-                m_damageFactor = 1.0 - dDamageReductionPercent / 100.0;
+                m_damageReductionFactor = dDamageReductionPercent / 100.0;
             }
             catch (Exception)
             {
@@ -114,8 +122,8 @@ namespace WorldLib
 
         #region Private data
 
-        // Proportion of damage taken, based on the damage reduction percentage...
-        private double m_damageFactor = 1.0;
+        // Damage reduction as a factor ie, 0.0 - 1.0...
+        private double m_damageReductionFactor = 0.0;
 
         #endregion
     }

@@ -21,6 +21,7 @@ TODO: Allow characters to move between locations.
 TODO: Add shops
 
 TODO: Armour
+      - Add ability to repair armour
 
 TODO: load and save
 

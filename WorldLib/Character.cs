@@ -339,17 +339,45 @@ namespace WorldLib
 
             // We work out how much damage we have done to the opponent...
             var damage = Utils.Rnd.Next(attack.MinDamage, attack.MaxDamage + 1);
+
+            // We create the update...
+            var update = new List<string>();
+            update.Add($"{Utils.prefix_The(Name)} launches a {attack.Name} attack at {Utils.prefix_the(opponent.Name)} doing {damage} damage.");
+
+            // We work out whether any damage is absorbed by the opponent's armour...
+            var armour = opponent.Armour;
+            if (armour != null
+                &&
+                armour.CurrentHP > 0)
+            {
+                // The opponent has workign armour, so we check what damage it absorbs...
+                var damageAbsorbed = (int)(damage * armour.getDamageReductionFactor());
+                update.Add($"{Utils.prefix_The(opponent.Name)}'s {armour.Name} reduces the damage by {damageAbsorbed} HP.");
+                damage -= damageAbsorbed;
+
+                // The armour takes the damage before the opponent...
+                if(damage >= armour.CurrentHP)
+                {
+                    // The armour has absorbed some damage, but has then broken...
+                    update.Add($"{Utils.prefix_The(armour.Name)} absorbs {armour.CurrentHP} HP, but is now broken.");
+                    damage -= armour.CurrentHP;
+                    armour.CurrentHP = 0;
+                }
+                else
+                {
+                    // The armour has absorbed all the damage...
+                    update.Add($"{Utils.prefix_The(armour.Name)} absorbs all the damage from this attack.");
+                    armour.CurrentHP -= damage;
+                    damage = 0;
+                }
+            }
+
+            // We take any remaining damage from the opponent's health...
             opponent.HP -= damage;
 
             // We gain XP for damage we inflict...
             XP += damage;
 
-            // We create the update...
-            var update = new List<string>();
-
-            // Attack description...
-            update.Add($"{Utils.prefix_The(Name)} launches a {attack.Name} attack at {Utils.prefix_the(opponent.Name)} doing {damage} damage.");
-            
             // We note if this character killed the opponent...
             if (opponent.isDead())
             {
@@ -417,7 +445,7 @@ namespace WorldLib
             // Armour...
             if(Armour != null)
             {
-                examine.Add($"{Utils.prefix_The(Name)} is wearing {Utils.prefix_a_an(Armour.Name)}.");
+                examine.Add($"{Utils.prefix_The(Name)} is wearing {Utils.prefix_a_an(Armour.Name)}. (HP={Armour.CurrentHP}/{Armour.HP}.)");
             }
 
             // Stats...
