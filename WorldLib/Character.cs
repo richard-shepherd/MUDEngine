@@ -188,6 +188,16 @@ namespace WorldLib
             // Dexterity...
             stats.Add($"Dexterity: {Dexterity}");
 
+            // Armour...
+            if(Armour != null)
+            {
+                stats.Add($"Armour: {Armour.CurrentHP}/{Armour.HP}");
+            }
+            else
+            {
+                stats.Add($"Armour: None");
+            }
+
             // Attacks...
             stats.Add("Attacks:");
             foreach(var attack in getAllAttacks())
@@ -445,7 +455,7 @@ namespace WorldLib
             // Armour...
             if(Armour != null)
             {
-                examine.Add($"{Utils.prefix_The(Name)} is wearing {Utils.prefix_a_an(Armour.Name)}. (HP={Armour.CurrentHP}/{Armour.HP}.)");
+                examine.Add($"{Utils.prefix_The(Name)} is wearing {Utils.prefix_a_an(Armour.Name)}.");
             }
 
             // Stats...

@@ -29,9 +29,6 @@
       "ID": "wooden-key"
     },
     {
-      "ID": "steel-armour"
-    },
-    {
       "ID": "wooden-chest",
       "Locked": true,
       "Key": "wooden-key",
