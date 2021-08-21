@@ -28,6 +28,7 @@ namespace WorldLib
             KILL,
             LOOK,
             PUT,
+            REPAIR,
             SMOKE_POT,
             STATS,
             TAKE,
@@ -50,6 +51,7 @@ namespace WorldLib
             "KILL [target]                 'kill dragon'",
             "LOOK                          looks at the current location",
             "PUT [target1] IN [target2]    'put sword in chest'",
+            "REPAIR [target]               'repair steel armour'",
             "STATS                         shows stats for the player",
             "STATS [target]                'stats dragon'",
             "TAKE [target]                 'take apple', 'take apples'",
@@ -122,6 +124,7 @@ namespace WorldLib
                 parse_Kill,
                 parse_Look,
                 parse_Put,
+                parse_Repair,
                 parse_SmokePot,
                 parse_Stats,
                 parse_Take,
@@ -144,6 +147,17 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Checks if the input is an REPAIR command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Repair(string uppercaseInput, string originalInput)
+        {
+            // We check if the input includes a REPAIR synonym.
+            var synonyms = new List<string> { "REPAIR ", "FIX " };
+            return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.REPAIR, synonyms, CommandPosition.ANYWHERE);
+        }
 
         /// <summary>
         /// Checks if the input is an PUT command.
@@ -344,7 +358,7 @@ namespace WorldLib
         private ParsedInput parse_Examine(string uppercaseInput, string originalInput)
         {
             // We check if the input starts with an EXAMINE synonym...
-            var synonyms = new List<string> { "EXAMINE", "LOOK AT" };
+            var synonyms = new List<string> { "EXAMINE ", "LOOK AT ", "LOOK IN " };
             return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.EXAMINE, synonyms);
         }
 
@@ -394,17 +408,20 @@ namespace WorldLib
         /// Returns ParsedInput for a command with two targets: "[command] [target1] [preposition] [target2]", eg, "GIVE apple to dragon".
         /// Returns null if the input does not match the command.
         /// </summary>
-        private ParsedInput parse_WithTargets(string uppercaseInput, string originalInput, ActionEnum action, List<string> synonyms)
+        private ParsedInput parse_WithTargets(string uppercaseInput, string originalInput, ActionEnum action, List<string> synonyms, CommandPosition commandPosition = CommandPosition.START)
         {
+            // If we are looking for commands anywhere in the inputi, we 
+            var preprocessedInput = preprocessInput(uppercaseInput, originalInput, synonyms, commandPosition);
+
             // We check if the input starts with a command synonym...
-            var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput.StartsWith(x));
+            var matchingSynonym = synonyms.FirstOrDefault(x => preprocessedInput.UppercaseInput.StartsWith(x));
             if (matchingSynonym == null)
             {
                 return null;
             }
 
             // We find the targets...
-            var targets = getTargets(matchingSynonym, originalInput);
+            var targets = getTargets(matchingSynonym, preprocessedInput.OriginalInput);
 
             // We return the parsed input...
             var parsedInput = new ParsedInput();
@@ -414,12 +431,70 @@ namespace WorldLib
             return parsedInput;
         }
 
+        /// <summary>
+        /// Preprocesses the input based on the expected command position.
+        /// </summary>
+        private (string UppercaseInput, string OriginalInput) preprocessInput(string uppercaseInput, string originalInput, List<string> synonyms, CommandPosition commandPosition)
+        {
+            switch(commandPosition)
+            {
+                case CommandPosition.START:
+                    return (uppercaseInput, originalInput);
+
+                case CommandPosition.ANYWHERE:
+                    return preprocessInput_Anywhere(uppercaseInput, originalInput, synonyms);
+
+                default:
+                    throw new Exception($"Unhandled command-position: {commandPosition}");
+            }
+        }
+
+        /// <summary>
+        /// Preprocesses input where the command can be anywhere in the text.
+        /// </summary><remarks>
+        /// For example, a repair command could be "repair armour" or "ask blacksmith to repair armour".
+        /// In both cases, we want to parse this as repair armour. So in this case we look for the word
+        /// "repair " and discard anything before it.
+        /// </remarks>
+        private (string UppercaseInput, string OriginalInput) preprocessInput_Anywhere(string uppercaseInput, string originalInput, List<string> synonyms)
+        {
+            // We see if the input starts with a synonym...
+            var matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput.StartsWith(x));
+            if (matchingSynonym != null)
+            {
+                return (uppercaseInput, originalInput);
+            }
+
+            // The text does not start with any of the synonyms, so we check if the text contains them.
+            // Note that in this case we look for them with an extra space before the command - eg, " repair " - 
+            // to make sure that we are getting a whole word.
+            matchingSynonym = synonyms.FirstOrDefault(x => uppercaseInput.Contains($" {x}"));
+            if (matchingSynonym == null)
+            {
+                return (uppercaseInput, originalInput);
+            }
+
+            // We have found the command, so we remove any text before it...
+            var index = uppercaseInput.IndexOf(matchingSynonym);
+            return (uppercaseInput.Substring(index), originalInput.Substring(index));
+        }
+
         #endregion
 
         #region Private data
 
         // Compass directions...
         private readonly HashSet<string> m_directions = new HashSet<string> { "N", "NE", "E", "SE", "S", "SW", "W", "NW", "UP", "DOWN" };
+
+        // Enum used when parsing input to determine where we look for command words.
+        private enum CommandPosition
+        {
+            // We only look for commands at the start of the input...
+            START,
+
+            // We look for commands anywhere in the input, and discard anything before the command...
+            ANYWHERE
+        }
         
         #endregion
     }

@@ -1,0 +1,27 @@
+﻿{
+  "ObjectType": "CHARACTER",
+
+  "Name": "blacksmith",
+  "Aliases": [
+    "smith"
+  ],
+
+  "Dimensions": {
+    "Height": "180cm",
+    "Width": "80cm",
+    "Depth": "80cm"
+  },
+
+  "Weight": "100kg",
+
+  "Examine": [
+    "The blacksmith's muscles ripple as he bashes metal against the anvil with a huge hammer."
+  ],
+
+  "Talk": [
+    [
+      "Hello. Let me know if you have anything which needs repairing."
+    ]
+  ]
+  
+}

@@ -12,6 +12,10 @@
       "To": "test-cave-2-north"
     },
     {
+      "Direction": "S",
+      "To": "smithy"
+    },
+    {
       "Direction": "E",
       "To": "test-cave-2-east",
       "BlockedBy": {

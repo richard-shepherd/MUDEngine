@@ -1,0 +1,22 @@
+﻿{
+  "ObjectType": "REPAIR_LOCATION",
+
+  "Description": [
+    "You are in a smithy.",
+    "The blacksmith's forge is casting its red-hot glow over the sweltering room."
+  ],
+
+  "Exits": [
+    {
+      "Direction": "N",
+      "To": "test-cave-2-main"
+    }
+  ],
+
+  "Objects": [
+    {
+      "ID": "blacksmith"
+    }
+  ]
+
+}

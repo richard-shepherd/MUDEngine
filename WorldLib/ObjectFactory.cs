@@ -85,9 +85,19 @@ namespace WorldLib
             var locationIDs = m_objectDefinitions
                 .Where(x => x.Value.ObjectType == ObjectTypeEnum.LOCATION)
                 .Select(x => x.Key);
-            foreach(var locationID in locationIDs)
+            foreach (var locationID in locationIDs)
             {
                 var location = createObjectAs<Location>(locationID);
+                locations[locationID] = location;
+            }
+
+            // We find the object-IDs for all reapir-locations, and create them...
+            var repairLocationIDs = m_objectDefinitions
+                .Where(x => x.Value.ObjectType == ObjectTypeEnum.REPAIR_LOCATION)
+                .Select(x => x.Key);
+            foreach (var locationID in repairLocationIDs)
+            {
+                var location = createObjectAs<RepairLocation>(locationID);
                 locations[locationID] = location;
             }
 
@@ -228,6 +238,10 @@ namespace WorldLib
 
                 case ObjectTypeEnum.OBJECT:
                     objectBase = Utils.fromJSON<ObjectBase>(objectDefinition.JSON);
+                    break;
+
+                case ObjectTypeEnum.REPAIR_LOCATION:
+                    objectBase = Utils.fromJSON<RepairLocation>(objectDefinition.JSON);
                     break;
 
                 case ObjectTypeEnum.WEAPON:

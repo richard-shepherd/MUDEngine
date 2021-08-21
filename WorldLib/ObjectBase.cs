@@ -26,6 +26,7 @@ namespace WorldLib
             MONSTER,
             OBJECT,
             PLAYER,
+            REPAIR_LOCATION,
             WEAPON
         }
 
