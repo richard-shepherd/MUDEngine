@@ -170,6 +170,10 @@ namespace WorldLib
                     look();
                     break;
 
+                case InputParser.ActionEnum.PUT:
+                    put(parsedInput.Target1, parsedInput.Target2);
+                    break;
+
                 case InputParser.ActionEnum.SMOKE_POT:
                     sendUIUpdate("It is not that sort of pot.");
                     break;
@@ -222,6 +226,49 @@ namespace WorldLib
         #region Private functions
 
         /// <summary>
+        /// Puts the target into the container.
+        /// </summary>
+        private void put(string targetName, string containerName)
+        {
+            // We find the target...
+            var targetInfo = findObject_LocationOrInventory(targetName);
+            if (!targetInfo.hasObject())
+            {
+                sendUIUpdate($"There is no {targetName} here or in your inventory.");
+                return;
+            }
+            var target = targetInfo.getObject();
+
+            // We find the container...
+            var containerInfo = findObject_LocationOrInventory(containerName);
+            if (!containerInfo.hasObject())
+            {
+                sendUIUpdate($"There is no {containerName} here or in your inventory.");
+                return;
+            }
+            var containerObject = containerInfo.getObject();
+
+            // We check that the container is a container...
+            var container = containerInfo.getObjectAs<Container>();
+            if(container == null)
+            {
+                sendUIUpdate($"You cannot put {Utils.prefix_the(target.Name)} into {Utils.prefix_the(containerObject.Name)}.");
+                return;
+            }
+
+            // We try to put the target into the container...
+            var actionResult = targetInfo.transferTo(container);
+            if(actionResult.Status == ActionResult.StatusEnum.SUCCEEDED)
+            {
+                sendUIUpdate($"You put {Utils.prefix_the(target.Name)} into {Utils.prefix_the(container.Name)}.");
+            }
+            else
+            {
+                sendUIUpdate(actionResult.Message);
+            }
+        }
+
+        /// <summary>
         /// Unlocks the target.
         /// </summary>
         private void unlock(string target)
@@ -269,13 +316,7 @@ namespace WorldLib
         /// </summary>
         private void wear(string target)
         {
-            // We see if the target is in the location...
-            var targetInfo = m_location.findObjectFromName(target);
-            if (!targetInfo.hasObject())
-            {
-                // There is no item in the location, so we see if we have one in our inventory...
-                targetInfo = ParsedInventory.findObjectFromName(target);
-            }
+            var targetInfo = findObject_LocationOrInventory(target);
             if (!targetInfo.hasObject())
             {
                 sendUIUpdate($"There is no {target} here or in your inventory.");
@@ -301,17 +342,28 @@ namespace WorldLib
         }
 
         /// <summary>
+        /// Gets an object from the location, or from the inventory if it is not in the location.
+        /// Returns an invalid ContainedObject if the object is not found.
+        /// </summary>
+        private ContainedObject findObject_LocationOrInventory(string target)
+        {
+            // We see if the target is in the location...
+            var targetInfo = m_location.findObjectFromName(target);
+            if (!targetInfo.hasObject())
+            {
+                // There is no item in the location, so we see if we have one in our inventory...
+                targetInfo = ParsedInventory.findObjectFromName(target);
+            }
+            return targetInfo;
+        }
+
+        /// <summary>
         /// Eats the target item.
         /// </summary>
         private void eat(string target)
         {
             // We see if the target is in the location...
-            var targetInfo = m_location.findObjectFromName(target);
-            if(!targetInfo.hasObject())
-            {
-                // There is no item in the location, so we see if we have one in our inventory...
-                targetInfo = ParsedInventory.findObjectFromName(target);
-            }
+            var targetInfo = findObject_LocationOrInventory(target);
             if (!targetInfo.hasObject())
             {
                 sendUIUpdate($"There is no {target} here or in your inventory.");
@@ -680,16 +732,15 @@ namespace WorldLib
             }
 
             // We add the object to our inventory...
-            var actionResult = ParsedInventory.add(objectFromLocation.getObject());
-            if (actionResult.Status != ActionResult.StatusEnum.SUCCEEDED)
+            var actionResult = objectFromLocation.transferTo(ParsedInventory);
+            if (actionResult.Status == ActionResult.StatusEnum.SUCCEEDED)
+            {
+                return ActionResult.succeeded($"You add {Utils.prefix_the(item)} to your inventory.");
+            }
+            else
             {
                 return actionResult;
             }
-
-            // The object was successfully added to the inventory, so we remove it 
-            // from the location...
-            objectFromLocation.removeFromContainer();
-            return ActionResult.succeeded($"You add {Utils.prefix_the(item)} to your inventory.");
         }
 
         /// <summary>
@@ -698,12 +749,7 @@ namespace WorldLib
         private void examine(string target)
         {
             // We find the target from the current location...
-            var targetInfo = m_location.findObjectFromName(target);
-            if (!targetInfo.hasObject())
-            {
-                // The target is not in the current location, so we see if we have it in our inventory...
-                targetInfo = ParsedInventory.findObjectFromName(target);
-            }
+            var targetInfo = findObject_LocationOrInventory(target);
             if (!targetInfo.hasObject())
             {
                 sendUIUpdate($"You cannot examine {Utils.prefix_the(target)}.");

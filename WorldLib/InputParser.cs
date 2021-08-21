@@ -27,6 +27,7 @@ namespace WorldLib
             INVENTORY,
             KILL,
             LOOK,
+            PUT,
             SMOKE_POT,
             STATS,
             TAKE,
@@ -48,6 +49,7 @@ namespace WorldLib
             "I / INVENTORY                 shows the inventory",
             "KILL [target]                 'kill dragon'",
             "LOOK                          looks at the current location",
+            "PUT [target1] IN [target2]    'put sword in chest'",
             "STATS                         shows stats for the player",
             "STATS [target]                'stats dragon'",
             "TAKE [target]                 'take apple', 'take apples'",
@@ -119,6 +121,7 @@ namespace WorldLib
                 parse_Inventory,
                 parse_Kill,
                 parse_Look,
+                parse_Put,
                 parse_SmokePot,
                 parse_Stats,
                 parse_Take,
@@ -141,6 +144,17 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Checks if the input is an PUT command.
+        /// Returns a ParsedInput if so, null if not.
+        /// </summary>
+        private ParsedInput parse_Put(string uppercaseInput, string originalInput)
+        {
+            // We check if the input starts with a WEAR synonym...
+            var synonyms = new List<string> { "PUT" };
+            return parse_WithTargets(uppercaseInput, originalInput, ActionEnum.PUT, synonyms);
+        }
 
         /// <summary>
         /// Checks if the input is an WEAR command.
@@ -344,7 +358,7 @@ namespace WorldLib
             var inputWithoutCommand = Utils.removeInitial(originalInput, command);
 
             // We find the preposition...
-            var prepositions = new List<string> { "WITH", "TO", "AT" };
+            var prepositions = new List<string> { "WITH", "TO", "AT", "IN", "INTO", "ON", "ONTO" };
             var uppercaseInputWithoutCommand = inputWithoutCommand.ToUpper();
             var target1 = "";
             var target2 = "";

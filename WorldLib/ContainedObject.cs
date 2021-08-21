@@ -38,6 +38,27 @@
         }
 
         /// <summary>
+        /// Transfers the object to the container.
+        /// </summary>
+        public ActionResult transferTo(Container container)
+        {
+            // Do we have an object?
+            if(!hasObject())
+            {
+                return ActionResult.failed("There is no object to tranfer");
+            }
+
+            // We transfer the object - ie, add it to the new container, and remove it from 
+            // its current container...
+            var actionResult = container.add(m_object);
+            if(actionResult.Status == ActionResult.StatusEnum.SUCCEEDED)
+            {
+                removeFromContainer();
+            }
+            return actionResult;
+        }
+
+        /// <summary>
         /// Returns the object.
         /// </summary>
         public ObjectBase getObject()
