@@ -8,8 +8,6 @@ TODO: Allow items to respawn afer a period of time
 TODO: DROP object, EAT object
       - Support plurals, eg DROP apples
 
-TODO: PUT [target1] in/into [target2]
-
 TODO: Implement XP
       Updates other stats at certain levels.
 

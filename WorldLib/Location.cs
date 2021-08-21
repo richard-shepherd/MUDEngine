@@ -146,14 +146,14 @@ namespace WorldLib
         public ActionResult canGoInDirection(string direction)
         {
             // We find the location in the direction specified...
-            var exit = Exits.FirstOrDefault(x => x.Direction == direction);
-            if (exit == null)
+            var exitInfo = Exits.FirstOrDefault(x => x.Direction == direction);
+            if (exitInfo == null)
             {
                 return ActionResult.failed($"There is no exit {direction}.");
             }
 
             // We check if there is a locked door in this direction...
-            var doorInfo = findObjectFromID(exit.Door);
+            var doorInfo = findObjectFromID(exitInfo.Door);
             if(doorInfo.hasObject())
             {
                 var door = doorInfo.getObjectAs<Door>();
@@ -164,10 +164,9 @@ namespace WorldLib
             }
 
             // We check if there is an object blocking this direction...
-            var blockingObjectInfo = findObjectFromID(exit.BlockedBy.ID);
-            if(blockingObjectInfo.hasObject())
+            var blockingObject = getBlockingObject(exitInfo);
+            if(blockingObject != null)
             {
-                var blockingObject = blockingObjectInfo.getObject();
                 return ActionResult.failed($"The exit {direction} is blocked by {Utils.prefix_the(blockingObject.Name)}.");
             }
 
@@ -385,48 +384,78 @@ namespace WorldLib
         /// <summary>
         /// Returns a string description of the location's exits.
         /// </summary>
-        private List<string> look_Exits()
+        private MultilineText look_Exits()
         {
-            var exits = new List<string>();
+            var exitsText = new MultilineText();
 
             // Exit directions...
             if (Exits.Count == 1)
             {
-                exits.Add($"There is an exit {Exits[0].Direction}.");
+                exitsText.Add($"There is an exit {Exits[0].Direction}.");
             }
             if (Exits.Count > 1)
             {
                 var directions = Exits.Select(x => x.Direction);
-                exits.Add($"There are exits: {string.Join(", ", directions)}.");
+                exitsText.Add($"There are exits: {string.Join(", ", directions)}.");
             }
 
             // Doors...
             var exitsWithDoors = Exits.Where(x => !String.IsNullOrEmpty(x.Door));
-            foreach (var exit in exitsWithDoors)
+            foreach (var exitInfo in exitsWithDoors)
             {
-                var doorInfo = findObjectFromID(exit.Door);
+                var doorInfo = findObjectFromID(exitInfo.Door);
                 if (!doorInfo.hasObject())
                 {
                     continue;
                 }
                 var door = doorInfo.getObjectAs<Door>();
-                exits.Add($"There is {Utils.prefix_a_an(door.Name)} at the {exit.Direction} exit. The {door.Name} is {door.getLockedText()}.");
+                exitsText.Add($"There is {Utils.prefix_a_an(door.Name)} at the {exitInfo.Direction} exit. The {door.Name} is {door.getLockedText()}.");
             }
 
             // Blocking objects...
-            var exitsWithBlockingObjects = Exits.Where(x => !String.IsNullOrEmpty(x.BlockedBy.ID));
-            foreach (var exit in exitsWithBlockingObjects)
+            foreach (var exitInfo in Exits)
             {
-                var blockingObjectInfo = findObjectFromID(exit.BlockedBy.ID);
-                if (!blockingObjectInfo.hasObject())
+                var blockingObject = getBlockingObject(exitInfo);
+                if(blockingObject != null)
                 {
-                    continue;
+                    exitsText.Add($"The exit {exitInfo.Direction} is blocked by {Utils.prefix_a_an(blockingObject.Name)}.");
                 }
-                var blockingObject = blockingObjectInfo.getObject();
-                exits.Add($"The exit {exit.Direction} is blocked by {Utils.prefix_a_an(blockingObject.Name)}.");
             }
 
-            return exits;
+            return exitsText;
+        }
+
+        /// <summary>
+        /// Return the blocking object if the exit is blocked, or null if the exit is not blocked.
+        /// </summary>
+        private ObjectBase getBlockingObject(ExitInfo exitInfo)
+        {
+            // Is there a blocking object for this exit?
+            if(String.IsNullOrEmpty(exitInfo.BlockedBy.ID))
+            {
+                // There is no blocking object...
+                return null;
+            }
+
+            // There is a blocking object specified.
+            // We check if it is in the current location...
+            var blockingObjectInfo = findObjectFromID(exitInfo.BlockedBy.ID);
+            if (!blockingObjectInfo.hasObject())
+            {
+                // The object is not in this location...
+                return null;
+            }
+
+            // We check if the object is in the location itself.
+            // If it is in some other container, it will not block the exit.
+            if (blockingObjectInfo.getContainer() != LocationContainer)
+            {
+                // The object is in a container...
+                return null;
+            }
+
+            // The object is in the location (and not in another conatiner), so we return it...
+            return blockingObjectInfo.getObject();
         }
 
         /// <summary>

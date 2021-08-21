@@ -59,6 +59,14 @@
         }
 
         /// <summary>
+        /// Returns the container holding the object.
+        /// </summary>
+        public Container getContainer()
+        {
+            return m_container;
+        }
+
+        /// <summary>
         /// Returns the object.
         /// </summary>
         public ObjectBase getObject()
