@@ -7,7 +7,7 @@ namespace WorldLib
     /// <summary>
     /// Represents armour.
     /// </summary>
-    public class Armour : ObjectBase
+    public class Armour : ObjectBase, IRepairable
     {
         #region Properties
 
@@ -35,6 +35,18 @@ namespace WorldLib
         /// </summary>
         public Armour()
         {
+        }
+
+        #endregion
+
+        #region IRepairable implementation
+
+        /// <summary>
+        /// Repairs the armour.
+        /// </summary>
+        public void repair()
+        {
+            CurrentHP = HP;
         }
 
         #endregion

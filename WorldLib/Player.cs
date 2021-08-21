@@ -174,6 +174,10 @@ namespace WorldLib
                     put(parsedInput.Target1, parsedInput.Target2);
                     break;
 
+                case InputParser.ActionEnum.REPAIR:
+                    repair(parsedInput.Target1);
+                    break;
+
                 case InputParser.ActionEnum.SMOKE_POT:
                     sendUIUpdate("It is not that sort of pot.");
                     break;
@@ -224,6 +228,51 @@ namespace WorldLib
         #endregion
 
         #region Private functions
+
+        /// <summary>
+        /// Repairs the target.
+        /// </summary>
+        private void repair(string target)
+        {
+            // We check that we are in a repair location...
+            var repairLocation = m_location as RepairLocation;
+            if(repairLocation == null)
+            {
+                sendUIUpdate("Repairs cannot be made here.");
+                return;
+            }
+
+            // We check if the target is the armour we are wearing...
+            IRepairable repairable = null;
+            if(Armour != null && Armour.matchesName(target))
+            {
+                repairable = Armour;
+            }
+            if(repairable == null)
+            {
+                // The target was not our armour, so we see if it is something from the inventory...
+                var targetInfo = ParsedInventory.findObjectFromName(target);
+                if(!targetInfo.hasObject())
+                {
+                    sendUIUpdate($"You do not have {Utils.prefix_the(target)}.");
+                    return;
+                }
+                var targetObject = targetInfo.getObject();
+
+                // We have the target, but is it a repairable object?
+                repairable = targetInfo.getObjectAs<IRepairable>();
+                if (repairable == null)
+                {
+                    sendUIUpdate($"{Utils.prefix_The(targetObject.Name)} is not repairable.");
+                    return;
+                }
+            }
+
+            // We repair the object...
+            repairable.repair();
+            var repairableObject = (ObjectBase)repairable;
+            sendUIUpdate($"{Utils.prefix_The(repairableObject.Name)} has been repaired.");
+        }
 
         /// <summary>
         /// Puts the target into the container.
